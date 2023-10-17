@@ -1,12 +1,12 @@
 const Navbar: React.FC = () => {
   return (
-    <div className="flex justify-between m-2 bg-slate-50">
+    <div className="flex items-center justify-between m-2 bg-slate-50">
       <img
         src="https://img.freepik.com/free-photo/woman-with-beauty-face-clean-skin_186202-5677.jpg"
         alt="profile"
         className="w-10 h-10 rounded-full"
       />
-      <div className="flex gap-2">
+      <div className="flex items-center gap-2">
         <form className="w-full max-w-sm shadow-2xl shadow-slate-400">
           <div className="flex items-center p-1 bg-white rounded-md">
             <input
@@ -16,14 +16,14 @@ const Navbar: React.FC = () => {
               aria-label="Full name"
             />
             <button
-              className="flex-shrink-0 bg-violet-950   text-sm  text-gray-50 font-bold py-2 px-2 rounded"
+              className="flex-shrink-0 bg-lime-500   text-sm  text-gray-50 font-bold py-2 px-2 rounded"
               type="button"
             >
               جست و جو
             </button>
           </div>
         </form>
-        <div className="w-10 h-10 bg-violet-950 rounded-xl flex justify-center items-center">
+        <div className="w-10 h-10 bg-lime-500 p-2 rounded-xl flex justify-center items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -39,7 +39,7 @@ const Navbar: React.FC = () => {
             />
           </svg>
         </div>
-        <div className="w-10 h-10 bg-violet-950 rounded-xl flex justify-center items-center">
+        <div className="w-10 h-10 bg-lime-500 p-2 rounded-xl flex justify-center items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
