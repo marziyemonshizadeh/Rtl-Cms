@@ -1,6 +1,6 @@
 const Navbar: React.FC = () => {
   return (
-    <div className="flex items-center justify-between m-2 bg-slate-50">
+    <div className="flex items-center justify-between bg-slate-50 m-2">
       <img
         src="https://img.freepik.com/free-photo/woman-with-beauty-face-clean-skin_186202-5677.jpg"
         alt="profile"

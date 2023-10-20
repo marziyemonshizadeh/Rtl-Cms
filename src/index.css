@@ -4,7 +4,7 @@
 
 @layer utilities{
     .card{
-        @apply bg-white  shadow-xl shadow-slate-200 p-3 m-2 rounded-lg
+        @apply bg-white  shadow-xl shadow-slate-200 p-3 rounded-lg
     }
     .link{
         @apply no-underline text-gray-50
