@@ -1,11 +1,12 @@
 const Sidebar: React.FC = () => {
   return (
     <>
-      <h2 className="text-slate-50 font-extrabold text-lg border-solid border-b p-3 border-slate-50 ">
+      {/* <Link to="#">nnn</Link> */}
+      <h2 className="text-slate-50 font-extrabold text-lg p-3 border-solid border-b border-slate-50 ">
         به داشبورد خود خوش آمدید
       </h2>
       <ul className="text-slate-50 space-y-2">
-        <li className="flex hover:bg-lime-700 py-3">
+        <li className="li">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -22,7 +23,7 @@ const Sidebar: React.FC = () => {
           </svg>
           <span className="font-extrabold text-lg mx-2">صفحه ی اصلی</span>
         </li>
-        <li className="flex hover:bg-lime-700 py-3">
+        <li className="li">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -40,7 +41,7 @@ const Sidebar: React.FC = () => {
 
           <span className="font-extrabold text-lg mx-2"> محصولات</span>
         </li>
-        <li className="flex hover:bg-lime-700 py-3">
+        <li className="li">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -58,7 +59,7 @@ const Sidebar: React.FC = () => {
 
           <span className="font-extrabold text-lg mx-2"> کامنت ها</span>
         </li>
-        <li className="flex hover:bg-lime-700 py-3">
+        <li className="li">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -76,7 +77,7 @@ const Sidebar: React.FC = () => {
 
           <span className="font-extrabold text-lg mx-2">کاربران</span>
         </li>
-        <li className="flex hover:bg-lime-700 py-3">
+        <li className="li">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -94,7 +95,7 @@ const Sidebar: React.FC = () => {
 
           <span className="font-extrabold text-lg mx-2">سفارشات</span>
         </li>
-        <li className="flex hover:bg-lime-700 py-3">
+        <li className="li">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
