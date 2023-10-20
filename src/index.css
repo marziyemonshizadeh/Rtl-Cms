@@ -4,9 +4,21 @@
 
 @layer utilities{
     .card{
-        @apply bg-white w-full shadow-xl shadow-slate-200 p-3
+        @apply bg-white  shadow-xl shadow-slate-200 p-3 m-2 rounded-lg
     }
     .link{
         @apply no-underline text-gray-50
+    }
+    .header{
+        @apply font-extrabold font-serif md:text-4xl text-xl my-2 p-3
+    }
+    .input{
+        @apply appearance-none border-none  bg-gray-200 font-bold h-10 text-gray-600 mr-3 py-1 px-2 leading-tight rounded-lg focus:border-lime-300
+    }
+    .li{
+        @apply flex hover:bg-lime-700 py-3
+    }
+    .btn{
+        @apply font-extrabold bg-lime-500 text-slate-50 p-2 select-none rounded-md m-2 focus:ring-2 ring-offset-2 ring-lime-700 focus:bg-lime-600
     }
 }
