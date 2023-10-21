@@ -1,0 +1,25 @@
+{
+    "products": [
+      { "id": 1, "name": "msi", "price": 30000000 ,"count":50 },
+      { "id": 2, "name": "dell", "price": 40000000 ,"count":50 },
+      { "id": 3, "name": "macbook", "price": 50000000 ,"count":50 },
+      { "id": 3, "name": "asus", "price": 25000000 ,"count":50 }
+    ],
+    "comments": [
+        { "id": 1, "name": "مرضیه منشی زاده", "product": "msi", "history":"1 فروردین 1397","time":"9:30" },
+        { "id": 2, "name": "مرضیه منشی زاده", "product": "dell", "history":"1 اردیبهشت 1397","time":"12:30" },
+        { "id": 3, "name": "مرضیه منشی زاده", "product": "macbook", "history":"13 شهریور 1402","time":"18:00" },
+        { "id": 3, "name": "مرضیه منشی زاده", "product": "asus", "history":"13 شهریور 1402","time":"8:00" }
+    ],
+    "discount": [
+        { "id": 1, "discountCode": "macBook02","discountPercent":"20%" , "history":"1 فروردین 1397","adminName":"مرضیه منشی زاده","product": "macBook" },
+        { "id": 2, "discountCode": "msi02","discountPercent":"24%", "history":"1 اردیبهشت 1397","adminName":"مرضیه منشی زاده", "product": "msi" },
+        { "id": 3, "discountCode": "dell02","discountPercent":"15%", "history":"13 شهریور 1402","adminName":"مرضیه منشی زاده", "product": "dell" },
+        { "id": 4, "discountCode": "asus02","discountPercent":"5%", "history":"13 شهریور 1402","adminName":"مرضیه منشی زاده", "product": "asus" }
+    ],
+    "orders": [{"product": "msi","customer":"مرضیه منشی زاده","orderDate":"1 فروردین 1397","orderTime":"9:30", "price":30000000,"discount":"24%"},
+               {"product": "dell","customer":"مرضیه منشی زاده","orderDate":"1 اردیبهشت 1397","orderTime":"12:30", "price":40000000,"discount":"15%"},
+               {"product": "macbook","customer":"مرضیه منشی زاده","orderDate":"1 شهریور 1397","orderTime":"18:00", "price":50000000,"discount":"20%"},
+               {"product": "asus","customer":"مرضیه منشی زاده","orderDate":"1 دی 1397","orderTime":"12:30", "price":25000000,"discount":"5%"}
+    ]
+  }
