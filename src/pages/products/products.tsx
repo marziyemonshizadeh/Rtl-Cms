@@ -1,113 +1,65 @@
+import { useEffect, useState } from "react";
 import AddNewProduct from "../../components/addNewProduct/addNewProduct";
+import apiRequests from "../../services/configs";
 
-const Products: React.FC = () => {
+interface products {
+  id: number;
+  name: string;
+  img: string;
+  price: string;
+  count: string;
+}
+const Products = () => {
+  const [myProducts, setMyProducts] = useState<products[]>();
+  const loadProducts = async () => {
+    const res = await apiRequests.get("/products");
+    setMyProducts(res?.data);
+    console.log("res =>", myProducts);
+  };
+  useEffect(() => {
+    loadProducts();
+  }, []);
   return (
     <>
       <AddNewProduct />
       <div className="card">
         <table className="w-full">
           <thead>
-            <tr>
-              <th className="py-8">عکس</th>
-              <th className="py-8">اسم</th>
-              <th className="py-8">قیمت</th>
-              <th className="py-8">موجودی</th>
-              <th className="py-8"></th>
+            <tr className="border-b">
+              <th className="py-3">عکس</th>
+              <th className="py-3">اسم</th>
+              <th className="py-3">قیمت</th>
+              <th className="py-3">موجودی</th>
+              <th className="py-3">وضعیت</th>
             </tr>
           </thead>
+
           <tbody>
-            <tr>
-              <td className="flex justify-center">
-                <img
-                  src="https://vihanhamrah.ir/uploads/products/a217b3.png?m=thumb&w=1280&h=800&q=high"
-                  alt="hb"
-                  className="max-h-40"
-                />
-              </td>
-              <td className="text-center py-8">هندزفری بلوتوثی</td>
-              <td className="text-center py-8">99900 تومان</td>
-              <td className="text-center py-8">134</td>
-              <td className="py-8">
-                <button type="button" className="btn">
-                  جزئیات
-                </button>
-                <button type="button" className="btn">
-                  حذف
-                </button>
-                <button type="button" className="btn">
-                  ویرایش
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td className="flex justify-center py-8">
-                <img
-                  src="https://hento.ir/wp-content/uploads/2022/03/56388241-2EED-4E49-AF49-39A644AE7506-768x768.webp"
-                  alt="hb"
-                  className="max-h-40 max-w-lg"
-                />
-              </td>
-              <td className="text-center py-8">هدست مخصوص بازی </td>
-              <td className="text-center py-8">672000 تومان</td>
-              <td className="text-center py-8">99</td>
-              <td className="py-8">
-                <button type="button" className="btn">
-                  جزئیات
-                </button>
-                <button type="button" className="btn">
-                  حذف
-                </button>
-                <button type="button" className="btn">
-                  ویرایش
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td className="flex justify-center ">
-                <img
-                  src="https://shenasname.ir/kala/wp-content/uploads/2022/07/headset-product2-600x600.png"
-                  alt="hb"
-                  className="flex justify-center max-h-40 max-w-lg"
-                />
-              </td>
-              <td className="text-center py-8">هندزفری بلوتوثی</td>
-              <td className="text-center py-8">99900 تومان</td>
-              <td className="text-center py-8">134</td>
-              <td className="py-8">
-                <button type="button" className="btn">
-                  جزئیات
-                </button>
-                <button type="button" className="btn">
-                  حذف
-                </button>
-                <button type="button" className="btn">
-                  ویرایش
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td className="flex justify-center py-8">
-                <img
-                  src="https://playstoreopal.com/wp-content/uploads/2023/05/Samsung-EP-DA705B-TypeC-to-TypeC-Fast-Charging-Cable-60W.webp"
-                  alt="hb"
-                  className="max-h-40 max-w-lg"
-                />
-              </td>
-              <td className="text-center py-8">کابل Type-C</td>
-              <td className="text-center py-8">190000 تومان</td>
-              <td className="text-center py-8">18</td>
-              <td className="py-8">
-                <button type="button" className="btn">
-                  جزئیات
-                </button>
-                <button type="button" className="btn">
-                  حذف
-                </button>
-                <button type="button" className="btn">
-                  ویرایش
-                </button>
-              </td>
-            </tr>
+            {myProducts?.map((i: any): JSX.Element => {
+              return (
+                <tr key={i.id}>
+                  <td className="md:flex justify-center">
+                    <img src={i.img} alt="hb" className="max-h-40" />
+                  </td>
+                  <td className="md:text-center py-8"> {i.name}</td>
+                  <td className="md:text-center py-8">
+                    {i.price.toLocaleString()} تومان
+                  </td>
+                  <td className="md:text-center py-8">{i.count}</td>
+                  <td className="py-8 text-center">
+                    <button type="button" className="btn">
+                      جزئیات
+                    </button>
+                    <button type="button" className="btn">
+                      حذف
+                    </button>
+                    <button type="button" className="btn">
+                      ویرایش
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
