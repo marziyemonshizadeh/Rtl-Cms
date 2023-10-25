@@ -25,12 +25,33 @@ const AddNewProduct: React.FC = () => {
           <input
             className="input"
             type="text"
-            placeholder="آدرس عکس محصول خود را بنویسید  "
+            placeholder="آدرس عکس محصول خود را بنویسید "
+            aria-label="Full name"
+          />
+          <input
+            className="input"
+            type="text"
+            placeholder="میزان محبوبیت محصول خود را بنویسید "
+            aria-label="Full name"
+          />
+          <input
+            className="input"
+            type="text"
+            placeholder="آدرس فروش محصول خود را بنویسید  "
+            aria-label="Full name"
+          />
+          <input
+            className="input"
+            type="text"
+            placeholder="تعداد رنگ بندی محصول خود را بنویسید "
             aria-label="Full name"
           />
         </div>
         <div className="flex justify-end mt-3">
-          <button type="button" className="btn">
+          <button
+            type="button"
+            className="font-extrabold bg-lime-500 text-slate-50 p-2 select-none rounded-md focus:ring-2 ring-offset-2 ring-lime-700 focus:bg-lime-600"
+          >
             ثبت محصول
           </button>
         </div>
