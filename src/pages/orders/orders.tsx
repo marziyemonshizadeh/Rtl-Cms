@@ -1,10 +1,11 @@
+import ErrorBox from "../../components/errorBox/errorBox";
+
 const Orders: React.FC = () => {
   return (
     <>
       <h1 className="header"> لیست سفارشات ثبت شده </h1>
-      <div className="w-full bg-red-950 text-gray-50 text-center font-bold p-3">
-        هیچ سفارشی یافت نشد
-      </div>
+      <ErrorBox message="هیچ سفارشی یافت نشد" />
+
       <div className="card mt-5">
         <table className="w-full">
           <thead className="border-b-2">
@@ -15,7 +16,7 @@ const Orders: React.FC = () => {
               <th className="py-8">ساعت سفارش</th>
               <th className="py-8">مبلغ کل</th>
               <th className="py-8"> تخفیف اعمال شده</th>
-              <th className="py-8"></th>
+              <th className="py-8">وضعیت</th>
             </tr>
           </thead>
           <tbody>
@@ -26,7 +27,7 @@ const Orders: React.FC = () => {
               <td className="text-center py-8">16:30</td>
               <td className="text-center py-8">35,000,000</td>
               <td className="text-center py-8">0%</td>
-              <td className="py-8">
+              <td className="py-8 text-center">
                 <button type="button" className="btn">
                   جزئیات
                 </button>

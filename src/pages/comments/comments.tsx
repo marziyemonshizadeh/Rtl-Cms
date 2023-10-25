@@ -1,20 +1,21 @@
+import ErrorBox from "../../components/errorBox/errorBox";
+
 const Comments: React.FC = () => {
   return (
     <>
       <h1 className="header"> کامنت های محصولات</h1>
-      <div className="w-full bg-red-950 text-gray-50 text-center font-bold p-3">
-        هیچ کامنتی یافت نشد
-      </div>
+      <ErrorBox message="هیچ کامنتی یافت نشد" />
+
       <div className="card mt-5">
         <table className="w-full">
-          <thead className="border-b-2">
+          <thead className="border-b">
             <tr>
               <th className="py-8">اسم کاربر</th>
               <th className="py-8">محصول</th>
               <th className="py-8">کامنت</th>
               <th className="py-8">تاریخ</th>
               <th className="py-8">ساعت</th>
-              <th className="py-8"></th>
+              <th className="py-8">وضعیت</th>
             </tr>
           </thead>
           <tbody>
@@ -29,7 +30,7 @@ const Comments: React.FC = () => {
               </td>
               <td className="text-center py-8">13 شهریور 1402 </td>
               <td className="text-center py-8">16:30</td>
-              <td className="py-8">
+              <td className="py-8 text-center">
                 <button type="button" className="btn">
                   حذف
                 </button>

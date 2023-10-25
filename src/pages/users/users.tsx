@@ -1,10 +1,11 @@
+import ErrorBox from "../../components/errorBox/errorBox";
+
 const Users: React.FC = () => {
   return (
     <>
       <h1 className="header">لیست کاربران</h1>
-      <div className="w-full bg-red-950 text-gray-50 text-center font-bold p-3">
-        هیچ کاربری یافت نشد
-      </div>
+      <ErrorBox message="هیچ کاربری یافت نشد" />
+
       <div className="card mt-5">
         <table className="w-full">
           <thead className="border-b-2">
@@ -14,7 +15,7 @@ const Users: React.FC = () => {
               <th className="py-8">رمز عبور</th>
               <th className="py-8">شماره تماس</th>
               <th className="py-8">ایمیل</th>
-              <th className="py-8"></th>
+              <th className="py-8">وضعیت</th>
             </tr>
           </thead>
           <tbody>
@@ -24,7 +25,7 @@ const Users: React.FC = () => {
               <td className="text-center py-8">qaz123</td>
               <td className="text-center py-8">0935555555</td>
               <td className="text-center py-8">marziehmonshizade@yahoo.com</td>
-              <td className="py-8">
+              <td className="py-8 text-center">
                 <button type="button" className="btn">
                   حذف
                 </button>
