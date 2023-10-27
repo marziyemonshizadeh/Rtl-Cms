@@ -1,5 +1,5 @@
 import { Outlet } from "react-router";
-import Modal from "./components/modal/modal";
+import Modal from "./components/Modals/deleteModal";
 import Navbar from "./components/navbar/navbar";
 import Sidebar from "./components/sidebar/sidebar";
 
@@ -12,8 +12,8 @@ function App() {
         </div>
         <div className="xl:col-span-5 md:col-span-3 block sm:col-span-1 bg-slate-50 md:mx-3 mb-14">
           <Navbar />
-          <Outlet />
           <Modal />
+          <Outlet />
         </div>
       </div>
     </div>

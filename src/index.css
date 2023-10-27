@@ -4,7 +4,7 @@
 
 @layer utilities{
     .card{
-        @apply bg-white  shadow-xl shadow-slate-200 p-3 rounded-lg
+        @apply bg-white  shadow-xl shadow-slate-200 p-3 rounded-lg my-3
     }
     .link{
         @apply no-underline text-gray-50
@@ -16,9 +16,12 @@
         @apply appearance-none border-none  bg-gray-200 font-bold h-10 text-gray-600 mr-3 py-1 px-2 leading-tight rounded-lg focus:border-lime-300
     }
     .li{
-        @apply flex hover:bg-lime-700 py-3
+        @apply flex hover:bg-lime-700 py-3 md:justify-start justify-center
     }
     .btn{
-        @apply font-extrabold bg-lime-500 text-slate-50 p-2 select-none rounded-md m-2 focus:ring-2 ring-offset-2 ring-lime-700 focus:bg-lime-600
+        @apply font-extrabold bg-lime-500 text-slate-50 p-2 m-2 select-none rounded-md focus:ring-2 ring-offset-2 ring-lime-700 focus:bg-lime-600
+    }
+    .btnLight{
+        @apply font-extrabold bg-slate-200 text-slate-950 p-2 m-2  select-none rounded-md focus:ring-2 ring-offset-2 ring-slate-400 focus:bg-slate-200
     }
 }
