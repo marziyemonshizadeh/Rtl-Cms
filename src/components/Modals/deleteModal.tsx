@@ -1,10 +1,18 @@
 import ReactDom from "react-dom";
-export default function Modal(): JSX.Element {
-  //   const modal = document.getElementById("modal") as HTMLElement;
+// import {useState} from "react"
+interface ModalProps {
+  submitAction: () => void;
+  cancelAction: () => void;
+  onclick?: () => void;
+}
+export default function Modal({
+  cancelAction,
+  submitAction,
+}: ModalProps): JSX.Element {
   return ReactDom.createPortal(
     <>
       <div
-        className="relative z-10"
+        className={`relative z-10`}
         aria-labelledby="modal-title"
         role="dialog"
         aria-modal="true"
@@ -20,10 +28,18 @@ export default function Modal(): JSX.Element {
                 </p>
               </div>
               <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:justify-center sm:px-6">
-                <button type="button" className="btn">
+                <button
+                  type="button"
+                  className="btn"
+                  onClick={() => cancelAction()}
+                >
                   بله
                 </button>
-                <button type="button" className="btnLight">
+                <button
+                  type="button"
+                  className="btnLight"
+                  onClick={() => submitAction()}
+                >
                   خیر
                 </button>
               </div>

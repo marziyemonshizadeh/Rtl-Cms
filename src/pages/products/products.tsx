@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
+import DeleteModal from "../../components/Modals/deleteModal";
 import AddNewProduct from "../../components/addNewProduct/addNewProduct";
 import apiRequests from "../../services/configs";
-
 interface products {
   id: number;
   name: string;
@@ -11,6 +11,13 @@ interface products {
 }
 const Products = () => {
   const [myProducts, setMyProducts] = useState<products[]>();
+  const [isShowModal, setIsShowModal] = useState<boolean>(false);
+  const modalCancel = () => {
+    setIsShowModal(false);
+  };
+  const modalSubmit = () => {
+    setIsShowModal(false);
+  };
   const loadProducts = async () => {
     const res = await apiRequests.get("/products");
     setMyProducts(res?.data);
@@ -50,7 +57,13 @@ const Products = () => {
                     <button type="button" className="btn">
                       جزئیات
                     </button>
-                    <button type="button" className="btn">
+                    <button
+                      type="button"
+                      className="btn"
+                      onClick={() => {
+                        setIsShowModal((prev) => !prev);
+                      }}
+                    >
                       حذف
                     </button>
                     <button type="button" className="btn">
@@ -63,6 +76,9 @@ const Products = () => {
           </tbody>
         </table>
       </div>
+      {isShowModal && (
+        <DeleteModal submitAction={modalSubmit} cancelAction={modalCancel} />
+      )}
     </>
   );
 };
