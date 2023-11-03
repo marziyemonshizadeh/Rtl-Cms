@@ -1,8 +1,21 @@
+import Swal from "sweetalert2";
 import ErrorBox from "../../components/errorBox/errorBox";
 
-const Discount: React.FC = () => {
+interface DiscountProps {
+  onclick?: () => void;
+}
+const Discount: React.FC<DiscountProps> = () => {
+  const swall = () => {
+    return Swal.fire({
+      title: "Error!",
+      text: "Do you want to continue",
+      icon: "error",
+      confirmButtonText: "Cool",
+    });
+  };
   return (
     <>
+      {/* {swall()} */}
       <h1 className="header"> لیست کدهای تخفیف ثبت شده </h1>
       <ErrorBox message="هیچ کد تخفیفی یافت نشد" />
       <div className="card my-5">
@@ -25,10 +38,22 @@ const Discount: React.FC = () => {
               <td className="text-center py-8">مرضیه منشی زاده</td>
               <td className="text-center py-8">مک بوک</td>
               <td className="py-8 text-center">
-                <button type="button" className="btn">
+                <button
+                  type="button"
+                  className="btn"
+                  onClick={() => {
+                    swall();
+                  }}
+                >
                   تایید
                 </button>
-                <button type="button" className="btn">
+                <button
+                  type="button"
+                  className="btn"
+                  onClick={() => {
+                    swall();
+                  }}
+                >
                   حذف
                 </button>
               </td>
