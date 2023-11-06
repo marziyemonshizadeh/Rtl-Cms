@@ -4,6 +4,7 @@ import DeleteModal from "../../components/Modals/deleteModal";
 import DetailsModal from "../../components/Modals/detailsModal";
 import EditModal from "../../components/Modals/editModal";
 import AddNewProduct from "../../components/addNewProduct/addNewProduct";
+import ErrorBox from "../../components/errorBox/errorBox";
 import { Product } from "../../components/product/product";
 
 const Products = () => {
@@ -29,41 +30,50 @@ const Products = () => {
   );
   return (
     <>
+      {console.log(data)}
       <AddNewProduct />
-      <div className="card">
-        <table className="w-full">
-          <thead>
-            <tr className="border-b">
-              <th className="py-3">عکس</th>
-              <th className="py-3">اسم</th>
-              <th className="py-3">قیمت</th>
-              <th className="py-3">موجودی</th>
-              <th className="py-3">وضعیت</th>
-            </tr>
-          </thead>
-          {isLoading && (
-            <div className="mx-auto text-gray-500">لطفا کمی صبر کنید...</div>
-          )}
-          {isError && (
-            <div className="text-red-700">
-              متاسفانه مشکلی پیش آمده است نمی توانیم داده ها را نمایش دهیم
-            </div>
-          )}
-          <tbody>
-            {data?.map(
-              (item: any): JSX.Element => (
-                <Product
-                  key={item.id}
-                  setIsShowModal={setIsShowModal}
-                  setIsShowDetailsModa={setIsShowDetailsModal}
-                  setIsShowEditModal={setIsShowEditModal}
-                  {...item}
-                />
-              )
-            )}
-          </tbody>
-        </table>
-      </div>
+      {data?.length ? (
+        <>
+          <div className="card">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b">
+                  <th className="py-3">عکس</th>
+                  <th className="py-3">اسم</th>
+                  <th className="py-3">قیمت</th>
+                  <th className="py-3">موجودی</th>
+                  <th className="py-3">وضعیت</th>
+                </tr>
+              </thead>
+              {isLoading && (
+                <div className="mx-auto text-gray-500">
+                  لطفا کمی صبر کنید...
+                </div>
+              )}
+              {isError && (
+                <div className="text-red-700">
+                  متاسفانه مشکلی پیش آمده است نمی توانیم داده ها را نمایش دهیم
+                </div>
+              )}
+              <tbody>
+                {data?.map(
+                  (item: any): JSX.Element => (
+                    <Product
+                      key={item.id}
+                      setIsShowModal={setIsShowModal}
+                      setIsShowDetailsModa={setIsShowDetailsModal}
+                      setIsShowEditModal={setIsShowEditModal}
+                      {...item}
+                    />
+                  )
+                )}
+              </tbody>
+            </table>
+          </div>
+        </>
+      ) : (
+        <ErrorBox message="هیچ محصولی یافت نشد" />
+      )}
 
       {/* modals */}
       {isShowModal && (
