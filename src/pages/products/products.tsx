@@ -32,6 +32,14 @@ const Products = () => {
     <>
       {console.log(data)}
       <AddNewProduct />
+      {isLoading && (
+        <div className="mx-auto text-gray-500">لطفا کمی صبر کنید...</div>
+      )}
+      {isError && (
+        <div className="text-red-700">
+          متاسفانه مشکلی پیش آمده است نمی توانیم داده ها را نمایش دهیم
+        </div>
+      )}
       {data?.length ? (
         <>
           <div className="card">
@@ -45,16 +53,6 @@ const Products = () => {
                   <th className="py-3">وضعیت</th>
                 </tr>
               </thead>
-              {isLoading && (
-                <div className="mx-auto text-gray-500">
-                  لطفا کمی صبر کنید...
-                </div>
-              )}
-              {isError && (
-                <div className="text-red-700">
-                  متاسفانه مشکلی پیش آمده است نمی توانیم داده ها را نمایش دهیم
-                </div>
-              )}
               <tbody>
                 {data?.map(
                   (item: any): JSX.Element => (
@@ -72,7 +70,7 @@ const Products = () => {
           </div>
         </>
       ) : (
-        <ErrorBox message="هیچ محصولی یافت نشد" />
+        <>{!isLoading && <ErrorBox message="هیچ محصولی یافت نشد" />}</>
       )}
 
       {/* modals */}
