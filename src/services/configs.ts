@@ -2,7 +2,7 @@ import axios from "axios";
 
 //baseurl
 const apiRequests = axios.create({
-  baseURL: " http://localhost:3001",
+  baseURL: "http://localhost:3000",
   headers: {
     "Content-Type": "application/json",
     Auth: "Bearer Token",
@@ -19,25 +19,4 @@ apiRequests.interceptors.request.use(
     return Promise.reject(err);
   }
 );
-//responses
-// apiRequests.interceptors.response.use(
-//   (response) => {
-//     return response;
-//   },
-//   (err) => {
-//     const status = err.response.status;
-//     if (status === 403) {
-//       alert("err response 403", err);
-//     } else if (status === 429) {
-//       alert("err response 429", err);
-//     } else if (status === 404) {
-//       alert("err response 404", err);
-//     } else if (status === 401) {
-//       alert("err response 401", err);
-//     }
-
-//     return Promise.reject(err);
-//   }
-// );
-
 export default apiRequests;
