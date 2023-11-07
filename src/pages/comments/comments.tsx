@@ -9,6 +9,9 @@ const Comments: React.FC = () => {
   return (
     <>
       <h1 className="header"> کامنت های محصولات</h1>
+      {isLoading && (
+        <div className="mx-auto text-gray-500">لطفا کمی صبر کنید...</div>
+      )}
       {data?.length ? (
         <div className="card mt-5">
           <table className="w-full">
@@ -23,11 +26,6 @@ const Comments: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {isLoading && (
-                <div className="mx-auto text-gray-500">
-                  لطفا کمی صبر کنید...
-                </div>
-              )}
               {data?.map((item: any) => {
                 return <Comment key={item.id} {...item} />;
               })}
@@ -35,7 +33,7 @@ const Comments: React.FC = () => {
           </table>
         </div>
       ) : (
-        <ErrorBox message="هیچ کامنتی یافت نشد" />
+        <>{!isLoading && <ErrorBox message="هیچ کامنتی یافت نشد" />}</>
       )}
     </>
   );
