@@ -1,16 +1,22 @@
+import { useDispatch } from "react-redux";
+import { toggleDarkmode } from "../../redux/store/darkmood";
+
+// import store from "../../redux/store";
 const Navbar: React.FC = () => {
+  const dispatch = useDispatch();
+
   return (
-    <div className="invisible md:visible flex items-center justify-between bg-slate-50 m-2">
+    <div className="flex items-center justify-between bg-slate-50 dark:bg-gray-700 m-2">
       <img
         src="https://img.freepik.com/free-photo/woman-with-beauty-face-clean-skin_186202-5677.jpg"
         alt="profile"
         className="w-10 h-10 rounded-full"
       />
       <div className="flex items-center gap-2">
-        <form className="w-full max-w-sm shadow-2xl shadow-slate-400">
-          <div className="flex items-center p-1 bg-white rounded-md">
+        <form className="w-full max-w-sm shadow-md ">
+          <div className="flex items-center p-1 bg-white dark:bg-slate-200 rounded-md">
             <input
-              className="appearance-none border-none w-full font-bold text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
+              className="appearance-none border-none w-full font-bold bg-white dark:bg-slate-200 text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
               type="text"
               placeholder=" جست و جو کنید ..."
               aria-label="Full name"
@@ -39,7 +45,11 @@ const Navbar: React.FC = () => {
             />
           </svg>
         </div>
-        <div className="w-10 h-10 bg-lime-500 p-2 rounded-xl flex justify-center items-center">
+        {/* darkmood set */}
+        <button
+          className="w-10 h-10 bg-lime-500 p-2 rounded-xl flex justify-center items-center"
+          onClick={() => dispatch(toggleDarkmode())}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -54,7 +64,7 @@ const Navbar: React.FC = () => {
               d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
             />
           </svg>
-        </div>
+        </button>
       </div>
     </div>
   );
