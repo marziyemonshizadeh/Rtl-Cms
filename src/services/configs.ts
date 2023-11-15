@@ -2,7 +2,7 @@ import axios from "axios";
 
 //baseurl
 const apiRequests = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: "http://localhost:3001",
   headers: {
     "Content-Type": "application/json",
     Auth: "Bearer Token",
