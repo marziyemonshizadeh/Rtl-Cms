@@ -11,7 +11,7 @@
         { "id": 3, "name": "محمد کریمی", "product": "macbook", "history":"13 شهریور 1402","time":"18:00" },
         { "id": 4, "name": "آناهیتا درگاهی", "product": "asus", "history":"13 شهریور 1402","time":"8:00" }
     ],
-    "discount": [
+    "discounts": [
         { "id": 1, "discountCode": "macBook02","discountPercent":"20%" , "history":"1 فروردین 1397","adminName":"marziehmonshizadeh","product": "macBook" },
         { "id": 2, "discountCode": "msi02","discountPercent":"24%", "history":"1 اردیبهشت 1397","adminName":"marziehmonshizadeh", "product": "msi" },
         { "id": 3, "discountCode": "dell02","discountPercent":"15%", "history":"13 شهریور 1402","adminName":"marziehmonshizadeh", "product": "dell" },
