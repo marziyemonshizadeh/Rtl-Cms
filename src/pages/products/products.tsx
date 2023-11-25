@@ -1,85 +1,129 @@
-import { useState } from "react";
-import { useQuery } from "react-query";
+// import { ThunkDispatch } from "@reduxjs/toolkit";
+import { useEffect, useState } from "react";
+// import { useQuery } from "react-query";
+import { useDispatch } from "react-redux";
 import DeleteModal from "../../components/Modals/deleteModal";
 import DetailsModal from "../../components/Modals/detailsModal";
 import EditModal from "../../components/Modals/editModal";
 import AddNewProduct from "../../components/addNewProduct/addNewProduct";
 import ErrorBox from "../../components/errorBox/errorBox";
-import { Product } from "../../components/product/product";
-
+// import Product from "../../components/product/product";
+import { useAppSelector } from "../../redux/store";
+import { fetchProduct, removeProduct } from "../../redux/store/products";
 const Products = () => {
   // state
   const [isShowModal, setIsShowModal] = useState<boolean>(false);
   const [isShowDetailsModal, setIsShowDetailsModal] = useState<boolean>(false);
   const [isShowEditModal, setIsShowEditModal] = useState<boolean>(false);
-
+  const [productId, setProductId] = useState();
   // funcs
   const modalCancel = () => {
     setIsShowModal(false);
   };
   const modalSubmit = () => {
     setIsShowModal(false);
+    console.log(productId);
+    dispatch(removeProduct(productId));
   };
   const editInfosSubmit = (e: any) => {
     e.preventDefault();
     setIsShowEditModal(false);
     console.log(isShowEditModal);
   };
-  const { data, isLoading, isError } = useQuery("Products", () =>
-    fetch("http://localhost:3001/products").then((res) => res.json())
-  );
+  const closeDetailsmodal = () => {
+    setIsShowDetailsModal(false);
+    console.log("مدال جزییات بسته شد");
+  };
+  // const { data, isLoading, isError } = useQuery("Products", () =>
+  //   fetch("http://localhost:3001/products").then((res) => res.json())
+  // );
+  const dispatch = useDispatch<any>();
+  const data = useAppSelector((state) => state.products);
+  // console.log("data===", data);
+
+  useEffect(() => {
+    dispatch(fetchProduct("products"));
+  }, []);
+
   return (
     <>
-      {console.log(data)}
       <AddNewProduct />
-      {isLoading && (
-        <div className="mx-auto text-gray-500">لطفا کمی صبر کنید...</div>
-      )}
-      {isError && (
-        <div className="text-red-700">
-          متاسفانه مشکلی پیش آمده است نمی توانیم داده ها را نمایش دهیم
+      {data.products?.length ? (
+        <div className="card">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b">
+                <th className="py-3">عکس</th>
+                <th className="py-3">اسم</th>
+                <th className="py-3">قیمت</th>
+                <th className="py-3">موجودی</th>
+                <th className="py-3">وضعیت</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.products.map(
+                (item: any): JSX.Element => (
+                  <tr key={item.id}>
+                    <td className="md:flex justify-center">
+                      <img
+                        src={item.img}
+                        alt={item.name}
+                        className="max-h-40"
+                      />
+                    </td>
+                    <td className="md:text-center py-8">{item.name}</td>
+                    <td className="md:text-center py-8">
+                      {item.price?.toLocaleString()} تومان
+                    </td>
+                    <td className="md:text-center py-8">{item.count}</td>
+                    <td className="py-8 text-center">
+                      <button
+                        type="button"
+                        className="btn"
+                        onClick={() => {
+                          setIsShowDetailsModal(true);
+                          console.log(item);
+                        }}
+                      >
+                        جزئیات
+                      </button>
+                      <button
+                        type="button"
+                        className="btn"
+                        onClick={() => {
+                          setIsShowModal(true);
+                          setProductId(item.id);
+                        }}
+                      >
+                        حذف
+                      </button>
+                      <button
+                        type="button"
+                        className="btn"
+                        onClick={() => setIsShowEditModal(true)}
+                      >
+                        ویرایش
+                      </button>
+                    </td>
+                  </tr>
+                )
+              )}
+            </tbody>
+          </table>
         </div>
-      )}
-      {data?.length ? (
-        <>
-          <div className="card">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b">
-                  <th className="py-3">عکس</th>
-                  <th className="py-3">اسم</th>
-                  <th className="py-3">قیمت</th>
-                  <th className="py-3">موجودی</th>
-                  <th className="py-3">وضعیت</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data?.map(
-                  (item: any): JSX.Element => (
-                    <Product
-                      key={item.id}
-                      setIsShowModal={setIsShowModal}
-                      setIsShowDetailsModa={setIsShowDetailsModal}
-                      setIsShowEditModal={setIsShowEditModal}
-                      {...item}
-                    />
-                  )
-                )}
-              </tbody>
-            </table>
-          </div>
-        </>
       ) : (
-        <>{!isLoading && <ErrorBox message="هیچ محصولی یافت نشد" />}</>
+        <ErrorBox message="هیچ محصولی یافت نشد" />
       )}
 
       {/* modals */}
       {isShowModal && (
-        <DeleteModal submitAction={modalSubmit} cancelAction={modalCancel} />
+        <DeleteModal
+          productId={productId}
+          submitAction={modalSubmit}
+          cancelAction={modalCancel}
+        />
       )}
-      {isShowDetailsModal && (
-        <DetailsModal onHide={() => setIsShowDetailsModal(false)} />
-      )}
+      {isShowDetailsModal && <DetailsModal onHide={closeDetailsmodal} />}
       {isShowEditModal && (
         <EditModal
           onClose={() => {

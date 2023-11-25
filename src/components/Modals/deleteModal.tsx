@@ -1,13 +1,19 @@
 import ReactDom from "react-dom";
+import { useDispatch } from "react-redux";
+import { removeProduct } from "../../redux/store/products";
 interface ModalProps {
   submitAction: () => void;
   cancelAction: () => void;
+  productId: any;
   onclick?: () => void;
 }
 export default function Modal({
+  productId,
   cancelAction,
   submitAction,
 }: ModalProps): JSX.Element {
+  const dispatch = useDispatch<any>();
+
   return ReactDom.createPortal(
     <div
       className="relative z-10"
@@ -29,14 +35,17 @@ export default function Modal({
               <button
                 type="button"
                 className="btn"
-                onClick={() => cancelAction()}
+                onClick={() => {
+                  submitAction();
+                  dispatch(removeProduct(productId));
+                }}
               >
                 بله
               </button>
               <button
                 type="button"
                 className="btnLight"
-                onClick={() => submitAction()}
+                onClick={() => cancelAction()}
               >
                 خیر
               </button>
