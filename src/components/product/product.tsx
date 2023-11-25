@@ -3,15 +3,18 @@ interface productProps {
   img: string;
   price: string;
   count: string;
+  onclick?: () => any;
+  isShowDetailsModal: boolean;
   setIsShowEditModal: (value: React.SetStateAction<boolean>) => void;
   setIsShowDetailsModal: (value: React.SetStateAction<boolean>) => void;
   setIsShowModal: (value: React.SetStateAction<boolean>) => void;
 }
-export const Product = ({
+const Product = ({
   name,
   img,
   price,
   count,
+  isShowDetailsModal,
   setIsShowEditModal,
   setIsShowDetailsModal,
   setIsShowModal,
@@ -29,7 +32,10 @@ export const Product = ({
           type="button"
           className="btn"
           onClick={() => {
-            setIsShowDetailsModal(true);
+            console.log("clicked");
+            console.log(isShowDetailsModal);
+            setIsShowDetailsModal(false);
+            console.log(setIsShowDetailsModal);
           }}
         >
           جزئیات
@@ -54,3 +60,4 @@ export const Product = ({
     </tr>
   );
 };
+export default Product;

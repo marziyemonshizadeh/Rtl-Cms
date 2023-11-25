@@ -1,10 +1,13 @@
 import { useEffect } from "react";
-import ReactDom from "react-dom";
+import { useQuery } from "react-query";
+
 interface DetailsModalProps {
   onHide: () => void;
+  productId?: any;
   onclick?: () => void;
 }
 export default function DetailsModal({
+  productId,
   onHide,
 }: DetailsModalProps): JSX.Element {
   useEffect(() => {
@@ -19,8 +22,14 @@ export default function DetailsModal({
 
     return () => window.removeEventListener("keydown", checkKey);
   });
+  const { data } = useQuery("Products", () =>
+    fetch(`http://localhost:3001/products/${productId}`).then((res) =>
+      res.json()
+    )
+  );
+  console.log(data);
 
-  return ReactDom.createPortal(
+  return (
     <div
       className="relative z-10"
       aria-labelledby="modal-title"
@@ -45,9 +54,9 @@ export default function DetailsModal({
 
                   <tbody>
                     <tr>
-                      <td className="td">msi</td>
-                      <td className="td"> 30000000</td>
-                      <td className="td">50</td>
+                      <td className="td">{data?.name}</td>
+                      <td className="td"> {data?.price}</td>
+                      <td className="td">{data?.count}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -56,7 +65,6 @@ export default function DetailsModal({
           </div>
         </div>
       </div>
-    </div>,
-    document.getElementById("modal")!
+    </div>
   );
 }
