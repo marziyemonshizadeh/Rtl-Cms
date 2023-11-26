@@ -1,12 +1,18 @@
-import { configureStore } from '@reduxjs/toolkit'
-import darkmodeReducer from './store/darkmood'
-
-
-
+import { configureStore } from '@reduxjs/toolkit';
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import commentsReducer from './store/comments';
+import darkmodeReducer from './store/darkmood';
+import discountsReducer from './store/discounts';
+import ordersReducer from './store/orders';
+import productsReducer from './store/products';
 
  const store = configureStore({
   reducer: {
-    darkmode: darkmodeReducer
+    darkmode: darkmodeReducer,
+    products:productsReducer,
+    comments:commentsReducer,
+    orders:ordersReducer,
+    discount:discountsReducer
   }
 })
 
@@ -14,29 +20,6 @@ import darkmodeReducer from './store/darkmood'
 export type RootState = ReturnType<typeof store.getState>
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch
+export const useAppDispatch: () => typeof store.dispatch = useDispatch;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 export default store
-
-
-
-
-
-
-
-// import { configureStore } from "@reduxjs/toolkit";
-// import { useDispatch } from 'react-redux';
-// // import productsReducer from "../redux/store/products";
-
-
-// const store = configureStore({
-//   reducer: {
-//     // products:productsReducer,
-//   },
-//   middleware: (getDefaultMiddleware) =>
-//     getDefaultMiddleware({
-//       serializableCheck: false,
-//     }),
-// });
-// export type RootState = ReturnType<typeof store.getState>
-// export type AppDispatch = typeof store.dispatch
-// export const useAppDispatch: () => AppDispatch = useDispatch
-// export default store;
