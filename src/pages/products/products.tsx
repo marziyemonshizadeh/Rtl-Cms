@@ -1,16 +1,20 @@
-// import { ThunkDispatch } from "@reduxjs/toolkit";
 import { useEffect, useState } from "react";
-// import { useQuery } from "react-query";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import DeleteModal from "../../components/Modals/deleteModal";
 import DetailsModal from "../../components/Modals/detailsModal";
 import EditModal from "../../components/Modals/editModal";
 import AddNewProduct from "../../components/addNewProduct/addNewProduct";
 import ErrorBox from "../../components/errorBox/errorBox";
-// import Product from "../../components/product/product";
 import { useAppSelector } from "../../redux/store";
 import { fetchProduct, removeProduct } from "../../redux/store/products";
-const Products = () => {
+import apiRequests from "../../services/configs";
+type Inputs = {
+  newName: string;
+  newPrice: Number;
+  newCount: string;
+};
+const Products: React.FC = () => {
   // state
   const [isShowModal, setIsShowModal] = useState<boolean>(false);
   const [isShowDetailsModal, setIsShowDetailsModal] = useState<boolean>(false);
@@ -25,11 +29,11 @@ const Products = () => {
     console.log(productId);
     dispatch(removeProduct(productId));
   };
-  const editInfosSubmit = (e: any) => {
-    e.preventDefault();
-    setIsShowEditModal(false);
-    console.log(isShowEditModal);
-  };
+  // const editInfosSubmit = (e: any) => {
+  //   e.preventDefault();
+  //   setIsShowEditModal(false);
+  //   console.log(isShowEditModal);
+  // };
   const closeDetailsmodal = () => {
     setIsShowDetailsModal(false);
     console.log("مدال جزییات بسته شد");
@@ -39,12 +43,26 @@ const Products = () => {
   // );
   const dispatch = useDispatch<any>();
   const data = useAppSelector((state) => state.products);
-  // console.log("data===", data);
+  console.log("data===", data);
 
   useEffect(() => {
     dispatch(fetchProduct("products"));
   }, []);
 
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<Inputs>();
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    console.log(data);
+    apiRequests.post("/products/", data).then((res) => {
+      console.log("get post called");
+      return res.data;
+    });
+  };
+  console.log(watch("newName"));
   return (
     <>
       <AddNewProduct />
@@ -79,9 +97,10 @@ const Products = () => {
                     <td className="py-8 text-center">
                       <button
                         type="button"
-                        className="btn"
+                        className="btn m-1"
                         onClick={() => {
                           setIsShowDetailsModal(true);
+                          setProductId(item.id);
                           console.log(item);
                         }}
                       >
@@ -89,7 +108,7 @@ const Products = () => {
                       </button>
                       <button
                         type="button"
-                        className="btn"
+                        className="btn m-1"
                         onClick={() => {
                           setIsShowModal(true);
                           setProductId(item.id);
@@ -99,8 +118,11 @@ const Products = () => {
                       </button>
                       <button
                         type="button"
-                        className="btn"
-                        onClick={() => setIsShowEditModal(true)}
+                        className="btn m-1"
+                        onClick={() => {
+                          setIsShowEditModal(true);
+                          setProductId(item.id);
+                        }}
                       >
                         ویرایش
                       </button>
@@ -123,33 +145,47 @@ const Products = () => {
           cancelAction={modalCancel}
         />
       )}
-      {isShowDetailsModal && <DetailsModal onHide={closeDetailsmodal} />}
+      {isShowDetailsModal && (
+        <DetailsModal productId={productId} onHide={closeDetailsmodal} />
+      )}
       {isShowEditModal && (
         <EditModal
           onClose={() => {
             console.log("close");
             setIsShowEditModal(false);
           }}
-          onSubmit={editInfosSubmit}
         >
-          <input
-            className="input mx-auto my-2 text-right font-normal"
-            type="text"
-            placeholder="نام جدید محصول را وارد کنید "
-            aria-label="Full name"
-          />
-          <input
-            className="input mx-auto my-2 text-right font-normal"
-            type="text"
-            placeholder="قیمت جدید محصول را وارد کنید "
-            aria-label="Full name"
-          />
-          <input
-            className="input mx-auto my-2 text-right font-normal"
-            type="text"
-            placeholder="تعداد جدید محصول را وارد کنید "
-            aria-label="Full name"
-          />
+          <form
+            className="text-center min-h-64 pt-5"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <input
+              // defaultValue="test"
+              className="input"
+              type="text"
+              placeholder="نام جدید محصول را وارد کنید "
+              aria-label="newName"
+              {...register("newName")}
+            />
+            {errors.newName && <span>This field is required</span>}
+            <input
+              className="input"
+              type="text"
+              placeholder="قیمت جدید محصول را وارد کنید "
+              aria-label="newPrice"
+              {...register("newPrice")}
+            />
+            <input
+              className="input"
+              type="text"
+              placeholder="تعداد جدید محصول را وارد کنید "
+              aria-label="newCount"
+              {...register("newCount")}
+            />
+            <button type="submit" className="mx-auto block btn my-5">
+              ثبت اطلاعات جدید
+            </button>
+          </form>
         </EditModal>
       )}
     </>
