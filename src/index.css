@@ -13,13 +13,13 @@
         @apply font-extrabold text-black dark:text-slate-100 font-serif md:text-4xl text-xl my-2 p-3
     }
     .input{
-        @apply appearance-none border-none  bg-gray-200 dark:bg-slate-200 font-bold h-10 text-gray-600 dark:text-slate-950  py-1 px-2 leading-tight rounded-lg focus:border-lime-300
+        @apply appearance-none border-none  bg-gray-200 dark:bg-slate-200 font-bold h-10 text-gray-600 dark:text-slate-950  py-1 px-2 leading-tight rounded-lg focus:border-lime-300 my-2
     }
     .li{
         @apply flex hover:bg-lime-700 dark:hover:bg-gray-500 py-3 md:justify-start justify-center transition-colors
     }
     .btn{
-        @apply font-extrabold bg-lime-500 text-slate-50 p-2 m-2 select-none rounded-md focus:ring-2 ring-offset-2 ring-lime-700 focus:bg-lime-600
+        @apply font-extrabold bg-lime-500 text-slate-50 p-2 select-none rounded-md focus:ring-2 ring-offset-2 ring-lime-700 focus:bg-lime-600
     }
     .btnLight{
         @apply font-extrabold bg-slate-200 text-slate-950 p-2 m-2  select-none rounded-md focus:ring-2 ring-offset-2 ring-slate-400 focus:bg-slate-200
