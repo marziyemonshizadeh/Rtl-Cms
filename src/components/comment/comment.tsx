@@ -22,16 +22,16 @@ export default function Comment({
       <td className="text-center py-8">{history}</td>
       <td className="text-center py-8">{time}</td>
       <td className="py-8 text-center">
-        <button type="button" className="btn">
+        <button type="button" className="btn m-1">
           حذف
         </button>
-        <button type="button" className="btn">
+        <button type="button" className="btn m-1">
           تایید
         </button>
-        <button type="button" className="btn">
+        <button type="button" className="btn m-1">
           پاسخ
         </button>
-        <button type="button" className="btn">
+        <button type="button" className="btn m-1">
           ویرایش
         </button>
       </td>

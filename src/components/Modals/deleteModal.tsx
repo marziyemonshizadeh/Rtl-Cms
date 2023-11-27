@@ -34,7 +34,7 @@ export default function Modal({
             <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:justify-center sm:px-6">
               <button
                 type="button"
-                className="btn"
+                className="btn my-2"
                 onClick={() => {
                   submitAction();
                   dispatch(removeProduct(productId));

@@ -43,7 +43,7 @@ const AddNewProduct: React.FC = () => {
     <>
       <h1 className="header">افزودن محصول جدید</h1>
       <form className="card min-h-64 pt-5" onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid xl:grid-cols-2 md:grid-cols-1 gap-5">
+        <div className="grid xl:grid-cols-2 md:grid-cols-1 gap-2">
           <input
             // defaultValue="test"
             className="input"

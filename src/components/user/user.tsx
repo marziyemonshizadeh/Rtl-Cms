@@ -20,13 +20,13 @@ export default function User({
       <td className="text-center py-8">{phoneNumber}</td>
       <td className="text-center py-8">{email}</td>
       <td className="py-8 text-center">
-        <button type="button" className="btn">
+        <button type="button" className="btn m-1">
           حذف
         </button>
-        <button type="button" className="btn">
+        <button type="button" className="btn m-1">
           جزئیات
         </button>
-        <button type="button" className="btn">
+        <button type="button" className="btn m-1">
           ویرایش
         </button>
       </td>
