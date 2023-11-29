@@ -1,6 +1,8 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import apiRequests from "../../services/configs";
 // import { useMutation } from "react-query";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 type Inputs = {
   name: string;
@@ -21,6 +23,7 @@ const AddNewProduct: React.FC = () => {
   //     )
   const {
     register,
+    reset,
     handleSubmit,
     watch,
     formState: { errors },
@@ -35,8 +38,20 @@ const AddNewProduct: React.FC = () => {
     console.log(data);
     apiRequests.post("/products/", data).then((res) => {
       console.log("get post called");
+      toast.success("! محصول مورد نظر با موفقیت اضافه شد", {
+        position: "bottom-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       return res.data;
     });
+
+    reset();
   };
   console.log(watch("name")); // watch input value by passing the name of it
   return (
@@ -45,6 +60,7 @@ const AddNewProduct: React.FC = () => {
       <form className="card min-h-64 pt-5" onSubmit={handleSubmit(onSubmit)}>
         <div className="grid xl:grid-cols-2 md:grid-cols-1 gap-2">
           <div className="flex flex-col">
+            <ToastContainer />
             <input
               // defaultValue="test"
               className="input"
