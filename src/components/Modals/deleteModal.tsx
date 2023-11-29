@@ -1,16 +1,18 @@
 import ReactDom from "react-dom";
 import { useDispatch } from "react-redux";
-import { removeProduct } from "../../redux/store/products";
+// import { removeProduct } from "../../redux/store/products";
 import ModalsTemplate from "../modalsTemplate/modalsTemplate";
 
 interface ModalProps {
   submitAction: () => void;
   cancelAction: () => void;
+  remove: any;
   productId: any;
   onclick?: () => void;
 }
 export default function Modal({
   productId,
+  remove,
   cancelAction,
   submitAction,
 }: ModalProps): JSX.Element {
@@ -28,7 +30,7 @@ export default function Modal({
           className="btn m-1"
           onClick={() => {
             submitAction();
-            dispatch(removeProduct(productId));
+            dispatch(remove(productId));
           }}
         >
           بله
