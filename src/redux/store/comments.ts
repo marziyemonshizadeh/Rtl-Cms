@@ -23,6 +23,12 @@ export const fetchComment = createAsyncThunk(
     });
   } 
 );
+export const removeComment = createAsyncThunk(
+  "comment/remove",
+  async (id:any) => {
+    return apiRequests.delete(`/comments/${id}`);   
+  } 
+);
 export const commentsSlice = createSlice({
     name: 'comments',
     // `createSlice` will infer the state type from the `initialState` argument
@@ -41,7 +47,12 @@ export const commentsSlice = createSlice({
     extraReducers: (builder) => {
       builder.addCase(fetchComment.fulfilled, (state, action) => {
         state.comments = action.payload;
-      });
+      }),
+      builder.addCase(removeComment.fulfilled, (state, action) => {
+        console.log("state remove fulfilled :",state.comments);
+        console.log("action remove fulfilled:", action);
+        const newComments = state.comments.filter(i=>i.id !== action.meta.arg)  
+      })
     },
   })
   
