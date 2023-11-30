@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import DeleteModal from "../../components/Modals/deleteModal";
 import DetailsModal from "../../components/Modals/detailsModal";
 import EditModal from "../../components/Modals/editModal";
@@ -14,12 +16,13 @@ type Inputs = {
   newPrice: Number;
   newCount: string;
 };
+
 const Products: React.FC = () => {
   // state
   const [isShowModal, setIsShowModal] = useState<boolean>(false);
   const [isShowDetailsModal, setIsShowDetailsModal] = useState<boolean>(false);
   const [isShowEditModal, setIsShowEditModal] = useState<boolean>(false);
-  const [productId, setProductId] = useState();
+  const [productId, setProductId] = useState<number>();
   // funcs
   const modalCancel = () => {
     setIsShowModal(false);
@@ -28,19 +31,23 @@ const Products: React.FC = () => {
     setIsShowModal(false);
     console.log(productId);
     dispatch(removeProduct(productId));
+    toast.success("! محصول مورد نظر با موفقیت حذف شد", {
+      position: "bottom-left",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
   };
-  // const editInfosSubmit = (e: any) => {
-  //   e.preventDefault();
-  //   setIsShowEditModal(false);
-  //   console.log(isShowEditModal);
-  // };
+
   const closeDetailsmodal = () => {
     setIsShowDetailsModal(false);
     console.log("مدال جزییات بسته شد");
   };
-  // const { data, isLoading, isError } = useQuery("Products", () =>
-  //   fetch("http://localhost:3001/products").then((res) => res.json())
-  // );
+
   const dispatch = useDispatch<any>();
   const data = useAppSelector((state) => state.products);
   console.log("data===", data);
@@ -52,20 +59,20 @@ const Products: React.FC = () => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     console.log(data);
-    apiRequests.post("/products/", data).then((res) => {
-      console.log("get post called");
+    apiRequests.get(`/products/${productId}`).then((res) => {
+      console.log("productId get data on edit modal successfully ;)");
       return res.data;
     });
   };
-  console.log(watch("newName"));
   return (
     <>
       <AddNewProduct />
+      <ToastContainer />
+
       {data.products?.length ? (
         <div className="card">
           <table className="w-full">
@@ -101,7 +108,6 @@ const Products: React.FC = () => {
                         onClick={() => {
                           setIsShowDetailsModal(true);
                           setProductId(item.id);
-                          console.log(item);
                         }}
                       >
                         جزئیات
@@ -119,6 +125,7 @@ const Products: React.FC = () => {
                       <button
                         type="button"
                         className="btn m-1"
+                        // onClick={editInfosSubmit(item.id)}
                         onClick={() => {
                           setIsShowEditModal(true);
                           setProductId(item.id);
@@ -143,8 +150,10 @@ const Products: React.FC = () => {
           productId={productId}
           submitAction={modalSubmit}
           cancelAction={modalCancel}
+          remove={removeProduct}
         />
       )}
+
       {isShowDetailsModal && (
         <DetailsModal productId={productId} onHide={closeDetailsmodal} />
       )}
@@ -155,36 +164,50 @@ const Products: React.FC = () => {
             setIsShowEditModal(false);
           }}
         >
-          <form
-            className="text-center min-h-64 pt-5"
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            <input
-              // defaultValue="test"
-              className="input"
-              type="text"
-              placeholder="نام جدید محصول را وارد کنید "
-              aria-label="newName"
-              {...register("newName")}
-            />
-            {errors.newName && <span>This field is required</span>}
-            <input
-              className="input"
-              type="text"
-              placeholder="قیمت جدید محصول را وارد کنید "
-              aria-label="newPrice"
-              {...register("newPrice")}
-            />
-            <input
-              className="input"
-              type="text"
-              placeholder="تعداد جدید محصول را وارد کنید "
-              aria-label="newCount"
-              {...register("newCount")}
-            />
-            <button type="submit" className="mx-auto block btn my-5">
-              ثبت اطلاعات جدید
-            </button>
+          <form className="min-h-64 pt-5" onSubmit={handleSubmit(onSubmit)}>
+            {data.products.map(
+              (item: any): JSX.Element => (
+                <>
+                  {item.id === productId ? (
+                    <>
+                      <input
+                        defaultValue={item.name}
+                        className="input w-full text-right"
+                        type="text"
+                        placeholder="نام جدید محصول را وارد کنید "
+                        aria-label="newName"
+                        {...register("newName")}
+                      />
+                      {errors.newName && <span>This field is required</span>}
+                      <input
+                        defaultValue={item.price}
+                        className="input w-full text-right"
+                        type="text"
+                        placeholder="قیمت جدید محصول را وارد کنید "
+                        aria-label="newPrice"
+                        {...register("newPrice")}
+                      />
+                      <input
+                        defaultValue={item.count}
+                        className="input w-full text-right"
+                        type="text"
+                        placeholder="تعداد جدید محصول را وارد کنید "
+                        aria-label="newCount"
+                        {...register("newCount")}
+                      />
+                      <div className="flex justify-center gap-3">
+                        <button type="submit" className="btnLight my-5">
+                          cancel
+                        </button>
+                        <button type="submit" className="btn my-5">
+                          ثبت اطلاعات جدید
+                        </button>
+                      </div>
+                    </>
+                  ) : null}
+                </>
+              )
+            )}
           </form>
         </EditModal>
       )}
