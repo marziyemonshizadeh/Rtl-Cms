@@ -5,6 +5,7 @@ import darkmodeReducer from './store/darkmood';
 import discountsReducer from './store/discounts';
 import ordersReducer from './store/orders';
 import productsReducer from './store/products';
+import usersReducer from './store/users';
 
  const store = configureStore({
   reducer: {
@@ -12,7 +13,8 @@ import productsReducer from './store/products';
     products:productsReducer,
     comments:commentsReducer,
     orders:ordersReducer,
-    discount:discountsReducer
+    discount:discountsReducer,
+    users:usersReducer
   }
 })
 

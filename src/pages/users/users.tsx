@@ -1,18 +1,30 @@
-import { useQuery } from "react-query";
+// import { useQuery } from "react-query";
 import ErrorBox from "../../components/errorBox/errorBox";
 import User from "../../components/user/user";
 
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "../../redux/store";
+import { fetchUser } from "../../redux/store/users";
+
 const Users: React.FC = () => {
-  const { data, isLoading } = useQuery("users", () =>
-    fetch("http://localhost:3001/users").then((res) => res.json())
-  );
+  const dispatch = useDispatch<any>();
+  const data = useAppSelector((state) => state.users);
+  console.log("data===", data);
+
+  useEffect(() => {
+    dispatch(fetchUser("users"));
+  }, []);
+  // const { data, isLoading } = useQuery("users", () =>
+  //   fetch("http://localhost:3001/users").then((res) => res.json())
+  // );
   return (
     <>
       <h1 className="header">لیست کاربران</h1>
-      {isLoading && (
-        <div className="mx-auto text-gray-500">لطفا کمی صبر کنید...</div>
-      )}
-      {data?.length ? (
+      {/* {isLoading && ( */}
+      {/* <div className="mx-auto text-gray-500">لطفا کمی صبر کنید...</div>
+      )} */}
+      {data.users?.length ? (
         <div className="card mt-5">
           <table className="w-full">
             <thead className="border-b-2">
@@ -26,14 +38,15 @@ const Users: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {data?.map((item: any) => {
+              {data.users?.map((item: any) => {
                 return <User key={item.id} {...item} />;
               })}
             </tbody>
           </table>
         </div>
       ) : (
-        <>{!isLoading && <ErrorBox message="هیچ کاربری یافت نشد" />}</>
+        // <>{!isLoading &&
+        <ErrorBox message="هیچ کاربری یافت نشد" />
       )}
     </>
   );
