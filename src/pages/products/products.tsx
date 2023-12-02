@@ -147,7 +147,7 @@ const Products: React.FC = () => {
       {/* modals */}
       {isShowModal && (
         <DeleteModal
-          productId={productId}
+          Id={productId}
           submitAction={modalSubmit}
           cancelAction={modalCancel}
           remove={removeProduct}
@@ -155,7 +155,17 @@ const Products: React.FC = () => {
       )}
 
       {isShowDetailsModal && (
-        <DetailsModal productId={productId} onHide={closeDetailsmodal} />
+        <DetailsModal
+          Id={productId}
+          // Get={fetchProduct}
+          getItem="products"
+          onHide={closeDetailsmodal}
+          product={true}
+        >
+          <th className="py-3">اسم</th>
+          <th className="py-3">قیمت</th>
+          <th className="py-3">موجودی</th>
+        </DetailsModal>
       )}
       {isShowEditModal && (
         <EditModal
