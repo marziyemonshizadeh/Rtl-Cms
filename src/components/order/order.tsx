@@ -5,6 +5,8 @@ interface orderProps {
   orderTime: string;
   price: string;
   discount: string;
+  onClick: () => void;
+  showDetails: () => void;
 }
 export default function Order({
   product,
@@ -13,6 +15,8 @@ export default function Order({
   orderTime,
   price,
   discount,
+  onClick,
+  showDetails,
 }: orderProps) {
   return (
     <tr>
@@ -23,16 +27,16 @@ export default function Order({
       <td className="text-center py-8">{price}</td>
       <td className="text-center py-8">{discount}</td>
       <td className="py-8 text-center">
-        <button type="button" className="btn">
+        <button type="button" className="btn m-1" onClick={showDetails}>
           جزئیات
         </button>
-        <button type="button" className="btn">
+        <button type="button" className="btn m-1" onClick={onClick}>
           حذف
         </button>
-        <button type="button" className="btn">
+        <button type="button" className="btn m-1">
           بعدا بررسی می شود
         </button>
-        <button type="button" className="btn">
+        <button type="button" className="btn m-1">
           تایید
         </button>
       </td>
