@@ -23,6 +23,12 @@ export const fetchDiscounts = createAsyncThunk(
     });
   } 
 );
+export const removeDiscounts = createAsyncThunk(
+  "discount/remove",
+  async (id:any) => {
+    return apiRequests.delete(`/discounts/${id}`);   
+  } 
+);
 export const discountsSlice = createSlice({
     name: 'discounts',
     // `createSlice` will infer the state type from the `initialState` argument
