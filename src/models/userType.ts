@@ -1,6 +1,8 @@
 export default interface User {
-    customer: number;
+    id:number;
+    customer: string;
     userName: string;
+    password: string;
     phoneNumber:string;
-    email:number;
+    email:string;
   }
