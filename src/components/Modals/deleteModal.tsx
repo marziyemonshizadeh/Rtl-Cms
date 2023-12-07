@@ -7,11 +7,11 @@ interface ModalProps {
   submitAction: () => void;
   cancelAction: () => void;
   remove: any;
-  productId: any;
+  Id: any;
   onclick?: () => void;
 }
 export default function Modal({
-  productId,
+  Id,
   remove,
   cancelAction,
   submitAction,
@@ -30,7 +30,7 @@ export default function Modal({
           className="btn m-1"
           onClick={() => {
             submitAction();
-            dispatch(remove(productId));
+            dispatch(remove(Id));
           }}
         >
           بله
