@@ -1,15 +1,30 @@
-import { useEffect } from "react";
-import { useQuery } from "react-query";
+import { useEffect, useState } from "react";
+// import { useQuery } from "react-query";
+import apiRequests from "../../services/configs";
 import ModalsTemplate from "../modalsTemplate/modalsTemplate";
 
 interface DetailsModalProps {
   onHide: () => void;
-  productId?: any;
+  // Get: any;
+  product?: boolean;
+  user?: boolean;
+  discount?: boolean;
+  order?: boolean;
+  getItem: string;
+  Id?: number;
+  children: React.ReactNode;
   onclick?: () => void;
 }
 export default function DetailsModal({
-  productId,
+  Id,
+  getItem,
+  product,
+  user,
+  order,
+  discount,
+  // Get,
   onHide,
+  children,
 }: DetailsModalProps): JSX.Element {
   useEffect(() => {
     const checkKey = (event: any) => {
@@ -23,30 +38,61 @@ export default function DetailsModal({
 
     return () => window.removeEventListener("keydown", checkKey);
   });
-  const { data } = useQuery("Products", () =>
-    fetch(`http://localhost:3001/products/${productId}`).then((res) =>
-      res.json()
-    )
-  );
-  console.log(data);
+  const [Data, setData] = useState<any>();
+  // const dispatch = useDispatch<any>();
+
+  useEffect(() => {
+    apiRequests.get(`http://localhost:3001/${getItem}/${Id}`).then((res) => {
+      setData(res.data);
+      console.log("res = ", res.data);
+    });
+  }, [Id]);
+  console.log("data = ", Data);
+
+  // const { data } = useQuery("Products", () =>
+  //   fetch(`http://localhost:3001/products/${Id}`).then((res) => res.json())
+  // );
 
   return (
     <ModalsTemplate>
       <div className="text-center font-extrabold text-2xl">
         <table className="w-full">
           <thead>
-            <tr className="border-b">
-              <th className="py-3">اسم</th>
-              <th className="py-3">قیمت</th>
-              <th className="py-3">موجودی</th>
-            </tr>
+            <tr className="border-b">{children}</tr>
           </thead>
 
           <tbody>
             <tr>
-              <td className="td">{data?.name}</td>
-              <td className="td"> {data?.price}</td>
-              <td className="td">{data?.count}</td>
+              {product && (
+                <>
+                  <td className="td">{Data?.name}</td>
+                  <td className="td"> {Data?.price}</td>
+                  <td className="td">{Data?.count}</td>
+                </>
+              )}
+              {user && (
+                <>
+                  <td className="td">{Data?.customer}</td>
+                  <td className="td"> {Data?.userName}</td>
+                  <td className="td">{Data?.password}</td>
+                </>
+              )}
+              {discount && (
+                <>
+                  <td className="td">{Data?.discountCode}</td>
+                  <td className="td"> {Data?.product}</td>
+                  <td className="td">{Data?.discountPercent}</td>
+                </>
+              )}
+              {order && (
+                <>
+                  <td className="td">{Data?.customer}</td>
+                  <td className="td">{Data?.product}</td>
+                  <td className="td">{Data?.password}</td>
+                  <td className="td">{Data?.price}</td>
+                  <td className="td">{Data?.discount}</td>
+                </>
+              )}
             </tr>
           </tbody>
         </table>
