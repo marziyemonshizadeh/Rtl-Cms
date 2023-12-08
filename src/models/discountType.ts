@@ -5,4 +5,5 @@ export default interface Discount {
     history:string;
     adminName:string;
     product:string;
-  }
+    confirmation: boolean;
+    }
