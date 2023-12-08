@@ -1,4 +1,4 @@
-import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import Comment from "../../models/commentType";
 import apiRequests from "../../services/configs";
 
@@ -34,29 +34,25 @@ export const commentsSlice = createSlice({
     // `createSlice` will infer the state type from the `initialState` argument
     initialState,
     reducers: {
-      addComment: (state,action: PayloadAction<{name: string}>) => {
-        state.comments.push({
-          id: state.comments.length,
-          name: action.payload.name,
-          product: action.payload.name,
-          history: action.payload.name,
-          time: action.payload.name,
-        });
-      },
+      // addComment: (state,action: PayloadAction<{name: string}>) => {
+      //   state.comments.push({
+      //     id: state.comments.length,
+      //     name: action.payload.name,
+      //     product: action.payload.name,
+      //     history: action.payload.name,
+      //     time: action.payload.name,
+      //   });
+      // },
     },
     extraReducers: (builder) => {
       builder.addCase(fetchComment.fulfilled, (state, action) => {
         state.comments = action.payload;
       }),
-      builder.addCase(removeComment.fulfilled, (state, action) => {
-        console.log("state remove fulfilled :",state.comments);
-        console.log("action remove fulfilled:", action);
-        const newComments = state.comments.filter(i=>i.id !== action.meta.arg)  
-      })
+      builder.addCase(removeComment.fulfilled, (state, action) =>{state.comments.filter(i=>i.id !== action.meta.arg)  })
     },
   })
   
-  export const { addComment } = commentsSlice.actions
+  // export const { addComment } = commentsSlice.actions
    
   export default commentsSlice.reducer
 
