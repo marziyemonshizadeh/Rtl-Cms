@@ -18,7 +18,9 @@ const Discounts: React.FC = () => {
   return (
     <>
       <h1 className="header"> لیست کدهای تخفیف ثبت شده </h1>
-      {data.discounts?.length ? (
+      {data.loading ? (
+        <div>در حال بارگزاری ...</div>
+      ) : data.discounts?.length ? (
         <div className="card my-5">
           <table className="w-full">
             <thead className="border-b-2">
@@ -39,7 +41,7 @@ const Discounts: React.FC = () => {
           </table>
         </div>
       ) : (
-        <ErrorBox message="هیچ تخفیفی یافت نشد" />
+        !data.loading && <ErrorBox message="هیچ تخفیفی یافت نشد" />
       )}
     </>
   );

@@ -4,10 +4,12 @@ import apiRequests from "../../services/configs";
 
 interface OrderState {
   orders: Order[];
+  loading: boolean;
 }
 
 const initialState: OrderState = {
   orders: [],
+  loading: false
 };
 export const fetchOrders = createAsyncThunk(
   "order/fetch",
@@ -34,20 +36,14 @@ export const ordersSlice = createSlice({
     // `createSlice` will infer the state type from the `initialState` argument
     initialState,
     reducers: {
-      // addOrder: (state,action: PayloadAction<{name: string}>) => {
-      //     state.orders.push({
-      //         product: action.payload.name,
-      //         customer: action.payload.name,
-      //         orderDate: action.payload.name,
-      //           price: state.orders.length,
-      //           orderTime: action.payload.name,
-      //           discount: action.payload.name,
-      //   });
-      // },
     },
     extraReducers: (builder) => {
       builder.addCase(fetchOrders.fulfilled, (state, action) => {
+        state.loading = false;
         state.orders = action.payload;
+      }),
+      builder.addCase(fetchOrders.pending, (state) => {
+        state.loading = true;
       }),
       builder.addCase(removeOrders.fulfilled, (state, action) => {
         console.log("state remove fulfilled :",state.orders);
@@ -59,8 +55,6 @@ export const ordersSlice = createSlice({
       })
     },
   })
-  
-  // export const { addOrder } = ordersSlice.actions
-   
+     
   export default ordersSlice.reducer
 

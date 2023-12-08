@@ -72,8 +72,9 @@ const Products: React.FC = () => {
     <>
       <AddNewProduct />
       <ToastContainer />
-
-      {data.products?.length ? (
+      {data.loading ? (
+        <div>در حال بارگزاری ...</div>
+      ) : data.products?.length ? (
         <div className="card">
           <table className="w-full">
             <thead>
@@ -141,7 +142,7 @@ const Products: React.FC = () => {
           </table>
         </div>
       ) : (
-        <ErrorBox message="هیچ محصولی یافت نشد" />
+        !data.loading && <ErrorBox message="هیچ محصولی یافت نشد" />
       )}
 
       {/* modals */}

@@ -17,7 +17,9 @@ const Comments: React.FC = () => {
   return (
     <>
       <h1 className="header"> کامنت های محصولات</h1>
-      {data.comments?.length ? (
+      {data.loading ? (
+        <div>در حال بارگزاری ...</div>
+      ) : data.comments?.length ? (
         <div className="card mt-5">
           <table className="w-full">
             <thead className="border-b">
@@ -38,7 +40,7 @@ const Comments: React.FC = () => {
           </table>
         </div>
       ) : (
-        <ErrorBox message="هیچ کامنتی یافت نشد" />
+        !data.loading && <ErrorBox message="هیچ کامنتی یافت نشد" />
       )}
     </>
   );

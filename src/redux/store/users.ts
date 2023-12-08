@@ -4,10 +4,12 @@ import apiRequests from "../../services/configs";
 
 interface UsersState {
   users: User[];
+  loading: boolean;
 }
 
 const initialState: UsersState = {
   users: [],
+  loading: false
 };
 export const fetchUser = createAsyncThunk(
   "user/fetch",
@@ -46,7 +48,11 @@ export const usersSlice = createSlice({
     },
     extraReducers: (builder) => {
       builder.addCase(fetchUser.fulfilled, (state, action) => {
+        state.loading = false;
         state.users = action.payload;
+      }),
+      builder.addCase(fetchUser.pending, (state, action) => {
+        state.loading = true;
       }),
       builder.addCase(removeUser.fulfilled, (state, action) => {
         console.log("state remove fulfilled :",state.users);

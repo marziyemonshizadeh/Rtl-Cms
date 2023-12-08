@@ -4,10 +4,12 @@ import apiRequests from "../../services/configs";
 
 interface CommentState {
   comments: Comment[];
+  loading: boolean;
 }
 
 const initialState: CommentState = {
   comments: [],
+  loading: false
 };
 export const fetchComment = createAsyncThunk(
   "comment/fetch",
@@ -34,25 +36,18 @@ export const commentsSlice = createSlice({
     // `createSlice` will infer the state type from the `initialState` argument
     initialState,
     reducers: {
-      // addComment: (state,action: PayloadAction<{name: string}>) => {
-      //   state.comments.push({
-      //     id: state.comments.length,
-      //     name: action.payload.name,
-      //     product: action.payload.name,
-      //     history: action.payload.name,
-      //     time: action.payload.name,
-      //   });
-      // },
     },
     extraReducers: (builder) => {
       builder.addCase(fetchComment.fulfilled, (state, action) => {
+        state.loading = false;
         state.comments = action.payload;
+      }),
+      builder.addCase(fetchComment.pending, (state) => {
+        state.loading = true;
       }),
       builder.addCase(removeComment.fulfilled, (state, action) =>{state.comments.filter(i=>i.id !== action.meta.arg)  })
     },
   })
-  
-  // export const { addComment } = commentsSlice.actions
-   
+     
   export default commentsSlice.reducer
 

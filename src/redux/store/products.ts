@@ -4,10 +4,12 @@ import apiRequests from "../../services/configs";
 
 interface ProductState {
   products: Product[];
+  loading: boolean;
 }
 
 const initialState: ProductState = {
   products: [],
+  loading: false
 };
 export const fetchProduct = createAsyncThunk(
   "product/fetch",
@@ -35,23 +37,14 @@ export const productsSlice = createSlice({
     // `createSlice` will infer the state type from the `initialState` argument
     initialState,
     reducers: {
-      // addProduct: (state,action: PayloadAction<{name: string}>) => {
-      //   state.products.push({
-      //     id: state.products.length,
-      //     name: action.payload.name,
-      //     img: action.payload.name,
-      //     price: state.products.length,
-      //     count: state.products.length,
-      //   });
-      // },
-      // removeProduct: (state, action) => {
-      //   const indexOfId = state.products.indexOf(action.payload);
-      //   state.products.splice(indexOfId, 1);
-      // },
     },
     extraReducers: (builder) => {
       builder.addCase(fetchProduct.fulfilled, (state, action) => {
+        state.loading = false;
        state.products = action.payload;
+      }),
+      builder.addCase(fetchProduct.pending, (state) => {
+        state.loading = true;
       }),
       builder.addCase(removeProduct.fulfilled, (state, action) => {
         console.log("state remove fulfilled :",state.products);
@@ -64,7 +57,6 @@ export const productsSlice = createSlice({
     },
   })
   
-  // export const { addProduct } = productsSlice.actions
    
   export default productsSlice.reducer
 

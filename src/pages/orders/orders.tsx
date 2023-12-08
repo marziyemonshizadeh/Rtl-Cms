@@ -40,7 +40,9 @@ const Orders: React.FC = () => {
     <>
       <h1 className="header"> لیست سفارشات ثبت شده </h1>
       <ToastContainer />
-      {datas.orders?.length ? (
+      {datas.loading ? (
+        <div>در حال بارگزاری ...</div>
+      ) : datas.orders?.length ? (
         <div className="card mt-5">
           <table className="w-full">
             <thead className="border-b-2">
@@ -77,7 +79,7 @@ const Orders: React.FC = () => {
           </table>
         </div>
       ) : (
-        <ErrorBox message="هیچ سفارشی یافت نشد" />
+        !datas.loading && <ErrorBox message="هیچ سفارشی یافت نشد" />
       )}
 
       {/* modals */}

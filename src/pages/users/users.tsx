@@ -15,16 +15,16 @@ const Users: React.FC = () => {
   useEffect(() => {
     dispatch(fetchUser("users"));
   }, []);
-  // const { data, isLoading } = useQuery("users", () =>
-  //   fetch("http://localhost:3001/users").then((res) => res.json())
-  // );
+
   return (
     <>
       <h1 className="header">لیست کاربران</h1>
       {/* {isLoading && ( */}
       {/* <div className="mx-auto text-gray-500">لطفا کمی صبر کنید...</div>
       )} */}
-      {data.users?.length ? (
+      {data.loading ? (
+        <div>لطفا کمی صبر کنید...</div>
+      ) : data.users?.length ? (
         <div className="card mt-5">
           <table className="w-full">
             <thead className="border-b-2">
@@ -45,8 +45,7 @@ const Users: React.FC = () => {
           </table>
         </div>
       ) : (
-        // <>{!isLoading &&
-        <ErrorBox message="هیچ کاربری یافت نشد" />
+        !data.loading && <ErrorBox message="هیچ کاربری یافت نشد" />
       )}
     </>
   );
