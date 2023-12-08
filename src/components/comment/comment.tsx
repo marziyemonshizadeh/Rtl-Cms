@@ -2,10 +2,12 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import CommentType from "../../models/commentType";
+import { useAppSelector } from "../../redux/store";
 import { removeComment } from "../../redux/store/comments";
+import apiRequests from "../../services/configs";
 import DeleteModal from "../Modals/deleteModal";
 import ShowComment from "../Modals/showCommentModal";
-// import axios from "axios";
 
 interface commentProps {
   id: number;
@@ -28,6 +30,11 @@ export default function Comment({
   const [productId, setProductId] = useState<number>();
 
   const dispatch = useDispatch<any>();
+  const allComments = useAppSelector((state) => state.comments);
+  let newData: CommentType | undefined = allComments.comments.find(
+    (i) => i.id === id
+  );
+
   const modalSubmit = () => {
     setIsShowModal(false);
     console.log(id);
@@ -56,7 +63,7 @@ export default function Comment({
         <td className="text-center py-8">
           <button
             type="button"
-            className="btn"
+            className={`${confirmation ? "btnDisable " : "btn"}`}
             disabled={confirmation}
             onClick={() => {
               setProductId(id);
@@ -71,7 +78,7 @@ export default function Comment({
         <td className="py-8 text-center">
           <button
             type="button"
-            className="btn m-1"
+            className={`m-1 ${confirmation ? "btnDisable " : "btn"}`}
             onClick={() => {
               setIsShowModal(true);
             }}
@@ -84,21 +91,25 @@ export default function Comment({
             className="btn m-1"
             onClick={() => {
               console.log("this", id, "comments");
-              //   axios.put(` http://localhost:3001/comments`, {
-              //     title: "Success",
-              //     body: "The record had been successfully updated"
-              // }).then ((response) => {setTableData(response.data);})
+              apiRequests.put(`/comments/${id}`, {
+                name: newData?.name,
+                product: newData?.product,
+                history: newData?.history,
+                time: newData?.time,
+                comment: newData?.comment,
+                confirmation: !newData?.confirmation,
+              });
             }}
-            disabled={confirmation}
+            // disabled={confirmation}
           >
-            تایید
+            {confirmation ? <>کنسل</> : <>تایید</>}
           </button>
         </td>
       </tr>
       {/* modals */}
       {isShowModal && (
         <DeleteModal
-          productId={id}
+          Id={id}
           submitAction={modalSubmit}
           cancelAction={modalCancel}
           remove={removeComment}

@@ -4,4 +4,6 @@ export default interface Comment {
     product:string;
     history:string;
     time:string;
+    comment:string;
+    confirmation:boolean;
   }
