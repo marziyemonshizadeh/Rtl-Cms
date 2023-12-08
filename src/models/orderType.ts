@@ -6,4 +6,5 @@ export default interface Order {
     orderTime: string;
     price:number;
     discount: string;
+    confirmation: boolean;
   }

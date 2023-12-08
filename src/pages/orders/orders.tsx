@@ -17,9 +17,7 @@ const Orders: React.FC = () => {
 
   const dispatch = useDispatch<any>();
   const datas = useAppSelector((state) => state.orders);
-  // const { data, isLoading } = useQuery("orders", () =>
-  //   fetch("http://localhost:3001/orders").then((res) => res.json())
-  // );
+
   const modalSubmit = () => {
     setIsShowModal(false);
     console.log(orderId);
@@ -96,7 +94,6 @@ const Orders: React.FC = () => {
         <DetailsModal
           Id={orderId}
           order={true}
-          // Get={fetchProduct}
           getItem="orders"
           onHide={() => setIsShowDetailsModal(false)}
         >
