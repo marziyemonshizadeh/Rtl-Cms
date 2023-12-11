@@ -4,7 +4,6 @@ import { toggleDarkmode } from "../../redux/store/darkmood";
 // import store from "../../redux/store";
 const Navbar: React.FC = () => {
   const dispatch = useDispatch();
-
   return (
     <div className="flex items-center justify-between bg-slate-50 dark:bg-gray-700 m-2">
       <img
@@ -18,7 +17,7 @@ const Navbar: React.FC = () => {
             <input
               className="appearance-none border-none w-full font-bold bg-white dark:bg-slate-200 text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
               type="text"
-              placeholder=" جست و جو کنید ..."
+              placeholder=" محصول مورد نظر ... "
               aria-label="Full name"
             />
             <button
