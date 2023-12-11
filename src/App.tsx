@@ -3,13 +3,15 @@
 // import { useSelector } from "react-redux";
 import { Outlet } from "react-router";
 // import { RootState } from "../src/redux/store";
+import { useSelector } from "react-redux";
 import Navbar from "./components/navbar/navbar";
 import Sidebar from "./components/sidebar/sidebar";
+import { RootState } from "./redux/store";
 function App() {
   // const client = new QueryClient();
-  // const IsDarkMood = useSelector(
-  //   (state: RootState) => state.darkmode.isDarkmode
-  // );
+  const IsDarkMood = useSelector(
+    (state: RootState) => state.darkmode.isDarkmode
+  );
 
   return (
     // <QueryClientProvider client={client}>
