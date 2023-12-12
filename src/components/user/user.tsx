@@ -1,10 +1,13 @@
 import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { removeUser } from "../../redux/store/users";
+import apiRequests from "../../services/configs";
 import DeleteModal from "../Modals/deleteModal";
 import DetailsModal from "../Modals/detailsModal";
+import EditModal from "../Modals/editModal";
 
 interface userProps {
   id: number;
@@ -24,8 +27,17 @@ export default function User({
 }: userProps) {
   const [isShowModal, setIsShowModal] = useState<boolean>(false);
   const [isShowDetailsModal, setIsShowDetailsModal] = useState<boolean>(false);
+  const [isShowEditModal, setIsShowEditModal] = useState<boolean>(false);
   const [productId, setProductId] = useState<number>();
   const dispatch = useDispatch<any>();
+
+  type Inputs = {
+    customer: string;
+    userName: string;
+    password: string;
+    phoneNumber: string;
+    email: string;
+  };
 
   const modalSubmit = () => {
     setIsShowModal(false);
@@ -43,6 +55,25 @@ export default function User({
       theme: "light",
     });
   };
+
+  const {
+    register,
+    reset,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>();
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    console.log(data);
+    await apiRequests.put(`/users/${productId}`, {
+      customer: data.customer,
+      userName: data.userName,
+      phoneNumber: data.phoneNumber,
+      password: data.password,
+      email: data.email,
+    });
+    reset();
+    setIsShowEditModal(false);
+  };
   return (
     <>
       <ToastContainer />
@@ -54,6 +85,7 @@ export default function User({
         <td className="text-center py-8">{phoneNumber}</td>
         <td className="text-center py-8">{email}</td>
         <td className="py-8 text-center">
+          {/* delete button */}
           <button
             type="button"
             className="btn m-1"
@@ -64,6 +96,7 @@ export default function User({
           >
             حذف
           </button>
+          {/* Details button */}
           <button
             type="button"
             className="btn m-1"
@@ -74,11 +107,20 @@ export default function User({
           >
             جزئیات
           </button>
-          <button type="button" className="btn m-1">
+          {/* edit button */}
+          <button
+            type="button"
+            className="btn m-1"
+            onClick={() => {
+              setIsShowEditModal(true);
+              setProductId(id);
+            }}
+          >
             ویرایش
           </button>
         </td>
       </tr>
+      {/* delete modal */}
       {isShowModal && (
         <DeleteModal
           Id={productId}
@@ -89,7 +131,7 @@ export default function User({
           remove={removeUser}
         />
       )}
-
+      {/* details modal */}
       {isShowDetailsModal && (
         <DetailsModal
           Id={productId}
@@ -104,6 +146,85 @@ export default function User({
           <th className="py-3">شماره تماس</th>
           <th className="py-3">ایمیل</th>
         </DetailsModal>
+      )}
+
+      {isShowEditModal && (
+        <EditModal
+          onClose={() => {
+            console.log("close");
+            setIsShowEditModal(false);
+          }}
+        >
+          <form className="min-h-64 pt-5" onSubmit={handleSubmit(onSubmit)}>
+            <input
+              defaultValue={customer}
+              className="input w-full text-right"
+              type="text"
+              placeholder="نام را وارد کنید "
+              aria-label="customer"
+              {...register("customer", { required: true })}
+            />
+            {errors.customer && <span>This field is required</span>}
+            <input
+              defaultValue={userName}
+              className="input w-full text-right"
+              type="text"
+              placeholder=" نام کاربری جدید را وارد کنید "
+              aria-label="userName"
+              {...register("userName", { required: true })}
+            />
+            {errors.userName && (
+              <span className="text-red-500">This field is required</span>
+            )}
+            <input
+              defaultValue={password}
+              className="input w-full text-right"
+              type="text"
+              placeholder="رمز عبور جدید را وارد کنید "
+              aria-label="password"
+              {...register("password", { required: true })}
+            />
+            {errors.password && (
+              <span className="text-red-500">This field is required</span>
+            )}
+            <input
+              defaultValue={phoneNumber}
+              className="input w-full text-right"
+              type="text"
+              placeholder="شماره موبایل جدید را وارد کنید "
+              aria-label="phoneNumber"
+              {...register("phoneNumber", { required: true })}
+            />
+            {errors.phoneNumber && (
+              <span className="text-red-500">This field is required</span>
+            )}
+
+            <input
+              defaultValue={email}
+              className="input w-full text-right"
+              type="text"
+              placeholder="ایمیل جدید را وارد کنید "
+              aria-label="email"
+              {...register("email", { required: true })}
+            />
+            {errors.email && (
+              <span className="text-red-500">This field is required</span>
+            )}
+
+            <div className="flex justify-center gap-3">
+              <button
+                type="submit"
+                className="btnLight my-5"
+                onClick={() => setIsShowEditModal(false)}
+              >
+                cancel
+              </button>
+              <button type="submit" className="btn my-5">
+                ثبت اطلاعات جدید
+              </button>
+            </div>
+          </form>
+        </EditModal>
       )}
     </>
   );
