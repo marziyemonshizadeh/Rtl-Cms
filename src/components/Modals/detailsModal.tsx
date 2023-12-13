@@ -5,7 +5,6 @@ import ModalsTemplate from "../modalsTemplate/modalsTemplate";
 
 interface DetailsModalProps {
   onHide: () => void;
-  // Get: any;
   product?: boolean;
   user?: boolean;
   discount?: boolean;
@@ -22,7 +21,6 @@ export default function DetailsModal({
   user,
   order,
   discount,
-  // Get,
   onHide,
   children,
 }: DetailsModalProps): JSX.Element {
@@ -39,7 +37,6 @@ export default function DetailsModal({
     return () => window.removeEventListener("keydown", checkKey);
   });
   const [Data, setData] = useState<any>();
-  // const dispatch = useDispatch<any>();
 
   useEffect(() => {
     apiRequests.get(`http://localhost:3001/${getItem}/${Id}`).then((res) => {
@@ -48,10 +45,6 @@ export default function DetailsModal({
     });
   }, [Id]);
   console.log("data = ", Data);
-
-  // const { data } = useQuery("Products", () =>
-  //   fetch(`http://localhost:3001/products/${Id}`).then((res) => res.json())
-  // );
 
   return (
     <ModalsTemplate>
@@ -86,9 +79,9 @@ export default function DetailsModal({
               )}
               {order && (
                 <>
-                  <td className="td">{Data?.customer}</td>
                   <td className="td">{Data?.product}</td>
-                  <td className="td">{Data?.password}</td>
+                  <td className="td">{Data?.customer}</td>
+                  <td className="td">{Data?.orderDate}</td>
                   <td className="td">{Data?.price}</td>
                   <td className="td">{Data?.discount}</td>
                 </>

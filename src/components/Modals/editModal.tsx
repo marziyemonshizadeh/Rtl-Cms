@@ -4,7 +4,6 @@ import ModalsTemplate from "../modalsTemplate/modalsTemplate";
 
 interface EditModalProps {
   onClose: () => void;
-  // onSubmit: (e: any) => void;
   onclick?: () => void;
   children: React.ReactNode;
 }
@@ -26,7 +25,7 @@ export default function EditModal({ onClose, children }: EditModalProps) {
       <div className="text-center text-xl">
         <div className="flex flex-col">
           <h1 className=" text-3xl font-extrabold border-b-2 pb-3">
-            اطلاعات جدید را وارد نمایید
+            لطفااطلاعات جدید را وارد نمایید
           </h1>
           {children}
         </div>

@@ -62,16 +62,12 @@ const Orders: React.FC = () => {
                   <Order
                     key={item.id}
                     {...item}
-                    onClick={() => {
-                      setOrderId(item.id);
-                      dispatch(removeOrders(orderId));
-                      setIsShowModal(true);
-                      console.log(orderId);
-                    }}
-                    showDetails={() => {
-                      setOrderId(item.id);
-                      setIsShowDetailsModal(true);
-                    }}
+                    // onClick={() => {
+                    //   setOrderId(item.id);
+                    //   dispatch(removeOrders(orderId));
+                    //   setIsShowModal(true);
+                    //   console.log(orderId);
+                    // }}
                   />
                 );
               })}
