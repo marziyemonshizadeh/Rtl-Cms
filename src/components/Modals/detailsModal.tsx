@@ -1,26 +1,40 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 // import { useQuery } from "react-query";
-import apiRequests from "../../services/configs";
+// import apiRequests from "../../services/configs";
 import ModalsTemplate from "../modalsTemplate/modalsTemplate";
 
 interface DetailsModalProps {
   onHide: () => void;
-  product?: boolean;
-  user?: boolean;
-  discount?: boolean;
+  product?: string;
+  user?: string;
+  discount?: string;
   order?: boolean;
-  getItem: string;
-  Id?: number;
+  name?: string;
+  count?: string;
+  price?: string;
+  orderDate?: string;
+  customer?: string;
+  discountPercent?: string;
+  discountCode?: string;
+  userName?: string;
+  password?: string;
   children: React.ReactNode;
   onclick?: () => void;
 }
 export default function DetailsModal({
-  Id,
-  getItem,
+  price,
+  count,
+  name,
   product,
   user,
   order,
   discount,
+  orderDate,
+  customer,
+  discountPercent,
+  discountCode,
+  userName,
+  password,
   onHide,
   children,
 }: DetailsModalProps): JSX.Element {
@@ -36,15 +50,15 @@ export default function DetailsModal({
 
     return () => window.removeEventListener("keydown", checkKey);
   });
-  const [Data, setData] = useState<any>();
+  // const [Data, setData] = useState<any>();
 
-  useEffect(() => {
-    apiRequests.get(`http://localhost:3001/${getItem}/${Id}`).then((res) => {
-      setData(res.data);
-      console.log("res = ", res.data);
-    });
-  }, [Id]);
-  console.log("data = ", Data);
+  // useEffect(() => {
+  //   apiRequests.get(`http://localhost:3001/${getItem}/${Id}`).then((res) => {
+  //     setData(res.data);
+  //     console.log("res = ", res.data);
+  //   });
+  // }, [Id]);
+  // console.log("data = ", Data);
 
   return (
     <ModalsTemplate>
@@ -58,32 +72,32 @@ export default function DetailsModal({
             <tr>
               {product && (
                 <>
-                  <td className="td">{Data?.name}</td>
-                  <td className="td"> {Data?.price}</td>
-                  <td className="td">{Data?.count}</td>
+                  <td className="td">{name}</td>
+                  <td className="td"> {price}</td>
+                  <td className="td">{count}</td>
                 </>
               )}
               {user && (
                 <>
-                  <td className="td">{Data?.customer}</td>
-                  <td className="td"> {Data?.userName}</td>
-                  <td className="td">{Data?.password}</td>
+                  <td className="td">{customer}</td>
+                  <td className="td"> {userName}</td>
+                  <td className="td">{password}</td>
                 </>
               )}
               {discount && (
                 <>
-                  <td className="td">{Data?.discountCode}</td>
-                  <td className="td"> {Data?.product}</td>
-                  <td className="td">{Data?.discountPercent}</td>
+                  <td className="td">{discountCode}</td>
+                  <td className="td"> {product}</td>
+                  <td className="td">{discountPercent}</td>
                 </>
               )}
               {order && (
                 <>
-                  <td className="td">{Data?.product}</td>
-                  <td className="td">{Data?.customer}</td>
-                  <td className="td">{Data?.orderDate}</td>
-                  <td className="td">{Data?.price}</td>
-                  <td className="td">{Data?.discount}</td>
+                  <td className="td">{product}</td>
+                  <td className="td">{customer}</td>
+                  <td className="td">{orderDate}</td>
+                  <td className="td">{price}</td>
+                  <td className="td">{discount}</td>
                 </>
               )}
             </tr>
