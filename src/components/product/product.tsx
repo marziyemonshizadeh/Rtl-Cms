@@ -113,9 +113,10 @@ const Product = ({ id, name, img, price, count }: productProps) => {
       {/* details modal */}
       {isShowDetailsModal && (
         <DetailsModal
-          Id={id}
+          name={name}
+          count={count}
+          price={price}
           product={true}
-          getItem="products"
           onHide={() => {
             setIsShowDetailsModal(false);
           }}
