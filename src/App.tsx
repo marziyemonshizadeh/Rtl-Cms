@@ -7,6 +7,7 @@ function App() {
   const IsDarkMood = useSelector(
     (state: RootState) => state.darkmode.isDarkmode
   );
+  console.log("IsDarkMood = ", IsDarkMood);
 
   return (
     <div
