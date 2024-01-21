@@ -1,12 +1,10 @@
 import { useEffect } from "react";
-// import { useQuery } from "react-query";
-// import apiRequests from "../../services/configs";
 import ModalsTemplate from "../modalsTemplate/modalsTemplate";
 
 interface DetailsModalProps {
   onHide: () => void;
-  product?: string;
-  user?: string;
+  product?: string | boolean;
+  user?: boolean;
   discount?: string;
   order?: boolean;
   name?: string;
@@ -50,15 +48,6 @@ export default function DetailsModal({
 
     return () => window.removeEventListener("keydown", checkKey);
   });
-  // const [Data, setData] = useState<any>();
-
-  // useEffect(() => {
-  //   apiRequests.get(`http://localhost:3001/${getItem}/${Id}`).then((res) => {
-  //     setData(res.data);
-  //     console.log("res = ", res.data);
-  //   });
-  // }, [Id]);
-  // console.log("data = ", Data);
 
   return (
     <ModalsTemplate>

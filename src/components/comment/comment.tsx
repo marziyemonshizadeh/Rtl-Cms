@@ -2,8 +2,6 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import CommentType from "../../models/commentType";
-import { useAppSelector } from "../../redux/store";
 import { removeComment } from "../../redux/store/comments";
 import apiRequests from "../../services/configs";
 import DeleteModal from "../Modals/deleteModal";
@@ -16,6 +14,7 @@ interface commentProps {
   product: string;
   history: string;
   time: string;
+  comment: string;
 }
 export default function Comment({
   id,
@@ -24,16 +23,13 @@ export default function Comment({
   product,
   history,
   time,
+  comment,
 }: commentProps) {
   const [isShowModal, setIsShowModal] = useState<boolean>(false);
   const [isShowComment, setIsShowComment] = useState<boolean>(false);
   const [productId, setProductId] = useState<number>();
 
   const dispatch = useDispatch<any>();
-  const allComments = useAppSelector((state) => state.comments);
-  let newData: CommentType | undefined = allComments.comments.find(
-    (i) => i.id === id
-  );
 
   const modalSubmit = () => {
     setIsShowModal(false);
@@ -92,15 +88,14 @@ export default function Comment({
             onClick={() => {
               console.log("this", id, "comments");
               apiRequests.put(`/comments/${id}`, {
-                name: newData?.name,
-                product: newData?.product,
-                history: newData?.history,
-                time: newData?.time,
-                comment: newData?.comment,
-                confirmation: !newData?.confirmation,
+                name: name,
+                product: product,
+                history: history,
+                time: time,
+                comment: comment,
+                confirmation: !confirmation,
               });
             }}
-            // disabled={confirmation}
           >
             {confirmation ? <>کنسل</> : <>تایید</>}
           </button>
@@ -118,7 +113,7 @@ export default function Comment({
       {console.log("id=", productId)}
       {isShowComment && (
         <ShowComment
-          id={productId}
+          comment={comment}
           onHide={() => {
             setIsShowComment(false);
           }}

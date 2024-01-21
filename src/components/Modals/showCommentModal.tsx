@@ -1,15 +1,17 @@
 import { useEffect } from "react";
 // import { useQuery } from "react-query";
-import { useAppSelector } from "../../redux/store";
+// import { useAppSelector } from "../../redux/store";
 import ModalsTemplate from "../modalsTemplate/modalsTemplate";
 
 interface ShowCommentProps {
+  comment: string;
   onHide: () => void;
   id?: any;
   onclick?: () => void;
 }
 export default function ShowComment({
-  id,
+  comment,
+  // id,
   onHide,
 }: ShowCommentProps): JSX.Element {
   useEffect(() => {
@@ -24,14 +26,14 @@ export default function ShowComment({
 
     return () => window.removeEventListener("keydown", checkKey);
   });
-  const allComments = useAppSelector((state) => state.comments);
-  let findMyComment = allComments.comments.find((i) => i.id === id);
+  // const allComments = useAppSelector((state) => state.comments);
+  // let findMyComment = allComments.comments.find((i) => i.id === id);
 
   return (
     <ModalsTemplate>
       <div className="text-center text-xl">
         <span className=" text-3xl font-extrabold dark:text-black">
-          {findMyComment?.comment}
+          {comment}
         </span>
       </div>
     </ModalsTemplate>
