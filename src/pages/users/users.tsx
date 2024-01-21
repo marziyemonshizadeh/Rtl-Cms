@@ -1,4 +1,3 @@
-// import { useQuery } from "react-query";
 import ErrorBox from "../../components/errorBox/errorBox";
 import User from "../../components/user/user";
 
@@ -19,9 +18,6 @@ const Users: React.FC = () => {
   return (
     <>
       <h1 className="header">لیست کاربران</h1>
-      {/* {isLoading && ( */}
-      {/* <div className="mx-auto text-gray-500">لطفا کمی صبر کنید...</div>
-      )} */}
       {data.loading ? (
         <div>لطفا کمی صبر کنید...</div>
       ) : data.users?.length ? (

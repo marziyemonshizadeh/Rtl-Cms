@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useAppSelector } from "../../redux/store";
 import { removeOrders } from "../../redux/store/orders";
 import apiRequests from "../../services/configs";
 import DeleteModal from "../Modals/deleteModal";
@@ -17,8 +16,6 @@ interface orderProps {
   price: string;
   discount: string;
   confirmation: boolean;
-  // onClick: () => void;
-  // showDetails: () => void;
 }
 export default function Order({
   id,
@@ -29,21 +26,26 @@ export default function Order({
   price,
   discount,
   confirmation,
-}: // onClick,
-// showDetails,
-orderProps) {
-  const data = useAppSelector((state) => state.orders);
-  let newData: any = data.orders.find((i) => i.id === id);
-
+}: orderProps) {
   const confirmationHandler = (id: any) => {
     apiRequests.put(`/orders/${id}`, {
-      product: newData?.product,
-      customer: newData?.customer,
-      orderDate: newData?.orderDate,
-      orderTime: newData?.orderTime,
-      price: newData?.price,
-      discount: newData?.discount,
-      confirmation: !newData?.confirmation,
+      product: product,
+      customer: customer,
+      orderDate: orderDate,
+      orderTime: orderTime,
+      price: price,
+      discount: discount,
+      confirmation: !confirmation,
+    });
+    toast.success("! وضعیت سفارش مورد نظر با موفقیت تغییر کرد", {
+      position: "bottom-left",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
     });
   };
   const [isShowModal, setIsShowModal] = useState<boolean>(false);
