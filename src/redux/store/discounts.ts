@@ -33,7 +33,6 @@ export const removeDiscounts = createAsyncThunk(
 );
 export const discountsSlice = createSlice({
     name: 'discounts',
-    // `createSlice` will infer the state type from the `initialState` argument
     initialState,
     reducers: {
     },

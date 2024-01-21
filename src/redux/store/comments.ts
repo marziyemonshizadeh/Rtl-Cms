@@ -33,7 +33,6 @@ export const removeComment = createAsyncThunk(
 );
 export const commentsSlice = createSlice({
     name: 'comments',
-    // `createSlice` will infer the state type from the `initialState` argument
     initialState,
     reducers: {
     },

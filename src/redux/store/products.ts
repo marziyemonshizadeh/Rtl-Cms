@@ -46,13 +46,8 @@ export const productsSlice = createSlice({
       builder.addCase(fetchProduct.pending, (state) => {
         state.loading = true;
       }),
-      builder.addCase(removeProduct.fulfilled, (state, action) => {
-        console.log("state remove fulfilled :",state.products);
-        console.log("action remove fulfilled:", action);
-        const newProducts = state.products.filter(i=>i.id !== action.meta.arg)
-        // return newProducts;
-        // return state.products.filter(i=>i.id !== action.meta.arg)
-        // return newProducts;
+      builder.addCase(removeProduct.fulfilled, (state, action) => {state.products.filter(i=>i.id !== action.meta.arg)
+
       })
     },
   })

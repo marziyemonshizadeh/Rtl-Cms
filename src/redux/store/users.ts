@@ -51,13 +51,10 @@ export const usersSlice = createSlice({
         state.loading = false;
         state.users = action.payload;
       }),
-      builder.addCase(fetchUser.pending, (state, action) => {
+      builder.addCase(fetchUser.pending, (state) => {
         state.loading = true;
       }),
-      builder.addCase(removeUser.fulfilled, (state, action) => {
-        console.log("state remove fulfilled :",state.users);
-        console.log("action remove fulfilled:", action);
-        const newusers = state.users.filter(i=>i.id !== action.meta.arg)  
+      builder.addCase(removeUser.fulfilled, (state, action) => {state.users.filter(i=>i.id !== action.meta.arg)  
       })
     },
   })
