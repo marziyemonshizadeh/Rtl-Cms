@@ -10,7 +10,7 @@ import DetailsModal from "../Modals/detailsModal";
 import EditModal from "../Modals/editModal";
 
 interface userProps {
-  id: number;
+  id?: number;
   customer: string;
   userName: string;
   password: string;
@@ -30,14 +30,6 @@ export default function User({
   const [isShowEditModal, setIsShowEditModal] = useState<boolean>(false);
   const [productId, setProductId] = useState<number>();
   const dispatch = useDispatch<any>();
-
-  type Inputs = {
-    customer: string;
-    userName: string;
-    password: string;
-    phoneNumber: string;
-    email: string;
-  };
 
   const modalSubmit = () => {
     setIsShowModal(false);
@@ -61,8 +53,8 @@ export default function User({
     reset,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  } = useForm<userProps>();
+  const onSubmit: SubmitHandler<userProps> = async (data) => {
     console.log(data);
     await apiRequests.put(`/users/${productId}`, {
       customer: data.customer,
@@ -134,10 +126,10 @@ export default function User({
       {/* details modal */}
       {isShowDetailsModal && (
         <DetailsModal
-          Id={productId}
+          customer={customer}
+          userName={userName}
+          password={password}
           user={true}
-          // Get={fetchUser}
-          getItem="users"
           onHide={() => {
             setIsShowDetailsModal(false);
           }}
@@ -147,7 +139,7 @@ export default function User({
           <th className="py-3">ایمیل</th>
         </DetailsModal>
       )}
-
+      {/* edit modal */}
       {isShowEditModal && (
         <EditModal
           onClose={() => {
