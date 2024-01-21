@@ -40,7 +40,7 @@ You can :
 ![](./src/assets/8.png)
 ## Project Status
 
-Project is: _InProcess
+Project is: _finished
 
 ## Contact
 
