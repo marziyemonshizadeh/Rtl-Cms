@@ -115,9 +115,12 @@ orderProps) {
 
       {isShowDetailsModal && (
         <DetailsModal
-          Id={id}
+          product={product}
+          customer={customer}
+          orderDate={orderDate}
+          price={price}
+          discount={discount}
           order={true}
-          getItem="orders"
           onHide={() => setIsShowDetailsModal(false)}
         >
           <th className="py-3">محصول</th>
