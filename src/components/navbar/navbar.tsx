@@ -1,7 +1,6 @@
 import { useDispatch } from "react-redux";
 import { toggleDarkmode } from "../../redux/store/darkmood";
 
-// import store from "../../redux/store";
 const Navbar: React.FC = () => {
   const dispatch = useDispatch();
   return (
@@ -12,22 +11,6 @@ const Navbar: React.FC = () => {
         className="w-10 h-10 rounded-full"
       />
       <div className="flex items-center gap-2">
-        <form className="w-full max-w-sm shadow-md ">
-          <div className="flex items-center p-1 bg-white dark:bg-slate-200 rounded-md">
-            <input
-              className="appearance-none border-none w-full font-bold bg-white dark:bg-slate-200 text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
-              type="text"
-              placeholder=" محصول مورد نظر ... "
-              aria-label="Full name"
-            />
-            <button
-              className="flex-shrink-0 bg-lime-500   text-sm  text-gray-50 font-bold py-2 px-2 rounded"
-              type="button"
-            >
-              جست و جو
-            </button>
-          </div>
-        </form>
         <div className="w-10 h-10 bg-lime-500 p-2 rounded-xl flex justify-center items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
