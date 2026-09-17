@@ -2,7 +2,7 @@ import axios from "axios";
 
 //baseurl
 const apiRequests = axios.create({
-  baseURL: "https://deploy-cms-json-server.vercel.app/",
+  baseURL: import.meta.env.VITE_API_URL,
   headers: {
     "Content-Type": "application/json",
     Auth: "Bearer Token",
