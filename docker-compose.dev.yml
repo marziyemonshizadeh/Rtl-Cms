@@ -1,0 +1,26 @@
+# docker-compose.dev.yml
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - json-server
+  
+  json-server:
+    image: node:24-alpine
+    working_dir: /app
+    volumes:
+      - ./db.json:/app/db.json
+    ports:
+      - "3000:3000"
+    command: sh -c "npm install -g json-server && json-server --watch db.json --host 0.0.0.0 --port 3000"
