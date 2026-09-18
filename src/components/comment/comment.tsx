@@ -15,6 +15,7 @@ interface commentProps {
   history: string;
   time: string;
   comment: string;
+  isMobile?: boolean;
 }
 export default function Comment({
   id,
@@ -53,10 +54,10 @@ export default function Comment({
     <>
       <ToastContainer />
 
-      <tr className={`${confirmation ? `text-slate-400 font-bold` : null} `}>
-        <td className={`text-center  py-8`}>{name} </td>
-        <td className="text-center py-8"> {product} </td>
-        <td className="text-center py-8">
+      <tr className="table-row">
+        <td className={`table-cell`}>{name} </td>
+        <td className="table-cell"> {product} </td>
+        <td className="table-cell">
           <button
             type="button"
             className={`${confirmation ? "btnDisable " : "btn"}`}
@@ -69,9 +70,14 @@ export default function Comment({
             دیدن کامنت
           </button>
         </td>
-        <td className="text-center py-8">{history}</td>
-        <td className="text-center py-8">{time}</td>
-        <td className="py-8 text-center">
+        <td className="table-cell">{history}</td>
+        <td className="table-cell">{time}</td>
+        <td className="table-cell">
+          <span className={confirmation ? "badge-approved" : "badge-pending"}>
+            {confirmation ? "تایید شده" : "در انتظار"}
+          </span>
+        </td>
+        <td className="table-cell">
           <button
             type="button"
             className={`m-1 ${confirmation ? "btnDisable " : "btn"}`}

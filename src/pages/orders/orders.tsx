@@ -24,17 +24,17 @@ const Orders: React.FC = () => {
       {datas.loading ? (
         <div>در حال بارگزاری ...</div>
       ) : datas.orders?.length ? (
-        <div className="card mt-5">
-          <table className="w-full">
-            <thead className="border-b-2">
+        <div className="table-container mt-5">
+          <table className="w-full hidden md:table">
+            <thead className="table-header">
               <tr>
-                <th className="py-8">نام محصول خریداری شده</th>
-                <th className="py-8">نام خریدار</th>
-                <th className="py-8">تاریخ سفارش</th>
-                <th className="py-8">ساعت سفارش</th>
-                <th className="py-8">مبلغ کل</th>
-                <th className="py-8"> تخفیف اعمال شده</th>
-                <th className="py-8">وضعیت</th>
+                <th className="table-header-cell">نام محصول خریداری شده</th>
+                <th className="table-header-cell">نام خریدار</th>
+                <th className="table-header-cell">تاریخ سفارش</th>
+                <th className="table-header-cell">ساعت سفارش</th>
+                <th className="table-header-cell">مبلغ کل</th>
+                <th className="table-header-cell"> تخفیف اعمال شده</th>
+                <th className="table-header-cell">وضعیت</th>
               </tr>
             </thead>
             <tbody>
@@ -43,6 +43,37 @@ const Orders: React.FC = () => {
               })}
             </tbody>
           </table>
+          <div className="md:hidden block p-4">
+            {datas.orders?.map((item: any) => (
+              <div key={item.id} className="mobile-card">
+                <div className="mobile-card-row">
+                  <span className="mobile-card-label">محصول</span>
+                  <span className="mobile-card-value">{item.product}</span>
+                </div>
+                <div className="mobile-card-row">
+                  <span className="mobile-card-label">خریدار</span>
+                  <span className="mobile-card-value">{item.customer}</span>
+                </div>
+                <div className="mobile-card-row">
+                  <span className="mobile-card-label">تاریخ</span>
+                  <span className="mobile-card-value">{item.orderDate}</span>
+                </div>
+                <div className="mobile-card-row">
+                  <span className="mobile-card-label">ساعت</span>
+                  <span className="mobile-card-value">{item.orderTime}</span>
+                </div>
+                <div className="mobile-card-row">
+                  <span className="mobile-card-label">مبلغ</span>
+                  <span className="mobile-card-value">{item.price}</span>
+                </div>
+                <div className="mobile-card-row">
+                  <span className="mobile-card-label">تخفیف</span>
+                  <span className="mobile-card-value">{item.discount}</span>
+                </div>
+                <Order {...item} isMobile />
+              </div>
+            ))}
+          </div>
         </div>
       ) : (
         !datas.loading && <ErrorBox message="هیچ سفارشی یافت نشد" />

@@ -15,6 +15,7 @@ interface discountProps {
   discountCode: string;
   product: string;
   history: string;
+  isMobile?: boolean;
 }
 export default function Discount({
   id,
@@ -64,13 +65,18 @@ export default function Discount({
   return (
     <>
       <ToastContainer />
-      <tr className={`${confirmation ? `text-slate-400 font-bold` : null} `}>
-        <td className="text-center py-8"> {discountCode} </td>
-        <td className="text-center py-8">{discountPercent}</td>
-        <td className="text-center py-8">{history}</td>
-        <td className="text-center py-8">{adminName}</td>
-        <td className="text-center py-8">{product}</td>
-        <td className="py-8 text-center">
+      <tr className="table-row">
+        <td className="table-cell"> {discountCode} </td>
+        <td className="table-cell">{discountPercent}</td>
+        <td className="table-cell">{history}</td>
+        <td className="table-cell">{adminName}</td>
+        <td className="table-cell">{product}</td>
+        <td className="table-cell">
+          <span className={confirmation ? "badge-approved" : "badge-pending"}>
+            {confirmation ? "تایید شده" : "در انتظار"}
+          </span>
+        </td>
+        <td className="table-cell">
           <button
             type="button"
             className="btn m-1"

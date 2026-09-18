@@ -21,16 +21,16 @@ const Discounts: React.FC = () => {
       {data.loading ? (
         <div>در حال بارگزاری ...</div>
       ) : data.discounts?.length ? (
-        <div className="card my-5">
-          <table className="w-full">
-            <thead className="border-b-2">
+        <div className="table-container my-5">
+          <table className="w-full hidden md:table">
+            <thead className="table-header">
               <tr>
-                <th className="py-8 text-center">کد تخفیف</th>
-                <th className="py-8 text-center">درصد تخفیف</th>
-                <th className="py-8 text-center">تاریخ ثبت</th>
-                <th className="py-8 text-center">ثبت شده توسط</th>
-                <th className="py-8 text-center">ساخته شده برای</th>
-                <th className="py-8 text-center">وضعیت</th>
+                <th className="table-header-cell">کد تخفیف</th>
+                <th className="table-header-cell">درصد تخفیف</th>
+                <th className="table-header-cell">تاریخ ثبت</th>
+                <th className="table-header-cell">ثبت شده توسط</th>
+                <th className="table-header-cell">ساخته شده برای</th>
+                <th className="table-header-cell">وضعیت</th>
               </tr>
             </thead>
             <tbody>
@@ -39,6 +39,33 @@ const Discounts: React.FC = () => {
               })}
             </tbody>
           </table>
+          <div className="md:hidden block p-4">
+            {data.discounts?.map((item: any) => (
+              <div key={item.id} className="mobile-card">
+                <div className="mobile-card-row">
+                  <span className="mobile-card-label">کد تخفیف</span>
+                  <span className="mobile-card-value">{item.discountCode}</span>
+                </div>
+                <div className="mobile-card-row">
+                  <span className="mobile-card-label">درصد</span>
+                  <span className="mobile-card-value">{item.discountPercent}</span>
+                </div>
+                <div className="mobile-card-row">
+                  <span className="mobile-card-label">تاریخ</span>
+                  <span className="mobile-card-value">{item.history}</span>
+                </div>
+                <div className="mobile-card-row">
+                  <span className="mobile-card-label">ثبت کننده</span>
+                  <span className="mobile-card-value">{item.adminName}</span>
+                </div>
+                <div className="mobile-card-row">
+                  <span className="mobile-card-label">محصول</span>
+                  <span className="mobile-card-value">{item.product}</span>
+                </div>
+                <Discount {...item} isMobile />
+              </div>
+            ))}
+          </div>
         </div>
       ) : (
         !data.loading && <ErrorBox message="هیچ تخفیفی یافت نشد" />

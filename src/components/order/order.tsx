@@ -16,6 +16,7 @@ interface orderProps {
   price: string;
   discount: string;
   confirmation: boolean;
+  isMobile?: boolean;
 }
 export default function Order({
   id,
@@ -68,14 +69,19 @@ export default function Order({
   };
   return (
     <>
-      <tr className={`${confirmation ? `text-slate-400 font-bold` : null} `}>
-        <td className="text-center py-8">{product}</td>
-        <td className="text-center py-8"> {customer} </td>
-        <td className="text-center py-8">{orderDate}</td>
-        <td className="text-center py-8">{orderTime}</td>
-        <td className="text-center py-8">{price}</td>
-        <td className="text-center py-8">{discount}</td>
-        <td className="py-8 text-center">
+      <tr className="table-row">
+        <td className="table-cell">{product}</td>
+        <td className="table-cell"> {customer} </td>
+        <td className="table-cell">{orderDate}</td>
+        <td className="table-cell">{orderTime}</td>
+        <td className="table-cell">{price}</td>
+        <td className="table-cell">{discount}</td>
+        <td className="table-cell">
+          <span className={confirmation ? "badge-approved" : "badge-pending"}>
+            {confirmation ? "تایید شده" : "در انتظار"}
+          </span>
+        </td>
+        <td className="table-cell">
           <button
             type="button"
             className={`m-1 ${confirmation ? "btnDisable " : "btn"}`}

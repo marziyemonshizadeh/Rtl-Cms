@@ -23,15 +23,15 @@ const Products: React.FC = () => {
       {data.loading ? (
         <div>در حال بارگزاری ...</div>
       ) : data.products?.length ? (
-        <div className="card">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b">
-                <th className="py-3">عکس</th>
-                <th className="py-3">اسم</th>
-                <th className="py-3">قیمت</th>
-                <th className="py-3">موجودی</th>
-                <th className="py-3">وضعیت</th>
+        <div className="table-container">
+          <table className="w-full hidden md:table">
+            <thead className="table-header">
+              <tr>
+                <th className="table-header-cell">عکس</th>
+                <th className="table-header-cell">اسم</th>
+                <th className="table-header-cell">قیمت</th>
+                <th className="table-header-cell">موجودی</th>
+                <th className="table-header-cell">وضعیت</th>
               </tr>
             </thead>
             <tbody>
@@ -42,6 +42,29 @@ const Products: React.FC = () => {
               )}
             </tbody>
           </table>
+          <div className="md:hidden block p-4">
+            {data.products.map((item: any) => (
+              <div key={item.id} className="mobile-card">
+                <div className="mobile-card-row">
+                  <span className="mobile-card-label">عکس</span>
+                  <img src={item.img} alt={item.name} className="max-h-24 rounded" />
+                </div>
+                <div className="mobile-card-row">
+                  <span className="mobile-card-label">اسم</span>
+                  <span className="mobile-card-value">{item.name}</span>
+                </div>
+                <div className="mobile-card-row">
+                  <span className="mobile-card-label">قیمت</span>
+                  <span className="mobile-card-value">{item.price.toLocaleString()} تومان</span>
+                </div>
+                <div className="mobile-card-row">
+                  <span className="mobile-card-label">موجودی</span>
+                  <span className="mobile-card-value">{item.count}</span>
+                </div>
+                <Product {...item} isMobile />
+              </div>
+            ))}
+          </div>
         </div>
       ) : (
         !data.loading && <ErrorBox message="هیچ محصولی یافت نشد" />

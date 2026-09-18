@@ -16,6 +16,7 @@ interface userProps {
   password: string;
   phoneNumber: string;
   email: string;
+  isMobile?: boolean;
 }
 export default function User({
   id,
@@ -70,13 +71,13 @@ export default function User({
     <>
       <ToastContainer />
 
-      <tr>
-        <td className="text-center py-8"> {customer} </td>
-        <td className="text-center py-8">{userName}</td>
-        <td className="text-center py-8">{password}</td>
-        <td className="text-center py-8">{phoneNumber}</td>
-        <td className="text-center py-8">{email}</td>
-        <td className="py-8 text-center">
+      <tr className="table-row">
+        <td className="table-cell"> {customer} </td>
+        <td className="table-cell">{userName}</td>
+        <td className="table-cell">{password}</td>
+        <td className="table-cell">{phoneNumber}</td>
+        <td className="table-cell">{email}</td>
+        <td className="table-cell">
           {/* delete button */}
           <button
             type="button"

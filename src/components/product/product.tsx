@@ -15,6 +15,7 @@ interface productProps {
   img: string;
   price: string;
   count: string;
+  isMobile?: boolean;
 }
 const Product = ({ id, name, img, price, count }: productProps) => {
   const [isShowModal, setIsShowModal] = useState<boolean>(false);
@@ -60,14 +61,14 @@ const Product = ({ id, name, img, price, count }: productProps) => {
   return (
     <>
       <ToastContainer />
-      <tr>
-        <td className="md:flex justify-center">
+      <tr className="table-row">
+        <td className="table-cell md:flex justify-center">
           <img src={img} alt="hb" className="max-h-40" />
         </td>
-        <td className="md:text-center py-8">{name}</td>
-        <td className="md:text-center py-8">{price.toLocaleString()} تومان</td>
-        <td className="md:text-center py-8">{count}</td>
-        <td className="py-8 text-center">
+        <td className="table-cell">{name}</td>
+        <td className="table-cell">{price.toLocaleString()} تومان</td>
+        <td className="table-cell">{count}</td>
+        <td className="table-cell">
           <button
             type="button"
             className="btn m-1"

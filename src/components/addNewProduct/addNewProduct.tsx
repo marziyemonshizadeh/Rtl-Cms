@@ -113,7 +113,7 @@ const AddNewProduct: React.FC = () => {
         <div className="flex justify-end mt-3">
           <button
             type="submit"
-            className="font-extrabold bg-lime-500 text-slate-50 p-2 select-none rounded-md focus:ring-2 ring-offset-2 ring-lime-700 focus:bg-lime-600"
+            className="btn"
           >
             ثبت محصول
           </button>

@@ -4,37 +4,96 @@
 
 @layer utilities{
     .card{
-        @apply bg-white dark:bg-gray-700 text-base dark:text-slate-100 dark:shadow-none  shadow-xl shadow-slate-200 p-3 rounded-lg my-3
+        @apply bg-white dark:bg-zinc-800 text-base dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700 shadow-sm p-4 rounded-lg my-3
+    }
+    .table-container{
+        @apply bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg shadow-sm overflow-hidden
+    }
+    .table-header{
+        @apply bg-zinc-50 dark:bg-zinc-800/50 border-b border-zinc-200 dark:border-zinc-700
+    }
+    .table-header-cell{
+        @apply py-3 px-4 text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide text-center
+    }
+    .table-row{
+        @apply border-b border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors
+    }
+    .table-cell{
+        @apply py-4 px-4 text-sm text-zinc-900 dark:text-zinc-100 text-center
+    }
+    .table-row:last-child{
+        @apply border-b-0
+    }
+    .mobile-card{
+        @apply bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg p-4 mb-3 shadow-sm
+    }
+    .mobile-card-row{
+        @apply flex justify-between items-start mb-3 pb-3 border-b border-zinc-200 dark:border-zinc-700
+    }
+    .mobile-card-row:last-child{
+        @apply mb-0 pb-0 border-b-0
+    }
+    .mobile-card-label{
+        @apply text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide
+    }
+    .mobile-card-value{
+        @apply text-sm font-semibold text-zinc-900 dark:text-zinc-100
     }
     .link{
-        @apply no-underline text-gray-50
+        @apply no-underline text-white
     }
     .header{
-        @apply font-extrabold text-black dark:text-slate-100 font-serif md:text-4xl text-xl my-2 p-3
+        @apply font-extrabold text-zinc-900 dark:text-zinc-100 font-serif md:text-4xl text-xl my-2 p-3
     }
     .input{
-        @apply appearance-none border-none  bg-gray-200 dark:bg-slate-200 font-bold h-10 text-gray-600 dark:text-slate-950  py-1 px-2 leading-tight rounded-lg focus:border-lime-300 my-2
+        @apply appearance-none border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 font-normal text-sm h-10 text-zinc-900 dark:text-zinc-100 px-3 py-2 leading-tight rounded-lg placeholder-zinc-400 dark:placeholder-zinc-500 focus:ring-2 focus:ring-lime-500 focus:border-transparent focus:outline-none my-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-zinc-100 dark:disabled:bg-zinc-900
     }
-    .li{
-        @apply flex hover:bg-lime-700 dark:hover:bg-gray-500 py-3 md:justify-start justify-center transition-colors
+    .sidebar-item{
+        @apply flex hover:bg-zinc-700 dark:hover:bg-zinc-700/50 py-3 px-3 md:justify-start justify-center transition-colors cursor-pointer relative
+    }
+    .sidebar-item-inactive{
+        @apply text-zinc-400 dark:text-zinc-400
+    }
+    .sidebar-item-active{
+        @apply text-lime-500 dark:text-lime-400 bg-zinc-700/50 dark:bg-zinc-700/30 border-r-2 border-lime-500 dark:border-lime-400
+    }
+    .sidebar-item-active::before{
+        content: '';
+        @apply absolute right-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-lime-500 dark:bg-lime-400 rounded-full opacity-100;
+    }
+    .sidebar-item-inactive::before{
+        content: '';
+        @apply absolute right-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-lime-500 dark:bg-lime-400 rounded-full opacity-0 transition-opacity;
+    }
+    .sidebar-item-inactive:hover::before{
+        @apply opacity-100
     }
     .btn{
-        @apply font-extrabold bg-lime-500 text-slate-50 p-2 select-none rounded-md focus:ring-2 ring-offset-2 ring-lime-700 focus:bg-lime-600
+        @apply font-semibold bg-lime-500 text-white px-4 py-2 text-sm select-none rounded-lg hover:bg-lime-600 focus:ring-2 ring-lime-500 ring-offset-2 active:scale-[0.98] active:bg-lime-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-lime-500
+    }
+    .btn-secondary{
+        @apply font-semibold border border-zinc-300 dark:border-zinc-600 text-zinc-700 dark:text-zinc-200 px-4 py-2 text-sm select-none rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 focus:ring-2 ring-zinc-500 ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed
+    }
+    .btn-destructive{
+        @apply font-semibold bg-red-500 text-white px-4 py-2 text-sm select-none rounded-lg hover:bg-red-600 focus:ring-2 ring-red-500 ring-offset-2 active:scale-[0.98] active:bg-red-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-red-500
     }
     .btnDisable{
-        @apply font-extrabold bg-lime-300 text-slate-100 p-2 select-none rounded-md focus:ring-2 ring-offset-2 ring-lime-700 focus:bg-lime-600
+        @apply font-semibold bg-zinc-300 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-400 px-4 py-2 text-sm select-none rounded-lg cursor-not-allowed opacity-50
     }
     .btnLight{
-        @apply font-extrabold bg-slate-200 text-slate-950 p-2   select-none rounded-md focus:ring-2 ring-offset-2 ring-slate-400 focus:bg-slate-200
+        @apply btn-secondary
     }
-    /* .active{
-        @apply invisible md:visible
-    }
-    .active{
-        @apply visible
-    } */
     .td{
-        @apply md:text-center py-8
-    } 
-
+        @apply md:text-center py-4 text-zinc-900 dark:text-zinc-100
+    }
+    .badge-pending{
+        @apply inline-block px-3 py-1 rounded-full text-sm font-semibold bg-amber-100 text-amber-700
+    }
+    .badge-rejected{
+        @apply inline-block px-3 py-1 rounded-full text-sm font-semibold bg-red-100 text-red-700
+    }
+    .badge-approved{
+        @apply inline-block px-3 py-1 rounded-full text-sm font-semibold bg-lime-100 text-lime-700
+    }
 }
+

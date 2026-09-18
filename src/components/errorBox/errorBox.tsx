@@ -3,7 +3,7 @@ interface errorBoxProps {
 }
 export default function errorBox({ message }: errorBoxProps) {
   return (
-    <div className="w-full bg-red-950 dark:bg-gray-500  text-gray-50 text-center font-bold p-3">
+    <div className="w-full bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-100 text-center font-semibold p-4 rounded-lg border border-red-200 dark:border-red-800">
       {message}
     </div>
   );

@@ -21,16 +21,16 @@ const Users: React.FC = () => {
       {data.loading ? (
         <div>لطفا کمی صبر کنید...</div>
       ) : data.users?.length ? (
-        <div className="card mt-5">
-          <table className="w-full">
-            <thead className="border-b-2">
+        <div className="table-container mt-5">
+          <table className="w-full hidden md:table">
+            <thead className="table-header">
               <tr>
-                <th className="py-8">نام و نام خانوادگی</th>
-                <th className="py-8">نام کاربری </th>
-                <th className="py-8">رمز عبور</th>
-                <th className="py-8">شماره تماس</th>
-                <th className="py-8">ایمیل</th>
-                <th className="py-8">وضعیت</th>
+                <th className="table-header-cell">نام و نام خانوادگی</th>
+                <th className="table-header-cell">نام کاربری </th>
+                <th className="table-header-cell">رمز عبور</th>
+                <th className="table-header-cell">شماره تماس</th>
+                <th className="table-header-cell">ایمیل</th>
+                <th className="table-header-cell">وضعیت</th>
               </tr>
             </thead>
             <tbody>
@@ -39,6 +39,33 @@ const Users: React.FC = () => {
               })}
             </tbody>
           </table>
+          <div className="md:hidden block p-4">
+            {data.users?.map((item: any) => (
+              <div key={item.id} className="mobile-card">
+                <div className="mobile-card-row">
+                  <span className="mobile-card-label">نام و نام خانوادگی</span>
+                  <span className="mobile-card-value">{item.customer}</span>
+                </div>
+                <div className="mobile-card-row">
+                  <span className="mobile-card-label">نام کاربری</span>
+                  <span className="mobile-card-value">{item.userName}</span>
+                </div>
+                <div className="mobile-card-row">
+                  <span className="mobile-card-label">رمز عبور</span>
+                  <span className="mobile-card-value">{item.password}</span>
+                </div>
+                <div className="mobile-card-row">
+                  <span className="mobile-card-label">شماره تماس</span>
+                  <span className="mobile-card-value">{item.phoneNumber}</span>
+                </div>
+                <div className="mobile-card-row">
+                  <span className="mobile-card-label">ایمیل</span>
+                  <span className="mobile-card-value">{item.email}</span>
+                </div>
+                <User {...item} isMobile />
+              </div>
+            ))}
+          </div>
         </div>
       ) : (
         !data.loading && <ErrorBox message="هیچ کاربری یافت نشد" />
