@@ -28,8 +28,8 @@ export default function RadialChart({
           data={data}
         >
           <RadialBar
-            label={{ position: "insideStart", fill: "#18181b", fontSize: 11 }}
-            background={{ fill: "hsl(var(--muted))" }}
+            label={{ position: "insideStart", fill: "var(--chart-label)", fontSize: 11 }}
+            background={{ fill: "var(--muted)" }}
             dataKey={dataKey}
           />
           <Legend

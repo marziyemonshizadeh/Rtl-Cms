@@ -61,13 +61,12 @@ const xAxisData = [
     },
   ];
   const AnnualSalesOfEachProduct = [
-    { name: "Macbook", count: 7, fill: "#82CA9D" },
-    { name: "Asus", count: 3, fill: "#8DD1E1" },
-    { name: "Dell", count: 15, fill: "#FFC658" },
-    { name: "msi", count: 50, fill: "#A4DE6C" },
+    { name: "Macbook", count: 7, fill: "var(--chart-1)" },
+    { name: "Asus", count: 3, fill: "var(--chart-2)" },
+    { name: "Dell", count: 15, fill: "var(--chart-3)" },
+    { name: "msi", count: 50, fill: "var(--chart-4)" },
   ];
   export {
   AnnualSalesOfEachProduct,
   xAxisData
 };
-  

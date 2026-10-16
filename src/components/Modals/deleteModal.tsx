@@ -25,7 +25,7 @@ export default function Modal({
         مطمئن هستید می خواهید حذف کنید ؟
       </p>
 
-      <div className="bg-white px-4 py-3 sm:flex sm:flex-row-reverse sm:justify-center sm:px-6">
+      <div className="bg-card px-4 py-3 sm:flex sm:flex-row-reverse sm:justify-center sm:px-6">
         <button
           type="button"
           className="btn m-1"

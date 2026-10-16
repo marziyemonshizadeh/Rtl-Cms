@@ -167,7 +167,7 @@ export default function User({
               {...register("userName", { required: true })}
             />
             {errors.userName && (
-              <span className="text-red-500">This field is required</span>
+              <span className="text-destructive">This field is required</span>
             )}
             <input
               defaultValue={password}
@@ -178,7 +178,7 @@ export default function User({
               {...register("password", { required: true })}
             />
             {errors.password && (
-              <span className="text-red-500">This field is required</span>
+              <span className="text-destructive">This field is required</span>
             )}
             <input
               defaultValue={phoneNumber}
@@ -189,7 +189,7 @@ export default function User({
               {...register("phoneNumber", { required: true })}
             />
             {errors.phoneNumber && (
-              <span className="text-red-500">This field is required</span>
+              <span className="text-destructive">This field is required</span>
             )}
 
             <input
@@ -201,7 +201,7 @@ export default function User({
               {...register("email", { required: true })}
             />
             {errors.email && (
-              <span className="text-red-500">This field is required</span>
+              <span className="text-destructive">This field is required</span>
             )}
 
             <div className="flex justify-center gap-3">

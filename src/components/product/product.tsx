@@ -154,7 +154,7 @@ const Product = ({ id, name, img, price, count }: productProps) => {
               {...register("img", { required: true })}
             />
             {errors.img && (
-              <span className="text-red-500">This field is required</span>
+              <span className="text-destructive">This field is required</span>
             )}
             <input
               defaultValue={price}
@@ -165,7 +165,7 @@ const Product = ({ id, name, img, price, count }: productProps) => {
               {...register("price", { required: true })}
             />
             {errors.price && (
-              <span className="text-red-500">This field is required</span>
+              <span className="text-destructive">This field is required</span>
             )}
             <input
               defaultValue={count}
@@ -176,7 +176,7 @@ const Product = ({ id, name, img, price, count }: productProps) => {
               {...register("count", { required: true })}
             />
             {errors.count && (
-              <span className="text-red-500">This field is required</span>
+              <span className="text-destructive">This field is required</span>
             )}
 
             <div className="flex justify-center gap-3">

@@ -27,37 +27,71 @@ export default function Sidebar({
 }: SidebarProps) {
   return (
     <div
-      className="flex h-full min-h-0 w-full flex-col bg-zinc-950 text-zinc-300"
+      className="flex h-full min-h-0 w-full flex-col bg-sidebar text-sidebar-foreground"
       dir="rtl"
     >
-      <NavLink
-        to="/"
-        onClick={onNavigate}
-        aria-label="مدیریت فروشگاه، پیشخوان"
+      <div
         className={cn(
-          "flex h-24 shrink-0 items-center gap-3 px-6",
+          "relative flex h-24 shrink-0 items-center px-6",
           collapsed && "justify-center px-0",
         )}
       >
-        <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-lime-400 text-zinc-950">
-          <PanelsTopLeft className="size-5" aria-hidden="true" />
-        </span>
-        {!collapsed && (
-          <span className="min-w-0">
-            <span className="block text-lg font-bold tracking-tight text-white">
-              مدیریت فروشگاه
-            </span>
-            <span className="mt-1 block text-[10px] tracking-[0.2em] text-zinc-500">
-              RTL CMS
-            </span>
+        <NavLink
+          to="/"
+          onClick={onNavigate}
+          aria-label="مدیریت فروشگاه، پیشخوان"
+          className={cn(
+            "flex min-w-0 flex-1 items-center gap-2.5",
+            collapsed && "flex-none",
+          )}
+        >
+          <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-sidebar-primary text-sidebar-primary-foreground">
+            <PanelsTopLeft className="size-5" aria-hidden="true" />
           </span>
+          {!collapsed && (
+            <span className="min-w-0">
+              <span className="block truncate text-sm font-bold tracking-tight text-sidebar-foreground">
+                مدیریت فروشگاه
+              </span>
+              <span className="mt-1 block text-[10px] tracking-[0.2em] text-sidebar-muted-foreground">
+                RTL CMS
+              </span>
+            </span>
+          )}
+        </NavLink>
+        {onToggle && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="absolute -end-4 top-1/2 z-50 size-8 -translate-y-1/2 rounded-lg border border-sidebar-border bg-sidebar text-sidebar-foreground shadow-sm hover:bg-sidebar-accent hover:text-sidebar-foreground focus-visible:ring-sidebar-primary"
+                onClick={onToggle}
+                aria-label={
+                  collapsed ? "باز کردن نوار کناری" : "جمع کردن نوار کناری"
+                }
+                aria-expanded={!collapsed}
+                aria-controls="desktop-sidebar"
+              >
+                {collapsed ? (
+                  <ArrowLeftToLine className="size-4" />
+                ) : (
+                  <ArrowRightToLine className="size-4" />
+                )}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="left">
+              {collapsed ? "باز کردن نوار کناری" : "جمع کردن نوار کناری"}
+            </TooltipContent>
+          </Tooltip>
         )}
-      </NavLink>
+      </div>
 
       <nav aria-label="منوی اصلی" className="flex-1 overflow-y-auto px-3 py-5">
         <p
           className={cn(
-            "mb-4 px-3 text-[11px] font-medium text-zinc-500",
+            "mb-4 px-3 text-[11px] font-medium text-sidebar-muted-foreground",
             collapsed && "sr-only",
           )}
         >
@@ -75,9 +109,9 @@ export default function Sidebar({
                     aria-label={collapsed ? title : undefined}
                     className={({ isActive }) =>
                       cn(
-                        "group relative flex h-11 items-center gap-3 rounded-xl px-3 text-[13px] font-medium outline-none transition-colors hover:bg-white/5 hover:text-white focus-visible:ring-2 focus-visible:ring-lime-400",
+                        "group relative flex h-11 items-center gap-3 rounded-xl px-3 text-[13px] font-medium outline-none transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground focus-visible:ring-2 focus-visible:ring-sidebar-primary",
                         isActive &&
-                          "bg-lime-400/10 text-lime-300 hover:bg-lime-400/15 hover:text-lime-300",
+                          "bg-sidebar-primary/10 text-sidebar-primary hover:bg-sidebar-primary/15 hover:text-sidebar-primary",
                         collapsed && "justify-center px-0",
                       )
                     }
@@ -91,7 +125,7 @@ export default function Sidebar({
                         />
                         {!collapsed && <span className="flex-1">{title}</span>}
                         {isActive && !collapsed && (
-                          <span className="size-1.5 rounded-full bg-lime-400" />
+                          <span className="size-1.5 rounded-full bg-sidebar-primary" />
                         )}
                       </>
                     )}
@@ -106,44 +140,22 @@ export default function Sidebar({
         </ul>
       </nav>
 
-      <div className="shrink-0 border-t border-white/[0.07] p-3">
-        {!collapsed && (
-          <div className="mb-3 flex items-center gap-3 rounded-xl border border-white/[0.07] bg-white/[0.03] p-3">
+      {!collapsed && (
+        <div className="shrink-0 border-t border-sidebar-border p-3">
+          <div className="flex items-center gap-3 rounded-xl border border-sidebar-border bg-sidebar-accent/50 p-3">
             <Store
-              className="size-5 shrink-0 text-zinc-400"
+              className="size-5 shrink-0 text-sidebar-muted-foreground"
               aria-hidden="true"
             />
             <div>
-              <p className="text-xs font-medium text-zinc-200">فروشگاه شما</p>
-              <p className="mt-1 text-[11px] text-zinc-500">
+              <p className="text-xs font-medium text-sidebar-foreground">فروشگاه شما</p>
+              <p className="mt-1 text-[11px] text-sidebar-muted-foreground">
                 همه‌چیز، در یک نگاه
               </p>
             </div>
           </div>
-        )}
-        {onToggle && (
-          <Button
-            variant="ghost"
-            className={cn(
-              "h-10 w-full justify-start gap-3 rounded-xl px-3 text-xs text-zinc-400 hover:bg-white/5 hover:text-white",
-              collapsed && "justify-center px-0",
-            )}
-            onClick={onToggle}
-            aria-label={
-              collapsed ? "باز کردن نوار کناری" : "جمع کردن نوار کناری"
-            }
-            aria-expanded={!collapsed}
-            aria-controls="desktop-sidebar"
-          >
-            {collapsed ? (
-              <ArrowLeftToLine className="size-4" />
-            ) : (
-              <ArrowRightToLine className="size-4" />
-            )}
-            {!collapsed && "جمع کردن منو"}
-          </Button>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

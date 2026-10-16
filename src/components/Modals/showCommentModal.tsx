@@ -31,7 +31,7 @@ export default function ShowComment({
   return (
     <ModalsTemplate>
       <div className="text-center text-xl">
-        <span className=" text-3xl font-extrabold dark:text-black">
+        <span className="text-3xl font-extrabold text-foreground">
           {comment}
         </span>
       </div>

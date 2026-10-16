@@ -70,7 +70,7 @@ const AddNewProduct: React.FC = () => {
               {...register("name", { required: true })}
             />
             {errors.name && (
-              <span className="text-red-500">This field is required</span>
+              <span className="text-destructive">This field is required</span>
             )}
           </div>
           <div className="flex flex-col">
@@ -82,7 +82,7 @@ const AddNewProduct: React.FC = () => {
               {...register("price", { required: true })}
             />
             {errors.img && (
-              <span className="text-red-500">This field is required</span>
+              <span className="text-destructive">This field is required</span>
             )}
           </div>
           <div className="flex flex-col">
@@ -94,7 +94,7 @@ const AddNewProduct: React.FC = () => {
               {...register("count", { required: true })}
             />
             {errors.price && (
-              <span className="text-red-500">This field is required</span>
+              <span className="text-destructive">This field is required</span>
             )}
           </div>
           <div className="flex flex-col">
@@ -106,7 +106,7 @@ const AddNewProduct: React.FC = () => {
               {...register("img", { required: true })}
             />
             {errors.count && (
-              <span className="text-red-500">This field is required</span>
+              <span className="text-destructive">This field is required</span>
             )}
           </div>
         </div>

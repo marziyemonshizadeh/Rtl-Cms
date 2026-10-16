@@ -26,7 +26,7 @@ const Home: React.FC = () => {
             data={xAxisData}
             dataKey="Sale"
             XAxisDataKey="month"
-            fill="hsl(var(--primary))"
+            fill="var(--primary)"
           />
         </div>
         <div className="card my-0">

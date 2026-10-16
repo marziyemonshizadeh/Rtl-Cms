@@ -28,7 +28,7 @@ export default function chart({ title, data, dataKey1 }: LineChartProps) {
         >
           <CartesianGrid
             vertical={false}
-            stroke="hsl(var(--border))"
+            stroke="var(--border)"
             strokeDasharray="4 4"
           />
           <XAxis
@@ -41,21 +41,21 @@ export default function chart({ title, data, dataKey1 }: LineChartProps) {
           <Line
             type="monotone"
             dataKey={dataKey1}
-            stroke="hsl(var(--primary))"
+            stroke="var(--primary)"
             strokeWidth={3}
             dot={false}
-            activeDot={{ r: 5, strokeWidth: 3, stroke: "hsl(var(--card))" }}
+            activeDot={{ r: 5, strokeWidth: 3, stroke: "var(--card)" }}
             name="فروش"
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: "hsl(var(--popover))",
-              border: "1px solid hsl(var(--border))",
+              backgroundColor: "var(--popover)",
+              border: "1px solid var(--border)",
               borderRadius: 12,
               direction: "rtl",
               fontSize: 12,
             }}
-            labelStyle={{ color: "hsl(var(--foreground))" }}
+            labelStyle={{ color: "var(--foreground)" }}
           />
         </LineChart>
       </ResponsiveContainer>

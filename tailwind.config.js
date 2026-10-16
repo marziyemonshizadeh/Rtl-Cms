@@ -1,12 +1,16 @@
 import animate from "tailwindcss-animate";
 
+// Full CSS colors (names, hex, rgb, hsl) with Tailwind opacity modifiers.
+const themeColor = (name) =>
+  `color-mix(in srgb, var(--${name}) calc(<alpha-value> * 100%), transparent)`;
+
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   darkMode: ["class"],
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Vazirmatn Variable", "Tahoma", "sans-serif"],
+        sans: ["var(--font-sans)"],
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -14,32 +18,48 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       colors: {
-        background: "hsl(var(--background) / <alpha-value>)",
-        foreground: "hsl(var(--foreground) / <alpha-value>)",
+        background: themeColor("background"),
+        foreground: themeColor("foreground"),
         card: {
-          DEFAULT: "hsl(var(--card) / <alpha-value>)",
-          foreground: "hsl(var(--foreground) / <alpha-value>)",
+          DEFAULT: themeColor("card"),
+          foreground: themeColor("foreground"),
         },
         popover: {
-          DEFAULT: "hsl(var(--popover) / <alpha-value>)",
-          foreground: "hsl(var(--foreground) / <alpha-value>)",
+          DEFAULT: themeColor("popover"),
+          foreground: themeColor("foreground"),
         },
         primary: {
-          DEFAULT: "hsl(var(--primary) / <alpha-value>)",
-          foreground: "hsl(var(--primary-foreground) / <alpha-value>)",
+          DEFAULT: themeColor("primary"),
+          foreground: themeColor("primary-foreground"),
         },
         muted: {
-          DEFAULT: "hsl(var(--muted) / <alpha-value>)",
-          foreground: "hsl(var(--muted-foreground) / <alpha-value>)",
+          DEFAULT: themeColor("muted"),
+          foreground: themeColor("muted-foreground"),
         },
         accent: {
-          DEFAULT: "hsl(var(--muted) / <alpha-value>)",
-          foreground: "hsl(var(--foreground) / <alpha-value>)",
+          DEFAULT: themeColor("muted"),
+          foreground: themeColor("foreground"),
         },
-        destructive: "hsl(var(--destructive) / <alpha-value>)",
-        border: "hsl(var(--border) / <alpha-value>)",
-        input: "hsl(var(--border) / <alpha-value>)",
-        ring: "hsl(var(--primary) / <alpha-value>)",
+        destructive: {
+          DEFAULT: themeColor("destructive"),
+          foreground: themeColor("destructive-foreground"),
+        },
+        success: themeColor("success"),
+        warning: themeColor("warning"),
+        info: themeColor("info"),
+        overlay: themeColor("overlay"),
+        sidebar: {
+          DEFAULT: themeColor("sidebar-background"),
+          foreground: themeColor("sidebar-foreground"),
+          "muted-foreground": themeColor("sidebar-muted-foreground"),
+          accent: themeColor("sidebar-accent"),
+          border: themeColor("sidebar-border"),
+          primary: themeColor("sidebar-primary"),
+          "primary-foreground": themeColor("sidebar-primary-foreground"),
+        },
+        border: themeColor("border"),
+        input: themeColor("border"),
+        ring: themeColor("primary"),
       },
     },
   },

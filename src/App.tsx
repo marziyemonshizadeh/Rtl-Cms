@@ -68,13 +68,13 @@ export default function App() {
           </a>
           <aside
             id="desktop-sidebar"
-            className="fixed inset-y-0 start-0 z-40 hidden w-[var(--sidebar-width)] border-e border-white/5 transition-[width] duration-200 motion-reduce:transition-none lg:flex"
+            className="fixed inset-y-0 start-0 z-40 hidden w-[var(--sidebar-width)] border-e border-sidebar-border transition-[width] duration-200 motion-reduce:transition-none lg:flex"
           >
             <Sidebar collapsed={collapsed} onToggle={toggleSidebar} />
           </aside>
 
           <SheetContent
-            className="w-[280px] border-zinc-800 bg-zinc-950 p-0 text-zinc-100"
+            className="w-[280px] border-sidebar-border bg-sidebar p-0 text-sidebar-foreground [&>button]:focus:ring-sidebar-primary"
             dir="rtl"
           >
             <SheetTitle className="sr-only">منوی اصلی فروشگاه</SheetTitle>
