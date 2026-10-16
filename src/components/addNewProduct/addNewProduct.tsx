@@ -1,3 +1,4 @@
+import FormField from "@/components/@base/Form/FormField";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -5,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { addProduct } from "@/redux/store/products";
 import type Product from "@/models/productType";
 
-type Inputs = Omit<Product, "id">;
+type Inputs = Omit<Product, "id" | "price" | "count"> & { price: number; count: number };
 
 const AddNewProduct: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -30,53 +31,55 @@ const AddNewProduct: React.FC = () => {
   return (
     <>
       <h1 className="header">افزودن محصول جدید</h1>
-      <form className="card min-h-64 pt-5" aria-busy={pending} onSubmit={handleSubmit(onSubmit)}>
+      <form noValidate className="card min-h-64 pt-5" aria-busy={pending} onSubmit={handleSubmit(onSubmit)}>
         <fieldset disabled={loading || pending} className="min-w-0">
-          <div className="grid xl:grid-cols-2 md:grid-cols-1 gap-2">
-            <div className="flex flex-col">
+          <div className="grid gap-4 xl:grid-cols-2">
+            <FormField label="نام محصول" error={errors.name?.message}>
               <Input
+                required
                 type="text"
-                placeholder="اسم محصول خود را بنویسید  "
-                aria-label="name"
-                {...register("name", { required: true })}
+                placeholder="نام محصول را وارد کنید"
+                {...register("name", { required: "نام محصول الزامی است." })}
               />
-              {errors.name && (
-                <span className="text-destructive">This field is required</span>
-              )}
-            </div>
-            <div className="flex flex-col">
+            </FormField>
+            <FormField label="قیمت" error={errors.price?.message}>
               <Input
-                type="text"
-                placeholder="قیمت محصول خود را بنویسید  "
-                aria-label="price"
-                {...register("price", { required: true })}
+                required
+                type="number"
+                min={0}
+                step="any"
+                placeholder="قیمت محصول را وارد کنید"
+                {...register("price", {
+                  required: "قیمت الزامی است.",
+                  valueAsNumber: true,
+                  min: { value: 0, message: "قیمت نمی‌تواند منفی باشد." },
+                  validate: (value) => Number.isFinite(value) || "قیمت معتبر وارد کنید.",
+                })}
               />
-              {errors.img && (
-                <span className="text-destructive">This field is required</span>
-              )}
-            </div>
-            <div className="flex flex-col">
+            </FormField>
+            <FormField label="موجودی" error={errors.count?.message}>
               <Input
-                type="text"
-                placeholder="موجودی محصول خود را بنویسید  "
-                aria-label="count"
-                {...register("count", { required: true })}
+                required
+                type="number"
+                min={0}
+                step="1"
+                placeholder="موجودی محصول را وارد کنید"
+                {...register("count", {
+                  required: "موجودی الزامی است.",
+                  valueAsNumber: true,
+                  min: { value: 0, message: "موجودی نمی‌تواند منفی باشد." },
+                  validate: (value) => Number.isInteger(value) || "موجودی باید عدد صحیح باشد.",
+                })}
               />
-              {errors.price && (
-                <span className="text-destructive">This field is required</span>
-              )}
-            </div>
-            <div className="flex flex-col">
+            </FormField>
+            <FormField label="آدرس تصویر" error={errors.img?.message}>
               <Input
+                required
                 type="text"
-                placeholder="آدرس عکس محصول خود را بنویسید "
-                aria-label="img"
-                {...register("img", { required: true })}
+                placeholder="آدرس تصویر محصول را وارد کنید"
+                {...register("img", { required: "آدرس تصویر الزامی است." })}
               />
-              {errors.count && (
-                <span className="text-destructive">This field is required</span>
-              )}
-            </div>
+            </FormField>
           </div>
           <div className="flex justify-end mt-3">
             <Button type="submit">{pending ? "در حال ثبت..." : "ثبت محصول"}</Button>

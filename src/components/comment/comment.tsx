@@ -52,7 +52,8 @@ export default function Comment({
             type="button"
             disabled={pending || confirmation}
             className={`${confirmation ? "btnDisable " : "btn"}`}
-            onClick={() => {
+            onClick={(event) => {
+              event.currentTarget.focus();
               setIsShowComment(true);
             }}
           >
@@ -71,7 +72,8 @@ export default function Comment({
             type="button"
             disabled={pending || confirmation}
             className={`m-1 ${confirmation ? "btnDisable " : "btn"}`}
-            onClick={() => {
+            onClick={(event) => {
+              event.currentTarget.focus();
               setIsShowModal(true);
             }}
           >
@@ -101,12 +103,11 @@ export default function Comment({
       )}
 
       {isShowComment && (
-        <ShowComment
-          comment={comment}
-          onHide={() => {
-            setIsShowComment(false);
-          }}
-        />
+        <ShowComment onHide={() => setIsShowComment(false)}>
+          <p className="whitespace-pre-wrap break-words text-start text-sm leading-8 [overflow-wrap:anywhere]">
+            {comment}
+          </p>
+        </ShowComment>
       )}
     </>
   );

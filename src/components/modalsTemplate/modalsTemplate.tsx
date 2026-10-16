@@ -1,25 +1,56 @@
-interface ModalsTemplateProps {
-  children: React.ReactNode;
-}
-export default function ModalsTemplate({ children }: ModalsTemplateProps) {
-  return (
-    <div
-      className="relative z-40"
-      aria-labelledby="modal-title"
-      role="dialog"
-      aria-modal="true"
-    >
-      <div className="fixed inset-0 bg-overlay/50 transition-opacity"></div>
+import { useState, type ReactNode } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
-      <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-        <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-          <div className="relative transform overflow-hidden rounded-lg bg-card text-left text-card-foreground shadow-lg transition-all sm:my-8 sm:w-full sm:max-w-lg">
-            <div className="px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-              {children}
-            </div>
-          </div>
+interface ModalsTemplateProps {
+  title: string;
+  description: string;
+  onClose: () => void;
+  pending?: boolean;
+  children: ReactNode;
+}
+
+export default function ModalsTemplate({
+  title,
+  description,
+  onClose,
+  pending = false,
+  children,
+}: ModalsTemplateProps) {
+  const [returnFocusTo] = useState(() =>
+    typeof document !== "undefined" && document.activeElement instanceof HTMLElement
+      ? document.activeElement
+      : null,
+  );
+
+  return (
+    <Dialog open onOpenChange={(open) => {
+      if (!open && !pending) onClose();
+    }}>
+      <DialogContent
+        pending={pending}
+        onCloseAutoFocus={(event) => {
+          event.preventDefault();
+          const target = returnFocusTo?.isConnected
+            && !returnFocusTo.matches(":disabled")
+            && returnFocusTo.getClientRects().length
+            ? returnFocusTo
+            : document.getElementById("main-content");
+          target?.focus({ preventScroll: true });
+        }}
+      >
+        <div className="mb-5 space-y-2 border-b pb-4 text-start">
+          <DialogTitle className="break-words text-lg font-semibold">{title}</DialogTitle>
+          <DialogDescription className="text-sm leading-6 text-muted-foreground">
+            {description}
+          </DialogDescription>
         </div>
-      </div>
-    </div>
+        {children}
+      </DialogContent>
+    </Dialog>
   );
 }

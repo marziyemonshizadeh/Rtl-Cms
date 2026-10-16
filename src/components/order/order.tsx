@@ -63,7 +63,10 @@ export default function Order({
             type="button"
             disabled={pending}
             className={`m-1 ${confirmation ? "btnDisable " : "btn"}`}
-            onClick={() => setIsShowDetailsModal(true)}
+            onClick={(event) => {
+              event.currentTarget.focus();
+              setIsShowDetailsModal(true);
+            }}
           >
             جزئیات
           </button>
@@ -71,7 +74,8 @@ export default function Order({
             type="button"
             disabled={pending || confirmation}
             className={`m-1 ${confirmation ? "btnDisable " : "btn"}`}
-            onClick={() => {
+            onClick={(event) => {
+              event.currentTarget.focus();
               setIsShowModal(true);
             }}
           >
@@ -103,20 +107,16 @@ export default function Order({
 
       {isShowDetailsModal && (
         <DetailsModal
-          product={product}
-          customer={customer}
-          orderDate={orderDate}
-          price={price}
-          discount={discount}
-          order={true}
+          title="جزئیات سفارش"
           onHide={() => setIsShowDetailsModal(false)}
-        >
-          <th className="py-3">محصول</th>
-          <th className="py-3"> مشتری</th>
-          <th className="py-3">تاریخ </th>
-          <th className="py-3">قیمت</th>
-          <th className="py-3"> تخفیف</th>
-        </DetailsModal>
+          items={[
+            { label: "محصول", value: product },
+            { label: "مشتری", value: customer },
+            { label: "تاریخ سفارش", value: orderDate },
+            { label: "قیمت", value: price },
+            { label: "تخفیف", value: discount },
+          ]}
+        />
       )}
     </>
   );

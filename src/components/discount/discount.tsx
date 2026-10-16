@@ -69,7 +69,8 @@ export default function Discount({
             type="button"
             disabled={pending || confirmation}
             className={`m-1 ${confirmation ? "btnDisable " : "btn"}`}
-            onClick={() => {
+            onClick={(event) => {
+              event.currentTarget.focus();
               setIsShowModal(true);
             }}
           >

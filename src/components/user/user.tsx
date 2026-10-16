@@ -1,3 +1,5 @@
+import FormField from "@/components/@base/Form/FormField";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useState } from "react";
@@ -16,6 +18,8 @@ interface userProps {
   email: string;
   isMobile?: boolean;
 }
+type UserInputs = Omit<userProps, "id" | "isMobile">;
+
 export default function User({
   id,
   customer,
@@ -45,8 +49,8 @@ export default function User({
     reset,
     handleSubmit,
     formState: { errors },
-  } = useForm<userProps>();
-  const onSubmit: SubmitHandler<userProps> = async (data) => {
+  } = useForm<UserInputs>();
+  const onSubmit: SubmitHandler<UserInputs> = async (data) => {
     try {
       await dispatch(updateUser({
         id,
@@ -79,7 +83,8 @@ export default function User({
             type="button"
             disabled={pending}
             className="btn m-1"
-            onClick={() => {
+            onClick={(event) => {
+              event.currentTarget.focus();
               setIsShowModal(true);
             }}
           >
@@ -90,7 +95,8 @@ export default function User({
             type="button"
             disabled={pending}
             className="btn m-1"
-            onClick={() => {
+            onClick={(event) => {
+              event.currentTarget.focus();
               setIsShowDetailsModal(true);
             }}
           >
@@ -101,7 +107,8 @@ export default function User({
             type="button"
             disabled={pending}
             className="btn m-1"
-            onClick={() => {
+            onClick={(event) => {
+              event.currentTarget.focus();
               setIsShowEditModal(true);
             }}
           >
@@ -123,95 +130,77 @@ export default function User({
       {/* details modal */}
       {isShowDetailsModal && (
         <DetailsModal
-          customer={customer}
-          userName={userName}
-          password={password}
-          user={true}
-          onHide={() => {
-            setIsShowDetailsModal(false);
-          }}
-        >
-          <th className="py-3">اسم</th>
-          <th className="py-3">شماره تماس</th>
-          <th className="py-3">ایمیل</th>
-        </DetailsModal>
+          title="جزئیات کاربر"
+          onHide={() => setIsShowDetailsModal(false)}
+          items={[
+            { label: "نام و نام خانوادگی", value: customer },
+            { label: "نام کاربری", value: userName },
+            { label: "رمز عبور", value: password },
+          ]}
+        />
       )}
       {/* edit modal */}
       {isShowEditModal && (
         <EditModal
+          pending={pending}
           onClose={() => {
-            if (!pending) setIsShowEditModal(false);
+            setIsShowEditModal(false);
           }}
         >
-          <form className="min-h-64 pt-5" aria-busy={pending} onSubmit={handleSubmit(onSubmit)}>
-            <fieldset disabled={pending} className="min-w-0">
-              <Input
-                defaultValue={customer}
-                className="text-right"
-                type="text"
-                placeholder="نام را وارد کنید "
-                aria-label="customer"
-                {...register("customer", { required: true })}
-              />
-              {errors.customer && <span>This field is required</span>}
-              <Input
-                defaultValue={userName}
-                className="text-right"
-                type="text"
-                placeholder=" نام کاربری جدید را وارد کنید "
-                aria-label="userName"
-                {...register("userName", { required: true })}
-              />
-              {errors.userName && (
-                <span className="text-destructive">This field is required</span>
-              )}
-              <Input
-                defaultValue={password}
-                className="text-right"
-                type="text"
-                placeholder="رمز عبور جدید را وارد کنید "
-                aria-label="password"
-                {...register("password", { required: true })}
-              />
-              {errors.password && (
-                <span className="text-destructive">This field is required</span>
-              )}
-              <Input
-                defaultValue={phoneNumber}
-                className="text-right"
-                type="text"
-                placeholder="شماره موبایل جدید را وارد کنید "
-                aria-label="phoneNumber"
-                {...register("phoneNumber", { required: true })}
-              />
-              {errors.phoneNumber && (
-                <span className="text-destructive">This field is required</span>
-              )}
-
-              <Input
-                defaultValue={email}
-                className="text-right"
-                type="text"
-                placeholder="ایمیل جدید را وارد کنید "
-                aria-label="email"
-                {...register("email", { required: true })}
-              />
-              {errors.email && (
-                <span className="text-destructive">This field is required</span>
-              )}
-
-              <div className="flex justify-center gap-3">
-                <button
-                  type="button"
-                  disabled={pending}
-                  className="btnLight my-5"
-                  onClick={() => setIsShowEditModal(false)}
-                >
-                  cancel
-                </button>
-                <button type="submit" className="btn my-5">
-                  ثبت اطلاعات جدید
-                </button>
+          <form noValidate className="min-h-64 pt-5" aria-busy={pending} onSubmit={handleSubmit(onSubmit)}>
+            <fieldset disabled={pending} className="min-w-0 space-y-4">
+              <FormField label="نام و نام خانوادگی" error={errors.customer?.message}>
+                <Input
+                  required
+                  defaultValue={customer}
+                  type="text"
+                  placeholder="نام و نام خانوادگی را وارد کنید"
+                  {...register("customer", { required: "نام و نام خانوادگی الزامی است." })}
+                />
+              </FormField>
+              <FormField label="نام کاربری" error={errors.userName?.message}>
+                <Input
+                  required
+                  defaultValue={userName}
+                  type="text"
+                  placeholder="نام کاربری را وارد کنید"
+                  {...register("userName", { required: "نام کاربری الزامی است." })}
+                />
+              </FormField>
+              <FormField label="رمز عبور" error={errors.password?.message}>
+                <Input
+                  required
+                  defaultValue={password}
+                  type="text"
+                  placeholder="رمز عبور را وارد کنید"
+                  {...register("password", { required: "رمز عبور الزامی است." })}
+                />
+              </FormField>
+              <FormField label="شماره تماس" error={errors.phoneNumber?.message}>
+                <Input
+                  required
+                  defaultValue={phoneNumber}
+                  type="text"
+                  placeholder="شماره تماس را وارد کنید"
+                  {...register("phoneNumber", { required: "شماره تماس الزامی است." })}
+                />
+              </FormField>
+              <FormField label="ایمیل" error={errors.email?.message}>
+                <Input
+                  required
+                  defaultValue={email}
+                  type="text"
+                  placeholder="ایمیل را وارد کنید"
+                  {...register("email", { required: "ایمیل الزامی است." })}
+                />
+              </FormField>
+              <div className="flex flex-wrap justify-end gap-3">
+                <Button type="button" variant="outline" onClick={() => setIsShowEditModal(false)}>
+                  انصراف
+                </Button>
+                <Button type="submit">
+                  {pending ? "در حال ثبت..." : "ثبت اطلاعات جدید"}
+                </Button>
               </div>
             </fieldset>
             {mutation?.error && (

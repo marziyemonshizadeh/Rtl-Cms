@@ -1,98 +1,27 @@
-import { useEffect } from "react";
+import type { ReactNode } from "react";
 import ModalsTemplate from "@/components/modalsTemplate/modalsTemplate";
 
 interface DetailsModalProps {
+  title: string;
   onHide: () => void;
-  product?: string | boolean;
-  user?: boolean;
-  discount?: number | string;
-  order?: boolean;
-  name?: string;
-  count?: number | string;
-  price?: number | string;
-  orderDate?: string;
-  customer?: string;
-  discountPercent?: string;
-  discountCode?: string;
-  userName?: string;
-  password?: string;
-  children: React.ReactNode;
-  onclick?: () => void;
+  items: readonly { label: string; value: ReactNode }[];
 }
-export default function DetailsModal({
-  price,
-  count,
-  name,
-  product,
-  user,
-  order,
-  discount,
-  orderDate,
-  customer,
-  discountPercent,
-  discountCode,
-  userName,
-  password,
-  onHide,
-  children,
-}: DetailsModalProps): JSX.Element {
-  useEffect(() => {
-    const checkKey = (event: KeyboardEvent) => {
-      console.log(event);
-      if (event.keyCode === 27) {
-        onHide();
-      }
-    };
 
-    window.addEventListener("keydown", checkKey);
-
-    return () => window.removeEventListener("keydown", checkKey);
-  });
-
+export default function DetailsModal({ title, onHide, items }: DetailsModalProps) {
   return (
-    <ModalsTemplate>
-      <div className="text-center font-extrabold text-2xl">
-        <table className="w-full">
-          <thead>
-            <tr className="border-b">{children}</tr>
-          </thead>
-
-          <tbody>
-            <tr>
-              {product && (
-                <>
-                  <td className="td">{name}</td>
-                  <td className="td"> {price}</td>
-                  <td className="td">{count}</td>
-                </>
-              )}
-              {user && (
-                <>
-                  <td className="td">{customer}</td>
-                  <td className="td"> {userName}</td>
-                  <td className="td">{password}</td>
-                </>
-              )}
-              {discount && (
-                <>
-                  <td className="td">{discountCode}</td>
-                  <td className="td"> {product}</td>
-                  <td className="td">{discountPercent}</td>
-                </>
-              )}
-              {order && (
-                <>
-                  <td className="td">{product}</td>
-                  <td className="td">{customer}</td>
-                  <td className="td">{orderDate}</td>
-                  <td className="td">{price}</td>
-                  <td className="td">{discount}</td>
-                </>
-              )}
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <ModalsTemplate
+      title={title}
+      description="اطلاعات ثبت‌شده را مشاهده کنید."
+      onClose={onHide}
+    >
+      <dl className="grid gap-4 text-start sm:grid-cols-2">
+        {items.map(({ label, value }) => (
+          <div key={label} className="min-w-0 space-y-1">
+            <dt className="text-xs text-muted-foreground">{label}</dt>
+            <dd className="whitespace-pre-wrap break-words text-sm leading-7 [overflow-wrap:anywhere]">{value}</dd>
+          </div>
+        ))}
+      </dl>
     </ModalsTemplate>
   );
 }

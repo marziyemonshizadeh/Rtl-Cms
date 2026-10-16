@@ -1,3 +1,5 @@
+import FormField from "@/components/@base/Form/FormField";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useState } from "react";
@@ -15,6 +17,8 @@ interface productProps {
   count: number | string;
   isMobile?: boolean;
 }
+type ProductInputs = Pick<productProps, "name" | "img"> & { price: number; count: number };
+
 const Product = ({ id, name, img, price, count }: productProps) => {
   const [isShowModal, setIsShowModal] = useState<boolean>(false);
   const [isShowDetailsModal, setIsShowDetailsModal] = useState<boolean>(false);
@@ -37,8 +41,8 @@ const Product = ({ id, name, img, price, count }: productProps) => {
     reset,
     handleSubmit,
     formState: { errors },
-  } = useForm<productProps>();
-  const onSubmit: SubmitHandler<productProps> = async (data) => {
+  } = useForm<ProductInputs>();
+  const onSubmit: SubmitHandler<ProductInputs> = async (data) => {
     try {
       await dispatch(updateProduct({
         id,
@@ -70,7 +74,8 @@ const Product = ({ id, name, img, price, count }: productProps) => {
             type="button"
             disabled={pending}
             className="btn m-1"
-            onClick={() => {
+            onClick={(event) => {
+              event.currentTarget.focus();
               setIsShowDetailsModal(true);
             }}
           >
@@ -80,7 +85,8 @@ const Product = ({ id, name, img, price, count }: productProps) => {
             type="button"
             disabled={pending}
             className="btn m-1"
-            onClick={() => {
+            onClick={(event) => {
+              event.currentTarget.focus();
               setIsShowModal(true);
             }}
           >
@@ -90,7 +96,10 @@ const Product = ({ id, name, img, price, count }: productProps) => {
             type="button"
             disabled={pending}
             className="btn m-1"
-            onClick={() => setIsShowEditModal(true)}
+            onClick={(event) => {
+              event.currentTarget.focus();
+              setIsShowEditModal(true);
+            }}
           >
             ویرایش
           </button>
@@ -111,83 +120,82 @@ const Product = ({ id, name, img, price, count }: productProps) => {
       {/* details modal */}
       {isShowDetailsModal && (
         <DetailsModal
-          name={name}
-          count={count}
-          price={price}
-          product={true}
-          onHide={() => {
-            setIsShowDetailsModal(false);
-          }}
-        >
-          <th className="py-3">اسم</th>
-          <th className="py-3">قیمت</th>
-          <th className="py-3">موجودی</th>
-        </DetailsModal>
+          title="جزئیات محصول"
+          onHide={() => setIsShowDetailsModal(false)}
+          items={[
+            { label: "نام محصول", value: name },
+            { label: "قیمت", value: price },
+            { label: "موجودی", value: count },
+          ]}
+        />
       )}
       {/* edit modal */}
       {isShowEditModal && (
         <EditModal
+          pending={pending}
           onClose={() => {
-            if (!pending) setIsShowEditModal(false);
+            setIsShowEditModal(false);
           }}
         >
-          <form className="min-h-64 pt-5" aria-busy={pending} onSubmit={handleSubmit(onSubmit)}>
-            <fieldset disabled={pending} className="min-w-0">
-              <Input
-                defaultValue={name}
-                className="text-right"
-                type="text"
-                placeholder="نام محصول جدید را وارد کنید "
-                aria-label="name"
-                {...register("name", { required: true })}
-              />
-              {errors.name && <span>This field is required</span>}
-              <Input
-                defaultValue={img}
-                className="text-right"
-                type="text"
-                placeholder="آدرس عکس جدید محصول را وارد کنید "
-                aria-label="img"
-                {...register("img", { required: true })}
-              />
-              {errors.img && (
-                <span className="text-destructive">This field is required</span>
-              )}
-              <Input
-                defaultValue={price}
-                className="text-right"
-                type="text"
-                placeholder=" قیمت جدید محصول را وارد کنید "
-                aria-label="price"
-                {...register("price", { required: true })}
-              />
-              {errors.price && (
-                <span className="text-destructive">This field is required</span>
-              )}
-              <Input
-                defaultValue={count}
-                className="text-right"
-                type="text"
-                placeholder=" تعداد جدید محصول را وارد کنید "
-                aria-label="count"
-                {...register("count", { required: true })}
-              />
-              {errors.count && (
-                <span className="text-destructive">This field is required</span>
-              )}
-
-              <div className="flex justify-center gap-3">
-                <button
-                  type="button"
-                  disabled={pending}
-                  className="btnLight my-5"
-                  onClick={() => setIsShowEditModal(false)}
-                >
-                  cancel
-                </button>
-                <button type="submit" className="btn my-5">
-                  ثبت اطلاعات جدید
-                </button>
+          <form noValidate className="min-h-64 pt-5" aria-busy={pending} onSubmit={handleSubmit(onSubmit)}>
+            <fieldset disabled={pending} className="min-w-0 space-y-4">
+              <FormField label="نام محصول" error={errors.name?.message}>
+                <Input
+                  required
+                  defaultValue={name}
+                  type="text"
+                  placeholder="نام محصول را وارد کنید"
+                  {...register("name", { required: "نام محصول الزامی است." })}
+                />
+              </FormField>
+              <FormField label="قیمت" error={errors.price?.message}>
+                <Input
+                  required
+                  defaultValue={price}
+                  type="number"
+                  min={0}
+                  step="any"
+                  placeholder="قیمت محصول را وارد کنید"
+                  {...register("price", {
+                    required: "قیمت الزامی است.",
+                    valueAsNumber: true,
+                    min: { value: 0, message: "قیمت نمی‌تواند منفی باشد." },
+                    validate: (value) => Number.isFinite(value) || "قیمت معتبر وارد کنید.",
+                  })}
+                />
+              </FormField>
+              <FormField label="موجودی" error={errors.count?.message}>
+                <Input
+                  required
+                  defaultValue={count}
+                  type="number"
+                  min={0}
+                  step="1"
+                  placeholder="موجودی محصول را وارد کنید"
+                  {...register("count", {
+                    required: "موجودی الزامی است.",
+                    valueAsNumber: true,
+                    min: { value: 0, message: "موجودی نمی‌تواند منفی باشد." },
+                    validate: (value) => Number.isInteger(value) || "موجودی باید عدد صحیح باشد.",
+                  })}
+                />
+              </FormField>
+              <FormField label="آدرس تصویر" error={errors.img?.message}>
+                <Input
+                  required
+                  defaultValue={img}
+                  type="text"
+                  placeholder="آدرس تصویر محصول را وارد کنید"
+                  {...register("img", { required: "آدرس تصویر الزامی است." })}
+                />
+              </FormField>
+              <div className="flex flex-wrap justify-end gap-3">
+                <Button type="button" variant="outline" onClick={() => setIsShowEditModal(false)}>
+                  انصراف
+                </Button>
+                <Button type="submit">
+                  {pending ? "در حال ثبت..." : "ثبت اطلاعات جدید"}
+                </Button>
               </div>
             </fieldset>
             {mutation?.error && (

@@ -130,6 +130,14 @@
     @apply my-2 h-11 appearance-none rounded-lg border border-input bg-card px-3 py-2 text-sm text-foreground outline-none transition-shadow placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50;
   }
 
+  .input[aria-invalid="true"] {
+    @apply border-destructive;
+  }
+
+  .input[aria-invalid="true"]:focus-visible {
+    @apply border-destructive ring-destructive;
+  }
+
   .btn {
     @apply inline-flex select-none items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50;
   }
