@@ -1,3 +1,4 @@
+import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -71,9 +72,9 @@ export default function Discount({
         <td className="table-cell">{adminName}</td>
         <td className="table-cell">{product}</td>
         <td className="table-cell">
-          <span className={confirmation ? "badge-approved" : "badge-pending"}>
+          <Badge variant={confirmation ? "approved" : "pending"}>
             {confirmation ? "تایید شده" : "در انتظار"}
-          </span>
+          </Badge>
         </td>
         <td className="table-cell">
           <button

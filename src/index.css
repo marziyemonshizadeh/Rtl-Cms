@@ -1,16 +1,12 @@
 @import "@fontsource-variable/vazirmatn";
 @import "./styles/themes.css";
+@import "./styles/tokens.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --font-sans: "Vazirmatn Variable", "Tahoma", sans-serif;
-    --radius: 0.75rem;
-  }
-
   * {
     @apply border-border;
   }
@@ -74,11 +70,11 @@
 
 @layer components {
   .card {
-    @apply my-4 min-w-0 rounded-2xl border bg-card p-5 text-foreground shadow-sm sm:p-6;
+    @apply my-4 min-w-0 rounded-lg border bg-card p-5 text-foreground shadow-sm sm:p-6;
   }
 
   .table-container {
-    @apply overflow-hidden rounded-2xl border bg-card shadow-sm;
+    @apply overflow-hidden rounded-lg border bg-card shadow-sm;
   }
 
   .table-header {
@@ -102,7 +98,7 @@
   }
 
   .mobile-card {
-    @apply mb-3 rounded-xl border bg-card p-4;
+    @apply mb-3 rounded-lg border bg-card p-4;
   }
 
   .mobile-card-row {
@@ -130,7 +126,7 @@
   }
 
   .input {
-    @apply my-2 h-11 appearance-none rounded-lg border border-input bg-card px-3 py-2 text-sm text-foreground outline-none transition-shadow placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply my-2 h-11 appearance-none rounded-lg border border-input bg-card px-3 py-2 text-sm text-foreground outline-none transition-shadow placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .btn {

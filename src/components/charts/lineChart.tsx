@@ -1,3 +1,4 @@
+import { Card } from "@/components/ui/card";
 import {
   CartesianGrid,
   Line,
@@ -13,7 +14,7 @@ interface LineChartProps {
 }
 export default function chart({ title, data, dataKey1 }: LineChartProps) {
   return (
-    <div className="card my-0">
+    <Card className="my-0">
       <div className="mb-6 flex items-center justify-between gap-3">
         <h2 className="text-sm font-semibold">{title}</h2>
         <span className="inline-flex items-center gap-2 text-xs text-muted-foreground">
@@ -59,6 +60,6 @@ export default function chart({ title, data, dataKey1 }: LineChartProps) {
           />
         </LineChart>
       </ResponsiveContainer>
-    </div>
+    </Card>
   );
 }

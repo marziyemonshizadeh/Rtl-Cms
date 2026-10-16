@@ -1,0 +1,68 @@
+@layer base {
+  :root {
+    --font-sans: "Vazirmatn Variable", "Tahoma", sans-serif;
+    --radius: 0.5rem;
+    --primary: var(--primary-light);
+    --primary-foreground: var(--primary-foreground-light);
+    --background: hsl(240 5% 97%);
+    --foreground: hsl(240 10% 12%);
+    --card: hsl(0 0% 100%);
+    --card-foreground: var(--foreground);
+    --popover: hsl(0 0% 100%);
+    --popover-foreground: var(--foreground);
+    --muted: hsl(240 5% 94%);
+    --muted-foreground: hsl(240 4% 40%);
+    --secondary: var(--muted);
+    --secondary-foreground: var(--foreground);
+    --accent: var(--accent-light);
+    --accent-foreground: var(--foreground);
+    --border: hsl(240 6% 89%);
+    --input: hsl(240 5% 55%);
+    --ring: var(--primary);
+    --destructive: hsl(0 72% 45%);
+    --destructive-foreground: hsl(0 0% 100%);
+    --success: hsl(145 75% 27%);
+    --warning: hsl(38 92% 30%);
+    --info: hsl(217 82% 45%);
+    --overlay: hsl(0 0% 0%);
+
+    --sidebar-background: hsl(var(--surface-hue) 18% 8%);
+    --sidebar-foreground: hsl(240 5% 96%);
+    --sidebar-muted-foreground: hsl(240 5% 70%);
+    --sidebar-accent: hsl(var(--surface-hue) 16% 16%);
+    --sidebar-border: hsl(var(--surface-hue) 14% 22%);
+    --sidebar-primary: var(--primary-dark);
+    --sidebar-primary-foreground: var(--primary-foreground-dark);
+
+    --chart-1: var(--primary);
+    --chart-2: var(--chart-2-light);
+    --chart-3: var(--chart-3-light);
+    --chart-4: var(--chart-4-light);
+    --chart-label: hsl(0 0% 100%);
+    color-scheme: light;
+  }
+
+  :root.dark {
+    --primary: var(--primary-dark);
+    --primary-foreground: var(--primary-foreground-dark);
+    --background: hsl(240 10% 6%);
+    --foreground: hsl(240 5% 96%);
+    --card: hsl(240 6% 10%);
+    --popover: hsl(240 5% 12%);
+    --muted: hsl(240 5% 16%);
+    --muted-foreground: hsl(240 5% 70%);
+    --accent: var(--accent-dark);
+    --border: hsl(240 5% 24%);
+    --input: hsl(240 5% 48%);
+    --destructive: hsl(0 85% 72%);
+    --destructive-foreground: hsl(0 60% 12%);
+    --success: hsl(145 60% 65%);
+    --warning: hsl(43 96% 68%);
+    --info: hsl(213 94% 73%);
+    --chart-2: var(--chart-2-dark);
+    --chart-3: var(--chart-3-dark);
+    --chart-4: var(--chart-4-dark);
+    --chart-label: var(--background);
+    color-scheme: dark;
+  }
+}

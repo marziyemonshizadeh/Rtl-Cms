@@ -1,3 +1,4 @@
+import { Input } from "@/components/ui/input";
 import { useAppDispatch } from "@/redux/hooks";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -136,18 +137,18 @@ const Product = ({ id, name, img, price, count }: productProps) => {
           }}
         >
           <form className="min-h-64 pt-5" onSubmit={handleSubmit(onSubmit)}>
-            <input
+            <Input
               defaultValue={name}
-              className="input w-full text-right"
+              className="text-right"
               type="text"
               placeholder="نام محصول جدید را وارد کنید "
               aria-label="name"
               {...register("name", { required: true })}
             />
             {errors.name && <span>This field is required</span>}
-            <input
+            <Input
               defaultValue={img}
-              className="input w-full text-right"
+              className="text-right"
               type="text"
               placeholder="آدرس عکس جدید محصول را وارد کنید "
               aria-label="img"
@@ -156,9 +157,9 @@ const Product = ({ id, name, img, price, count }: productProps) => {
             {errors.img && (
               <span className="text-destructive">This field is required</span>
             )}
-            <input
+            <Input
               defaultValue={price}
-              className="input w-full text-right"
+              className="text-right"
               type="text"
               placeholder=" قیمت جدید محصول را وارد کنید "
               aria-label="price"
@@ -167,9 +168,9 @@ const Product = ({ id, name, img, price, count }: productProps) => {
             {errors.price && (
               <span className="text-destructive">This field is required</span>
             )}
-            <input
+            <Input
               defaultValue={count}
-              className="input w-full text-right"
+              className="text-right"
               type="text"
               placeholder=" تعداد جدید محصول را وارد کنید "
               aria-label="count"

@@ -1,3 +1,5 @@
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { SubmitHandler, useForm } from "react-hook-form";
 import apiRequests from "@/services/configs/axios";
 // import { useMutation } from "react-query";
@@ -61,9 +63,8 @@ const AddNewProduct: React.FC = () => {
         <div className="grid xl:grid-cols-2 md:grid-cols-1 gap-2">
           <div className="flex flex-col">
             <ToastContainer />
-            <input
+            <Input
               // defaultValue="test"
-              className="input"
               type="text"
               placeholder="اسم محصول خود را بنویسید  "
               aria-label="name"
@@ -74,8 +75,7 @@ const AddNewProduct: React.FC = () => {
             )}
           </div>
           <div className="flex flex-col">
-            <input
-              className="input"
+            <Input
               type="text"
               placeholder="قیمت محصول خود را بنویسید  "
               aria-label="price"
@@ -86,8 +86,7 @@ const AddNewProduct: React.FC = () => {
             )}
           </div>
           <div className="flex flex-col">
-            <input
-              className="input"
+            <Input
               type="text"
               placeholder="موجودی محصول خود را بنویسید  "
               aria-label="count"
@@ -98,8 +97,7 @@ const AddNewProduct: React.FC = () => {
             )}
           </div>
           <div className="flex flex-col">
-            <input
-              className="input"
+            <Input
               type="text"
               placeholder="آدرس عکس محصول خود را بنویسید "
               aria-label="img"
@@ -111,12 +109,7 @@ const AddNewProduct: React.FC = () => {
           </div>
         </div>
         <div className="flex justify-end mt-3">
-          <button
-            type="submit"
-            className="btn"
-          >
-            ثبت محصول
-          </button>
+          <Button type="submit">ثبت محصول</Button>
         </div>
       </form>
     </>

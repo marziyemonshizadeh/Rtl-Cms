@@ -1,3 +1,4 @@
+import { Badge } from "@/components/ui/badge";
 import { useAppDispatch } from "@/redux/hooks";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
@@ -73,9 +74,9 @@ export default function Comment({
         <td className="table-cell">{history}</td>
         <td className="table-cell">{time}</td>
         <td className="table-cell">
-          <span className={confirmation ? "badge-approved" : "badge-pending"}>
+          <Badge variant={confirmation ? "approved" : "pending"}>
             {confirmation ? "تایید شده" : "در انتظار"}
-          </span>
+          </Badge>
         </td>
         <td className="table-cell">
           <button

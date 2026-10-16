@@ -1,3 +1,4 @@
+import { Card } from "@/components/ui/card";
 import BarChart from "@/components/charts/barChart";
 import LineChart from "@/components/charts/lineChart";
 import RadialChart from "@/components/charts/radialChart";
@@ -20,7 +21,7 @@ const Home: React.FC = () => {
       </div>
       <LineChart title="فروش ماهانه" data={xAxisData} dataKey1="Sale" />
       <div className="grid gap-5 xl:grid-cols-2">
-        <div className="card my-0">
+        <Card className="my-0">
           <BarChart
             title="میزان فروش سال 1402"
             data={xAxisData}
@@ -28,14 +29,14 @@ const Home: React.FC = () => {
             XAxisDataKey="month"
             fill="var(--primary)"
           />
-        </div>
-        <div className="card my-0">
+        </Card>
+        <Card className="my-0">
           <RadialChart
             title="فروش سالانه هر محصول"
             data={AnnualSalesOfEachProduct}
             dataKey="count"
           />
-        </div>
+        </Card>
       </div>
     </section>
   );

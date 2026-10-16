@@ -3,6 +3,7 @@ import type { Action, ThunkAction } from "@reduxjs/toolkit";
 import type { RootState } from "@/redux/store";
 import ReactDom from "react-dom";
 import ModalsTemplate from "@/components/modalsTemplate/modalsTemplate";
+import { Button } from "@/components/ui/button";
 
 interface ModalProps {
   submitAction: () => void;
@@ -26,23 +27,25 @@ export default function Modal({
       </p>
 
       <div className="bg-card px-4 py-3 sm:flex sm:flex-row-reverse sm:justify-center sm:px-6">
-        <button
+        <Button
           type="button"
-          className="btn m-1"
+          variant="destructive"
+          className="m-1"
           onClick={() => {
             submitAction();
             dispatch(remove(Id));
           }}
         >
           بله
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
-          className="btnLight m-1"
+          variant="outline"
+          className="m-1"
           onClick={() => cancelAction()}
         >
           خیر
-        </button>
+        </Button>
       </div>
     </ModalsTemplate>,
     document.getElementById("modal")!

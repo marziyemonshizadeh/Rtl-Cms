@@ -27,5 +27,5 @@ export function savePreference(key: string, value: string): void {
 
 export function getSavedTheme(): Theme {
   const saved = readPreference(themeStorageKey);
-  return themes.find((theme) => theme.id === saved)?.id ?? "lime";
+  return themes.find((theme) => theme.id === saved)?.id ?? "blue";
 }

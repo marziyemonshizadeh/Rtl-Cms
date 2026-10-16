@@ -1,3 +1,4 @@
+import { Badge } from "@/components/ui/badge";
 import { useAppDispatch } from "@/redux/hooks";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -77,9 +78,9 @@ export default function Order({
         <td className="table-cell">{price}</td>
         <td className="table-cell">{discount}</td>
         <td className="table-cell">
-          <span className={confirmation ? "badge-approved" : "badge-pending"}>
+          <Badge variant={confirmation ? "approved" : "pending"}>
             {confirmation ? "تایید شده" : "در انتظار"}
-          </span>
+          </Badge>
         </td>
         <td className="table-cell">
           <button

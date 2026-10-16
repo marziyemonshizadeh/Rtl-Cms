@@ -1,3 +1,4 @@
+import { Input } from "@/components/ui/input";
 import { useAppDispatch } from "@/redux/hooks";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -149,18 +150,18 @@ export default function User({
           }}
         >
           <form className="min-h-64 pt-5" onSubmit={handleSubmit(onSubmit)}>
-            <input
+            <Input
               defaultValue={customer}
-              className="input w-full text-right"
+              className="text-right"
               type="text"
               placeholder="نام را وارد کنید "
               aria-label="customer"
               {...register("customer", { required: true })}
             />
             {errors.customer && <span>This field is required</span>}
-            <input
+            <Input
               defaultValue={userName}
-              className="input w-full text-right"
+              className="text-right"
               type="text"
               placeholder=" نام کاربری جدید را وارد کنید "
               aria-label="userName"
@@ -169,9 +170,9 @@ export default function User({
             {errors.userName && (
               <span className="text-destructive">This field is required</span>
             )}
-            <input
+            <Input
               defaultValue={password}
-              className="input w-full text-right"
+              className="text-right"
               type="text"
               placeholder="رمز عبور جدید را وارد کنید "
               aria-label="password"
@@ -180,9 +181,9 @@ export default function User({
             {errors.password && (
               <span className="text-destructive">This field is required</span>
             )}
-            <input
+            <Input
               defaultValue={phoneNumber}
-              className="input w-full text-right"
+              className="text-right"
               type="text"
               placeholder="شماره موبایل جدید را وارد کنید "
               aria-label="phoneNumber"
@@ -192,9 +193,9 @@ export default function User({
               <span className="text-destructive">This field is required</span>
             )}
 
-            <input
+            <Input
               defaultValue={email}
-              className="input w-full text-right"
+              className="text-right"
               type="text"
               placeholder="ایمیل جدید را وارد کنید "
               aria-label="email"
