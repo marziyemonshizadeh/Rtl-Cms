@@ -1,4 +1,4 @@
-# docker-compose.dev.yml
+# docker-compose.yml
 services:
   app:
     build:
