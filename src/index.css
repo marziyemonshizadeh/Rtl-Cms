@@ -1,6 +1,7 @@
 @import "@fontsource-variable/vazirmatn";
 @import "./styles/themes.css";
 @import "./styles/tokens.css";
+@import "./styles/layout.css";
 
 @tailwind base;
 @tailwind components;
@@ -74,7 +75,7 @@
   }
 
   .table-container {
-    @apply overflow-hidden rounded-lg border bg-card shadow-sm;
+    @apply overflow-x-auto rounded-lg border bg-card shadow-sm;
   }
 
   .table-header {

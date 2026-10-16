@@ -9,7 +9,7 @@ import {
   Sun,
   UserRound,
 } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, matchPath, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { SheetTrigger } from "@/components/ui/sheet";
 import {
@@ -37,7 +37,7 @@ import { navigationItems } from "@/routes/navigation";
 import { themes } from "@/lib/themes";
 import { setTheme } from "@/redux/store/theme";
 
-export default function Navbar() {
+export default function Header() {
   // #region State
   const dispatch = useAppDispatch();
   const isDarkmode = useAppSelector((state) => state.darkmode.isDarkmode);
@@ -45,7 +45,9 @@ export default function Navbar() {
   const currentTheme = themes.find((item) => item.id === theme) ?? themes[0];
   const { pathname } = useLocation();
   const page =
-    navigationItems.find((item) => item.path === pathname) ??
+    navigationItems.find((item) =>
+      matchPath({ path: item.path, end: true }, pathname),
+    ) ??
     navigationItems[0];
   const today = new Intl.DateTimeFormat("fa-IR", {
     weekday: "long",
@@ -55,11 +57,12 @@ export default function Navbar() {
   // #endregion
 
   return (
-    <header className="sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/85">
-      <div className="mx-auto flex h-20 max-w-[1600px] items-center justify-between gap-3 px-4 sm:px-6 xl:px-8">
+    <header className="layout-header">
+      <div className="layout-header-content">
         <div className="flex min-w-0 items-center gap-3">
           <SheetTrigger asChild>
             <Button
+              type="button"
               variant="outline"
               size="icon"
               className="size-9 shrink-0 lg:hidden"
@@ -147,9 +150,11 @@ export default function Navbar() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-52">
-              <DropdownMenuItem>
-                <CircleUser />
-                <Link to="/profile">پروفایل</Link>
+              <DropdownMenuItem asChild>
+                <Link to="/users">
+                  <CircleUser />
+                  مدیریت کاربران
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuSub>
