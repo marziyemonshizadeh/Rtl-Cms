@@ -1,0 +1,143 @@
+@layer base {
+  /* Palette inputs. Shared semantic tokens below derive every surface from
+     these hues; each palette supplies separate light and dark brand colors. */
+  :root,
+  [data-theme="lime"] {
+    --surface-hue: 85;
+    --surface-saturation: 10%;
+    --primary-light: hsl(85 85% 24%);
+    --primary-dark: hsl(82 78% 65%);
+    --primary-foreground-light: hsl(0 0% 100%);
+    --primary-foreground-dark: hsl(85 65% 10%);
+    --accent-light: hsl(85 55% 90%);
+    --accent-dark: hsl(85 28% 18%);
+    --chart-2-light: hsl(191 72% 34%);
+    --chart-2-dark: hsl(191 65% 65%);
+    --chart-3-light: hsl(38 90% 32%);
+    --chart-3-dark: hsl(40 95% 66%);
+    --chart-4-light: hsl(265 48% 52%);
+    --chart-4-dark: hsl(265 65% 76%);
+    --theme-swatch: hsl(82 78% 55%);
+  }
+
+  [data-theme="orange"] {
+    --surface-hue: 28;
+    --surface-saturation: 18%;
+    --primary-light: hsl(22 90% 37%);
+    --primary-dark: hsl(27 96% 64%);
+    --primary-foreground-light: hsl(0 0% 100%);
+    --primary-foreground-dark: hsl(22 65% 10%);
+    --accent-light: hsl(28 80% 92%);
+    --accent-dark: hsl(24 38% 18%);
+    --chart-2-light: hsl(177 65% 30%);
+    --chart-2-dark: hsl(174 57% 62%);
+    --chart-3-light: hsl(330 60% 45%);
+    --chart-3-dark: hsl(330 68% 73%);
+    --chart-4-light: hsl(43 85% 30%);
+    --chart-4-dark: hsl(43 90% 68%);
+    --theme-swatch: hsl(27 96% 56%);
+  }
+
+  [data-theme="cherry"] {
+    --surface-hue: 345;
+    --surface-saturation: 14%;
+    --primary-light: hsl(346 77% 41%);
+    --primary-dark: hsl(345 88% 74%);
+    --primary-foreground-light: hsl(0 0% 100%);
+    --primary-foreground-dark: hsl(346 60% 12%);
+    --accent-light: hsl(345 65% 94%);
+    --accent-dark: hsl(345 34% 19%);
+    --chart-2-light: hsl(260 58% 51%);
+    --chart-2-dark: hsl(260 75% 78%);
+    --chart-3-light: hsl(24 80% 40%);
+    --chart-3-dark: hsl(26 90% 68%);
+    --chart-4-light: hsl(181 65% 30%);
+    --chart-4-dark: hsl(181 58% 62%);
+    --theme-swatch: hsl(346 77% 51%);
+  }
+
+  [data-theme="blue"] {
+    --surface-hue: 217;
+    --surface-saturation: 20%;
+    --primary-light: hsl(217 82% 45%);
+    --primary-dark: hsl(213 94% 73%);
+    --primary-foreground-light: hsl(0 0% 100%);
+    --primary-foreground-dark: hsl(217 65% 12%);
+    --accent-light: hsl(214 80% 94%);
+    --accent-dark: hsl(217 40% 20%);
+    --chart-2-light: hsl(180 70% 29%);
+    --chart-2-dark: hsl(180 58% 62%);
+    --chart-3-light: hsl(266 58% 52%);
+    --chart-3-dark: hsl(266 75% 78%);
+    --chart-4-light: hsl(35 85% 32%);
+    --chart-4-dark: hsl(38 92% 67%);
+    --theme-swatch: hsl(217 82% 55%);
+  }
+
+  :root {
+    --primary: var(--primary-light);
+    --primary-foreground: var(--primary-foreground-light);
+    --background: hsl(var(--surface-hue) var(--surface-saturation) 97%);
+    --foreground: hsl(var(--surface-hue) 20% 12%);
+    --card: hsl(var(--surface-hue) var(--surface-saturation) 99%);
+    --card-foreground: var(--foreground);
+    --popover: hsl(var(--surface-hue) var(--surface-saturation) 99%);
+    --popover-foreground: var(--foreground);
+    --muted: hsl(var(--surface-hue) var(--surface-saturation) 93%);
+    --muted-foreground: hsl(var(--surface-hue) 8% 38%);
+    --secondary: var(--muted);
+    --secondary-foreground: var(--foreground);
+    --accent: var(--accent-light);
+    --accent-foreground: var(--foreground);
+    --border: hsl(var(--surface-hue) var(--surface-saturation) 86%);
+    --input: hsl(var(--surface-hue) var(--surface-saturation) 78%);
+    --ring: var(--primary);
+    --destructive: hsl(0 72% 45%);
+    --destructive-foreground: hsl(0 0% 100%);
+    --success: hsl(145 75% 27%);
+    --warning: hsl(38 92% 30%);
+    --info: hsl(217 82% 45%);
+    --overlay: hsl(0 0% 0%);
+
+    /* Keep the sidebar dark in both modes, with a brighter brand color for
+       readable labels and icons against its tinted surfaces. */
+    --sidebar-background: hsl(var(--surface-hue) 18% 8%);
+    --sidebar-foreground: hsl(var(--surface-hue) 12% 95%);
+    --sidebar-muted-foreground: hsl(var(--surface-hue) 10% 68%);
+    --sidebar-accent: hsl(var(--surface-hue) 16% 16%);
+    --sidebar-border: hsl(var(--surface-hue) 14% 22%);
+    --sidebar-primary: var(--primary-dark);
+    --sidebar-primary-foreground: var(--primary-foreground-dark);
+
+    --chart-1: var(--primary);
+    --chart-2: var(--chart-2-light);
+    --chart-3: var(--chart-3-light);
+    --chart-4: var(--chart-4-light);
+    --chart-label: hsl(0 0% 100%);
+    color-scheme: light;
+  }
+
+  :root.dark {
+    --primary: var(--primary-dark);
+    --primary-foreground: var(--primary-foreground-dark);
+    --background: hsl(var(--surface-hue) 18% 7%);
+    --foreground: hsl(var(--surface-hue) 12% 95%);
+    --card: hsl(var(--surface-hue) 16% 10%);
+    --popover: hsl(var(--surface-hue) 16% 12%);
+    --muted: hsl(var(--surface-hue) 14% 16%);
+    --muted-foreground: hsl(var(--surface-hue) 10% 68%);
+    --accent: var(--accent-dark);
+    --border: hsl(var(--surface-hue) 12% 23%);
+    --input: hsl(var(--surface-hue) 12% 32%);
+    --destructive: hsl(0 85% 72%);
+    --destructive-foreground: hsl(0 60% 12%);
+    --success: hsl(145 60% 65%);
+    --warning: hsl(43 96% 68%);
+    --info: hsl(213 94% 73%);
+    --chart-2: var(--chart-2-dark);
+    --chart-3: var(--chart-3-dark);
+    --chart-4: var(--chart-4-dark);
+    --chart-label: var(--background);
+    color-scheme: dark;
+  }
+}

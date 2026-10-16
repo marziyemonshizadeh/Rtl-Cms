@@ -3,6 +3,7 @@ import {
   ChevronLeft,
   Menu,
   Moon,
+  Palette,
   Plus,
   Sun,
   UserRound,
@@ -16,7 +17,12 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -27,11 +33,15 @@ import {
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { toggleDarkmode } from "@/redux/store/darkmood";
 import { navigationItems } from "@/routes/navigation";
+import { themes } from "@/lib/themes";
+import { setTheme } from "@/redux/store/theme";
 
 export default function Navbar() {
   // #region State
   const dispatch = useAppDispatch();
   const isDarkmode = useAppSelector((state) => state.darkmode.isDarkmode);
+  const theme = useAppSelector((state) => state.theme.current);
+  const currentTheme = themes.find((item) => item.id === theme) ?? themes[0];
   const { pathname } = useLocation();
   const page =
     navigationItems.find((item) => item.path === pathname) ??
@@ -141,9 +151,47 @@ export default function Navbar() {
               <DropdownMenuItem asChild>
                 <Link to="/">پیشخوان</Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link to="/users">مدیریت کاربران</Link>
-              </DropdownMenuItem>
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger
+                  aria-label={`رنگ‌بندی محیط، تم فعلی: ${currentTheme.label}`}
+                >
+                  <Palette className="text-primary" aria-hidden="true" />
+                  <span>رنگ‌بندی محیط</span>
+                  <span
+                    data-theme={theme}
+                    className="ms-auto size-3 shrink-0 rounded-full border border-border bg-[var(--theme-swatch)]"
+                    aria-hidden="true"
+                  />
+                </DropdownMenuSubTrigger>
+                <DropdownMenuSubContent className="w-56">
+                  <DropdownMenuLabel>انتخاب رنگ‌بندی</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuRadioGroup
+                    aria-label="رنگ‌بندی محیط"
+                    value={theme}
+                    onValueChange={(value) => {
+                      const selected = themes.find((item) => item.id === value);
+                      if (selected) dispatch(setTheme(selected.id));
+                    }}
+                  >
+                    {themes.map((item) => (
+                      <DropdownMenuRadioItem key={item.id} value={item.id}>
+                        <span
+                          data-theme={item.id}
+                          className="size-5 shrink-0 rounded-full border border-border bg-[var(--theme-swatch)]"
+                          aria-hidden="true"
+                        />
+                        <span className="flex flex-1 items-center justify-between gap-3">
+                          <span>{item.label}</span>
+                          <span dir="ltr" className="text-xs text-muted-foreground">
+                            {item.name}
+                          </span>
+                        </span>
+                      </DropdownMenuRadioItem>
+                    ))}
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuSubContent>
+              </DropdownMenuSub>
               <DropdownMenuSeparator />
               <DropdownMenuCheckboxItem
                 checked={isDarkmode}

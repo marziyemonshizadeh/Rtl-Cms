@@ -1,4 +1,5 @@
 @import "@fontsource-variable/vazirmatn";
+@import "./styles/themes.css";
 
 @tailwind base;
 @tailwind components;
@@ -6,63 +7,8 @@
 
 @layer base {
   :root {
-    /* Theme settings: use any CSS color, such as red, #ef4444 or hsl(0 84% 60%).
-       --primary is shared by light/dark modes, buttons, charts and the sidebar. */
-    /* --primary: oklch(62.3% 0.214 259.815); */
-    --primary: oklch(66.446% 0.18295 131.956);
-    --primary-foreground: hsl(0 0% 100%);
     --font-sans: "Vazirmatn Variable", "Tahoma", sans-serif;
     --radius: 0.75rem;
-
-    /* Light-mode surfaces. The .dark block below overrides these only. */
-    --background: hsl(240 6% 97%);
-    --foreground: hsl(240 6% 12%);
-    --card: hsl(0 0% 100%);
-    --popover: hsl(0 0% 100%);
-    --muted: hsl(240 5% 94%);
-    --muted-foreground: hsl(240 4% 44%);
-    --destructive: hsl(0 72% 51%);
-    --destructive-foreground: hsl(0 0% 100%);
-    --success: hsl(85 85% 30%);
-    --warning: hsl(38 92% 35%);
-    --info: hsl(217 91% 50%);
-    --border: hsl(240 6% 90%);
-    --overlay: hsl(0 0% 0%);
-
-    /* Independent sidebar palette, shared by desktop and mobile.
-       To follow the app's light/dark mode, replace these five values with:
-       var(--card), var(--foreground), var(--muted-foreground),
-       var(--muted), var(--border), respectively. */
-    --sidebar-background: hsl(240 6% 7%);
-    --sidebar-foreground: hsl(240 5% 94%);
-    --sidebar-muted-foreground: hsl(240 5% 64%);
-    --sidebar-accent: hsl(240 5% 15%);
-    --sidebar-border: hsl(240 4% 19%);
-    --sidebar-primary: var(--primary);
-    --sidebar-primary-foreground: var(--primary-foreground);
-
-    /* Chart series can be customized independently of the brand color. */
-    --chart-1: var(--primary);
-    --chart-2: hsl(191 58% 72%);
-    --chart-3: hsl(40 100% 67%);
-    --chart-4: hsl(88 63% 65%);
-    --chart-label: var(--foreground);
-    color-scheme: light;
-  }
-
-  .dark {
-    --background: hsl(240 6% 7%);
-    --foreground: hsl(240 5% 94%);
-    --card: hsl(240 5% 10%);
-    --popover: hsl(240 5% 12%);
-    --muted: hsl(240 5% 15%);
-    --muted-foreground: hsl(240 5% 64%);
-    --destructive: hsl(0 72% 60%);
-    --success: hsl(85 78% 65%);
-    --warning: hsl(43 96% 65%);
-    --info: hsl(217 91% 65%);
-    --border: hsl(240 4% 19%);
-    color-scheme: dark;
   }
 
   * {

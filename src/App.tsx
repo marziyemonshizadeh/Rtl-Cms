@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import type { CSSProperties } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "@/components/navbar/navbar";
@@ -12,19 +12,24 @@ import {
 } from "@/components/ui/sheet";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useAppSelector } from "@/redux/hooks";
+import { readPreference, savePreference, themeStorageKey } from "@/lib/themes";
 
 export default function App() {
   // #region State
   const isDarkmode = useAppSelector((state) => state.darkmode.isDarkmode);
+  const theme = useAppSelector((state) => state.theme.current);
   const [collapsed, setCollapsed] = useState(
-    () => localStorage.getItem("sidebar-collapsed") === "true",
+    () => readPreference("sidebar-collapsed") === "true",
   );
   const [mobileOpen, setMobileOpen] = useState(false);
   const { pathname } = useLocation();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    document.documentElement.dataset.theme = theme;
     document.documentElement.classList.toggle("dark", isDarkmode);
-  }, [isDarkmode]);
+    savePreference(themeStorageKey, theme);
+    savePreference("IsDarkMood", String(isDarkmode));
+  }, [theme, isDarkmode]);
 
   useEffect(() => {
     setMobileOpen(false);
@@ -42,7 +47,7 @@ export default function App() {
 
   const toggleSidebar = () => {
     setCollapsed((current) => {
-      localStorage.setItem("sidebar-collapsed", String(!current));
+      savePreference("sidebar-collapsed", String(!current));
       return !current;
     });
   };

@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { readPreference } from '@/lib/themes';
 
 // Define a type for the slice state
 interface DarkmodeState {
@@ -7,7 +8,7 @@ interface DarkmodeState {
 
 // Define the initial state using that type
 const initialState: DarkmodeState = {
-  isDarkmode : localStorage.getItem("IsDarkMood") === "true"
+  isDarkmode : readPreference("IsDarkMood") === "true"
 }
 
 export const darkmodeSlice = createSlice({
@@ -17,7 +18,6 @@ export const darkmodeSlice = createSlice({
   reducers: {
     toggleDarkmode: (state) => {
       state.isDarkmode = !state.isDarkmode;
-      localStorage.setItem("IsDarkMood", `${state.isDarkmode}`);
     }
   },
 })

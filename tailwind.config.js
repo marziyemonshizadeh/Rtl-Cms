@@ -22,11 +22,11 @@ export default {
         foreground: themeColor("foreground"),
         card: {
           DEFAULT: themeColor("card"),
-          foreground: themeColor("foreground"),
+          foreground: themeColor("card-foreground"),
         },
         popover: {
           DEFAULT: themeColor("popover"),
-          foreground: themeColor("foreground"),
+          foreground: themeColor("popover-foreground"),
         },
         primary: {
           DEFAULT: themeColor("primary"),
@@ -36,9 +36,13 @@ export default {
           DEFAULT: themeColor("muted"),
           foreground: themeColor("muted-foreground"),
         },
+        secondary: {
+          DEFAULT: themeColor("secondary"),
+          foreground: themeColor("secondary-foreground"),
+        },
         accent: {
-          DEFAULT: themeColor("muted"),
-          foreground: themeColor("foreground"),
+          DEFAULT: themeColor("accent"),
+          foreground: themeColor("accent-foreground"),
         },
         destructive: {
           DEFAULT: themeColor("destructive"),
@@ -58,8 +62,8 @@ export default {
           "primary-foreground": themeColor("sidebar-primary-foreground"),
         },
         border: themeColor("border"),
-        input: themeColor("border"),
-        ring: themeColor("primary"),
+        input: themeColor("input"),
+        ring: themeColor("ring"),
       },
     },
   },

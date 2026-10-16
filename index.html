@@ -10,7 +10,13 @@
     />
     <title>مدیریت فروشگاه | RTL CMS</title>
     <script>
+      // Apply saved appearance before the stylesheet paints the page.
+      document.documentElement.dataset.theme = "lime";
       try {
+        const theme = localStorage.getItem("theme");
+        if (["lime", "orange", "cherry", "blue"].includes(theme)) {
+          document.documentElement.dataset.theme = theme;
+        }
         document.documentElement.classList.toggle(
           "dark",
           localStorage.getItem("IsDarkMood") === "true",
