@@ -1,7 +1,7 @@
-import BarChart from "../../components/charts/barChart";
-import LineChart from "../../components/charts/lineChart";
-import RadialChart from "../../components/charts/radialChart";
-import { AnnualSalesOfEachProduct, xAxisData } from "../../datas";
+import BarChart from "@/components/charts/barChart";
+import LineChart from "@/components/charts/lineChart";
+import RadialChart from "@/components/charts/radialChart";
+import { AnnualSalesOfEachProduct, xAxisData } from "@/datas";
 const Home: React.FC = () => {
   return (
     <>

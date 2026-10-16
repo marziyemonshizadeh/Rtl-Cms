@@ -1,19 +1,18 @@
-import ErrorBox from "../../components/errorBox/errorBox";
-import User from "../../components/user/user";
+import ErrorBox from "@/components/errorBox/errorBox";
+import User from "@/components/user/user";
 
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { useAppSelector } from "../../redux/store";
-import { fetchUser } from "../../redux/store/users";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { fetchUser } from "@/redux/store/users";
 
 const Users: React.FC = () => {
-  const dispatch = useDispatch<any>();
+  const dispatch = useAppDispatch();
   const data = useAppSelector((state) => state.users);
   console.log("data===", data);
 
   useEffect(() => {
     dispatch(fetchUser("users"));
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
@@ -34,13 +33,13 @@ const Users: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {data.users?.map((item: any) => {
+              {data.users?.map((item) => {
                 return <User key={item.id} {...item} />;
               })}
             </tbody>
           </table>
           <div className="md:hidden block p-4">
-            {data.users?.map((item: any) => (
+            {data.users?.map((item) => (
               <div key={item.id} className="mobile-card">
                 <div className="mobile-card-row">
                   <span className="mobile-card-label">نام و نام خانوادگی</span>

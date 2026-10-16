@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import Order from "../../models/orderType";
-import apiRequests from "../../services/configs";
+import Order from "@/models/orderType";
+import apiRequests from "@/services/configs/axios";
 
 interface OrderState {
-  orders: Order[];
+  orders: Order[] | undefined;
   loading: boolean;
 }
 
@@ -11,26 +11,30 @@ const initialState: OrderState = {
   orders: [],
   loading: false
 };
+// #region API
 export const fetchOrders = createAsyncThunk(
   "order/fetch",
-  async (values:any) => {
+  async (values: string) => {
     return apiRequests
-    .get(values)
+    .get<Order[]>(values)
     .then((res) => {
       console.log("get post called");
       return res.data;
     })
-    .catch((err) => {
+    .catch((err: unknown) => {
       console.log("err:", err);
+      return undefined;
     });
   } 
 );
 export const removeOrders = createAsyncThunk(
   "order/remove",
-  async (id:any) => {
+  async (id: Order["id"] | undefined) => {
     return apiRequests.delete(`/orders/${id}`);   
   } 
 );
+// #endregion
+
 export const ordersSlice = createSlice({
     name: 'orders',
     // `createSlice` will infer the state type from the `initialState` argument
@@ -45,7 +49,7 @@ export const ordersSlice = createSlice({
       builder.addCase(fetchOrders.pending, (state) => {
         state.loading = true;
       }),
-      builder.addCase(removeOrders.fulfilled, (state, action) => {state.orders.filter(i=>i.id !== action.meta.arg)})
+      builder.addCase(removeOrders.fulfilled, (state, action) => {state.orders?.filter(i=>i.id !== action.meta.arg)})
     },
   })
      

@@ -1,21 +1,20 @@
 import { useEffect } from "react";
 
-import { useDispatch } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ErrorBox from "../../components/errorBox/errorBox";
-import Order from "../../components/order/order";
-import { useAppSelector } from "../../redux/store";
-import { fetchOrders } from "../../redux/store/orders";
+import ErrorBox from "@/components/errorBox/errorBox";
+import Order from "@/components/order/order";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { fetchOrders } from "@/redux/store/orders";
 
 const Orders: React.FC = () => {
-  const dispatch = useDispatch<any>();
+  const dispatch = useAppDispatch();
   const datas = useAppSelector((state) => state.orders);
   console.log("datas = ", datas.orders);
 
   useEffect(() => {
     dispatch(fetchOrders("orders"));
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
@@ -38,13 +37,13 @@ const Orders: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {datas.orders?.map((item: any) => {
+              {datas.orders?.map((item) => {
                 return <Order key={item.id} {...item} />;
               })}
             </tbody>
           </table>
           <div className="md:hidden block p-4">
-            {datas.orders?.map((item: any) => (
+            {datas.orders?.map((item) => (
               <div key={item.id} className="mobile-card">
                 <div className="mobile-card-row">
                   <span className="mobile-card-label">محصول</span>

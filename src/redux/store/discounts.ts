@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import Discount from "../../models/discountType";
-import apiRequests from "../../services/configs";
+import Discount from "@/models/discountType";
+import apiRequests from "@/services/configs/axios";
 
 interface DiscountState {
-  discounts: Discount[];
+  discounts: Discount[] | undefined;
   loading: boolean;
 }
 
@@ -11,26 +11,30 @@ const initialState: DiscountState = {
     discounts: [],
     loading: false
 };
+// #region API
 export const fetchDiscounts = createAsyncThunk(
   "discount/fetch",
-  async (values:any) => {
+  async (values: string) => {
     return apiRequests
-    .get(values)
+    .get<Discount[]>(values)
     .then((res) => {
       console.log("get post called");
       return res.data;
     })
-    .catch((err) => {
+    .catch((err: unknown) => {
       console.log("err:", err);
+      return undefined;
     });
   } 
 );
 export const removeDiscounts = createAsyncThunk(
   "discount/remove",
-  async (id:any) => {
+  async (id: Discount["id"] | undefined) => {
     return apiRequests.delete(`/discounts/${id}`);   
   } 
 );
+// #endregion
+
 export const discountsSlice = createSlice({
     name: 'discounts',
     initialState,

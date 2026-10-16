@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import ReactDom from "react-dom";
-import ModalsTemplate from "../modalsTemplate/modalsTemplate";
+import ModalsTemplate from "@/components/modalsTemplate/modalsTemplate";
 
 interface EditModalProps {
   onClose: () => void;
@@ -9,7 +9,7 @@ interface EditModalProps {
 }
 export default function EditModal({ onClose, children }: EditModalProps) {
   useEffect(() => {
-    const checkKey = (event: any) => {
+    const checkKey = (event: KeyboardEvent) => {
       console.log(event);
       if (event.keyCode === 27) {
         onClose();

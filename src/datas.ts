@@ -1,4 +1,4 @@
-let xAxisData = [
+const xAxisData = [
     {
       month: "فروردین",
       Sale: 112_000,

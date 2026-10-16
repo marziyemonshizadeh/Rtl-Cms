@@ -1,11 +1,11 @@
+import { useAppDispatch } from "@/redux/hooks";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { removeOrders } from "../../redux/store/orders";
-import apiRequests from "../../services/configs";
-import DeleteModal from "../Modals/deleteModal";
-import DetailsModal from "../Modals/detailsModal";
+import { removeOrders } from "@/redux/store/orders";
+import apiRequests from "@/services/configs/axios";
+import DeleteModal from "@/components/Modals/deleteModal";
+import DetailsModal from "@/components/Modals/detailsModal";
 
 interface orderProps {
   id: number;
@@ -13,7 +13,7 @@ interface orderProps {
   customer: string;
   orderDate: string;
   orderTime: string;
-  price: string;
+  price: number | string;
   discount: string;
   confirmation: boolean;
   isMobile?: boolean;
@@ -28,7 +28,7 @@ export default function Order({
   discount,
   confirmation,
 }: orderProps) {
-  const confirmationHandler = (id: any) => {
+  const confirmationHandler = (id: number) => {
     apiRequests.put(`/orders/${id}`, {
       product: product,
       customer: customer,
@@ -51,7 +51,7 @@ export default function Order({
   };
   const [isShowModal, setIsShowModal] = useState<boolean>(false);
   const [isShowDetailsModal, setIsShowDetailsModal] = useState<boolean>(false);
-  const dispatch = useDispatch<any>();
+  const dispatch = useAppDispatch();
 
   const modalSubmit = () => {
     setIsShowModal(false);

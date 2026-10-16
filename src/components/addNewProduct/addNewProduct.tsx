@@ -1,5 +1,5 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import apiRequests from "../../services/configs";
+import apiRequests from "@/services/configs/axios";
 // import { useMutation } from "react-query";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 type Inputs = {
   name: string;
   img: string;
-  price: Number;
+  price: number;
   count: string;
 };
 

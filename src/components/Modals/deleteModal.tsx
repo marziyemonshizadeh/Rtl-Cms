@@ -1,13 +1,14 @@
+import { useAppDispatch } from "@/redux/hooks";
+import type { Action, ThunkAction } from "@reduxjs/toolkit";
+import type { RootState } from "@/redux/store";
 import ReactDom from "react-dom";
-import { useDispatch } from "react-redux";
-// import { removeProduct } from "../../redux/store/products";
-import ModalsTemplate from "../modalsTemplate/modalsTemplate";
+import ModalsTemplate from "@/components/modalsTemplate/modalsTemplate";
 
 interface ModalProps {
   submitAction: () => void;
   cancelAction: () => void;
-  remove: any;
-  Id: any;
+  remove: (id: number | undefined) => ThunkAction<unknown, RootState, unknown, Action>;
+  Id: number | undefined;
   onclick?: () => void;
 }
 export default function Modal({
@@ -16,7 +17,7 @@ export default function Modal({
   cancelAction,
   submitAction,
 }: ModalProps): JSX.Element {
-  const dispatch = useDispatch<any>();
+  const dispatch = useAppDispatch();
 
   return ReactDom.createPortal(
     <ModalsTemplate>

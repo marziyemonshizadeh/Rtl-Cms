@@ -6,13 +6,21 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+interface BarChartProps {
+  title: string;
+  data: Record<string, string | number>[];
+  dataKey: string;
+  XAxisDataKey: string;
+  fill: string;
+}
+
 export default function barChart({
   title,
   data,
   dataKey,
   XAxisDataKey,
   fill,
-}: any) {
+}: BarChartProps) {
   return (
     <>
       <h3>{title}</h3>

@@ -1,15 +1,15 @@
 import { useEffect } from "react";
-import ModalsTemplate from "../modalsTemplate/modalsTemplate";
+import ModalsTemplate from "@/components/modalsTemplate/modalsTemplate";
 
 interface DetailsModalProps {
   onHide: () => void;
   product?: string | boolean;
   user?: boolean;
-  discount?: string;
+  discount?: number | string;
   order?: boolean;
   name?: string;
-  count?: string;
-  price?: string;
+  count?: number | string;
+  price?: number | string;
   orderDate?: string;
   customer?: string;
   discountPercent?: string;
@@ -37,7 +37,7 @@ export default function DetailsModal({
   children,
 }: DetailsModalProps): JSX.Element {
   useEffect(() => {
-    const checkKey = (event: any) => {
+    const checkKey = (event: KeyboardEvent) => {
       console.log(event);
       if (event.keyCode === 27) {
         onHide();

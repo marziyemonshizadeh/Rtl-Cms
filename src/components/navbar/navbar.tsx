@@ -1,8 +1,8 @@
-import { useDispatch } from "react-redux";
-import { toggleDarkmode } from "../../redux/store/darkmood";
+import { useAppDispatch } from "@/redux/hooks";
+import { toggleDarkmode } from "@/redux/store/darkmood";
 
 const Navbar: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   return (
     <div className="flex items-center justify-between bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 px-6 py-4 rounded-lg shadow-sm mb-4">
       <img

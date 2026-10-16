@@ -1,27 +1,27 @@
+import { useAppDispatch } from "@/redux/hooks";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { removeProduct } from "../../redux/store/products";
-import apiRequests from "../../services/configs";
-import DeleteModal from "../Modals/deleteModal";
-import DetailsModal from "../Modals/detailsModal";
-import EditModal from "../Modals/editModal";
+import { removeProduct } from "@/redux/store/products";
+import apiRequests from "@/services/configs/axios";
+import DeleteModal from "@/components/Modals/deleteModal";
+import DetailsModal from "@/components/Modals/detailsModal";
+import EditModal from "@/components/Modals/editModal";
 
 interface productProps {
   id?: number;
   name: string;
   img: string;
-  price: string;
-  count: string;
+  price: number | string;
+  count: number | string;
   isMobile?: boolean;
 }
 const Product = ({ id, name, img, price, count }: productProps) => {
   const [isShowModal, setIsShowModal] = useState<boolean>(false);
   const [isShowDetailsModal, setIsShowDetailsModal] = useState<boolean>(false);
   const [isShowEditModal, setIsShowEditModal] = useState<boolean>(false);
-  const dispatch = useDispatch<any>();
+  const dispatch = useAppDispatch();
 
   const modalSubmit = () => {
     setIsShowModal(false);

@@ -1,10 +1,10 @@
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
-interface commentProps {
+interface LineChartProps {
   title: string;
-  data: any;
-  dataKey1: any;
+  data: Record<string, string | number>[];
+  dataKey1: string;
 }
-export default function chart({ title, data, dataKey1 }: commentProps) {
+export default function chart({ title, data, dataKey1 }: LineChartProps) {
   return (
     <div className="my-3 p-2 card">
       <h3>{title}</h3>

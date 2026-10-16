@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import Comment from "../../models/commentType";
-import apiRequests from "../../services/configs";
+import Comment from "@/models/commentType";
+import apiRequests from "@/services/configs/axios";
 
 interface CommentState {
-  comments: Comment[];
+  comments: Comment[] | undefined;
   loading: boolean;
 }
 
@@ -11,26 +11,30 @@ const initialState: CommentState = {
   comments: [],
   loading: false
 };
+// #region API
 export const fetchComment = createAsyncThunk(
   "comment/fetch",
-  async (values:any) => {
+  async (values: string) => {
     return apiRequests
-    .get(values)
+    .get<Comment[]>(values)
     .then((res) => {
       console.log("get post called");
       return res.data;
     })
-    .catch((err) => {
+    .catch((err: unknown) => {
       console.log("err:", err);
+      return undefined;
     });
   } 
 );
 export const removeComment = createAsyncThunk(
   "comment/remove",
-  async (id:any) => {
+  async (id: Comment["id"] | undefined) => {
     return apiRequests.delete(`/comments/${id}`);   
   } 
 );
+// #endregion
+
 export const commentsSlice = createSlice({
     name: 'comments',
     initialState,
@@ -44,7 +48,7 @@ export const commentsSlice = createSlice({
       builder.addCase(fetchComment.pending, (state) => {
         state.loading = true;
       }),
-      builder.addCase(removeComment.fulfilled, (state, action) =>{state.comments.filter(i=>i.id !== action.meta.arg)  })
+      builder.addCase(removeComment.fulfilled, (state, action) =>{state.comments?.filter(i=>i.id !== action.meta.arg)  })
     },
   })
      

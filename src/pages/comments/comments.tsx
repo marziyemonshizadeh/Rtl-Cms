@@ -1,19 +1,18 @@
 import { useEffect } from "react";
 // import { useQuery } from "react-query";
-import { useDispatch } from "react-redux";
-import Comment from "../../components/comment/comment";
-import ErrorBox from "../../components/errorBox/errorBox";
-import { useAppSelector } from "../../redux/store";
-import { fetchComment } from "../../redux/store/comments";
+import Comment from "@/components/comment/comment";
+import ErrorBox from "@/components/errorBox/errorBox";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { fetchComment } from "@/redux/store/comments";
 
 const Comments: React.FC = () => {
-  const dispatch = useDispatch<any>();
+  const dispatch = useAppDispatch();
   const data = useAppSelector((state) => state.comments);
   console.log("data===", data);
 
   useEffect(() => {
     dispatch(fetchComment("comments"));
-  }, []);
+  }, [dispatch]);
   return (
     <>
       <h1 className="header"> کامنت های محصولات</h1>
@@ -33,13 +32,13 @@ const Comments: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {data.comments?.map((item: any) => {
+              {data.comments?.map((item) => {
                 return <Comment key={item.id} {...item} />;
               })}
             </tbody>
           </table>
           <div className="md:hidden block p-4">
-            {data.comments?.map((item: any) => (
+            {data.comments?.map((item) => (
               <div key={item.id} className="mobile-card">
                 <div className="mobile-card-row">
                   <span className="mobile-card-label">اسم کاربر</span>

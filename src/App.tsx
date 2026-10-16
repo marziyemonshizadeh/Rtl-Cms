@@ -1,11 +1,10 @@
-import { useSelector } from "react-redux";
+import { useAppSelector } from "@/redux/hooks";
 import { Outlet } from "react-router";
-import Navbar from "./components/navbar/navbar";
-import Sidebar from "./components/sidebar/sidebar";
-import { RootState } from "./redux/store";
+import Navbar from "@/components/navbar/navbar";
+import Sidebar from "@/components/sidebar/sidebar";
 function App() {
-  const IsDarkMood = useSelector(
-    (state: RootState) => state.darkmode.isDarkmode
+  const IsDarkMood = useAppSelector(
+    (state) => state.darkmode.isDarkmode
   );
   console.log("IsDarkMood = ", IsDarkMood);
 

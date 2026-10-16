@@ -1,13 +1,13 @@
+import { useAppDispatch } from "@/redux/hooks";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { removeUser } from "../../redux/store/users";
-import apiRequests from "../../services/configs";
-import DeleteModal from "../Modals/deleteModal";
-import DetailsModal from "../Modals/detailsModal";
-import EditModal from "../Modals/editModal";
+import { removeUser } from "@/redux/store/users";
+import apiRequests from "@/services/configs/axios";
+import DeleteModal from "@/components/Modals/deleteModal";
+import DetailsModal from "@/components/Modals/detailsModal";
+import EditModal from "@/components/Modals/editModal";
 
 interface userProps {
   id?: number;
@@ -30,7 +30,7 @@ export default function User({
   const [isShowDetailsModal, setIsShowDetailsModal] = useState<boolean>(false);
   const [isShowEditModal, setIsShowEditModal] = useState<boolean>(false);
   const [productId, setProductId] = useState<number>();
-  const dispatch = useDispatch<any>();
+  const dispatch = useAppDispatch();
 
   const modalSubmit = () => {
     setIsShowModal(false);

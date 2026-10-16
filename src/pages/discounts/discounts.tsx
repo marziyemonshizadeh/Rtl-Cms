@@ -1,19 +1,18 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
-import Discount from "../../components/discount/discount";
-import ErrorBox from "../../components/errorBox/errorBox";
-import { useAppSelector } from "../../redux/store";
-import { fetchDiscounts } from "../../redux/store/discounts";
+import Discount from "@/components/discount/discount";
+import ErrorBox from "@/components/errorBox/errorBox";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { fetchDiscounts } from "@/redux/store/discounts";
 
 const Discounts: React.FC = () => {
-  const dispatch = useDispatch<any>();
+  const dispatch = useAppDispatch();
   const data = useAppSelector((state) => state.discount);
   console.log("data===", data);
 
   useEffect(() => {
     dispatch(fetchDiscounts("discounts"));
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
@@ -34,13 +33,13 @@ const Discounts: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {data.discounts?.map((item: any) => {
+              {data.discounts?.map((item) => {
                 return <Discount {...item} key={item.id} />;
               })}
             </tbody>
           </table>
           <div className="md:hidden block p-4">
-            {data.discounts?.map((item: any) => (
+            {data.discounts?.map((item) => (
               <div key={item.id} className="mobile-card">
                 <div className="mobile-card-row">
                   <span className="mobile-card-label">کد تخفیف</span>

@@ -1,11 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
-import commentsReducer from './store/comments';
-import darkmodeReducer from './store/darkmood';
-import discountsReducer from './store/discounts';
-import ordersReducer from './store/orders';
-import productsReducer from './store/products';
-import usersReducer from './store/users';
+import commentsReducer from '@/redux/store/comments';
+import darkmodeReducer from '@/redux/store/darkmood';
+import discountsReducer from '@/redux/store/discounts';
+import ordersReducer from '@/redux/store/orders';
+import productsReducer from '@/redux/store/products';
+import usersReducer from '@/redux/store/users';
 
  const store = configureStore({
   reducer: {
@@ -18,10 +17,6 @@ import usersReducer from './store/users';
   }
 })
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch
-export const useAppDispatch: () => typeof store.dispatch = useDispatch;
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 export default store

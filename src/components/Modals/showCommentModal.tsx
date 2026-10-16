@@ -1,12 +1,11 @@
 import { useEffect } from "react";
 // import { useQuery } from "react-query";
-// import { useAppSelector } from "../../redux/store";
-import ModalsTemplate from "../modalsTemplate/modalsTemplate";
+import ModalsTemplate from "@/components/modalsTemplate/modalsTemplate";
 
 interface ShowCommentProps {
   comment: string;
   onHide: () => void;
-  id?: any;
+  id?: number;
   onclick?: () => void;
 }
 export default function ShowComment({
@@ -15,7 +14,7 @@ export default function ShowComment({
   onHide,
 }: ShowCommentProps): JSX.Element {
   useEffect(() => {
-    const checkKey = (event: any) => {
+    const checkKey = (event: KeyboardEvent) => {
       console.log(event);
       if (event.keyCode === 27) {
         onHide();

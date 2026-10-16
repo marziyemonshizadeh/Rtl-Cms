@@ -1,11 +1,11 @@
+import { useAppDispatch } from "@/redux/hooks";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { removeComment } from "../../redux/store/comments";
-import apiRequests from "../../services/configs";
-import DeleteModal from "../Modals/deleteModal";
-import ShowComment from "../Modals/showCommentModal";
+import { removeComment } from "@/redux/store/comments";
+import apiRequests from "@/services/configs/axios";
+import DeleteModal from "@/components/Modals/deleteModal";
+import ShowComment from "@/components/Modals/showCommentModal";
 
 interface commentProps {
   id: number;
@@ -30,7 +30,7 @@ export default function Comment({
   const [isShowComment, setIsShowComment] = useState<boolean>(false);
   const [productId, setProductId] = useState<number>();
 
-  const dispatch = useDispatch<any>();
+  const dispatch = useAppDispatch();
 
   const modalSubmit = () => {
     setIsShowModal(false);

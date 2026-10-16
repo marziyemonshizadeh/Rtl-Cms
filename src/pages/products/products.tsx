@@ -1,20 +1,19 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import AddNewProduct from "../../components/addNewProduct/addNewProduct";
-import ErrorBox from "../../components/errorBox/errorBox";
-import Product from "../../components/product/product";
-import { useAppSelector } from "../../redux/store";
-import { fetchProduct } from "../../redux/store/products";
+import AddNewProduct from "@/components/addNewProduct/addNewProduct";
+import ErrorBox from "@/components/errorBox/errorBox";
+import Product from "@/components/product/product";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { fetchProduct } from "@/redux/store/products";
 
 const Products: React.FC = () => {
   const data = useAppSelector((state) => state.products);
-  const dispatch = useDispatch<any>();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(fetchProduct("products"));
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
@@ -36,14 +35,14 @@ const Products: React.FC = () => {
             </thead>
             <tbody>
               {data.products.map(
-                (item: any): JSX.Element => (
+                (item): JSX.Element => (
                   <Product key={item.id} {...item} />
                 )
               )}
             </tbody>
           </table>
           <div className="md:hidden block p-4">
-            {data.products.map((item: any) => (
+            {data.products.map((item) => (
               <div key={item.id} className="mobile-card">
                 <div className="mobile-card-row">
                   <span className="mobile-card-label">عکس</span>

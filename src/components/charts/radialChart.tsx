@@ -4,7 +4,13 @@ import {
   RadialBarChart,
   ResponsiveContainer,
 } from "recharts";
-export default function RadialChart({ title, data, dataKey }: any) {
+interface RadialChartProps {
+  title: string;
+  data: Record<string, string | number>[];
+  dataKey: string;
+}
+
+export default function RadialChart({ title, data, dataKey }: RadialChartProps) {
   return (
     <>
       <h3 className="mb-3">{title}</h3>

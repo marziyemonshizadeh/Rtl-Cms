@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import DeleteModal from "../../components/Modals/deleteModal";
-import { useAppSelector } from "../../redux/store";
-import { removeDiscounts } from "../../redux/store/discounts";
-import apiRequests from "../../services/configs";
+import DeleteModal from "@/components/Modals/deleteModal";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { removeDiscounts } from "@/redux/store/discounts";
+import apiRequests from "@/services/configs/axios";
 
 interface discountProps {
   id: number;
@@ -26,13 +25,13 @@ export default function Discount({
   product,
   confirmation,
 }: discountProps) {
-  const dispatch = useDispatch<any>();
+  const dispatch = useAppDispatch();
   const data = useAppSelector((state) => state.discount);
-  let newData: any = data.discounts.find((i) => i.id === id);
+  const newData = data.discounts?.find((i) => i.id === id);
 
   const [isShowModal, setIsShowModal] = useState<boolean>(false);
 
-  const confirmationHandler = (id: any) => {
+  const confirmationHandler = (id: number) => {
     console.log("newData=", newData);
     console.log("id=", id);
 
