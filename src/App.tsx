@@ -26,10 +26,13 @@ export default function App() {
 
   useLayoutEffect(() => {
     document.documentElement.dataset.theme = theme;
-    document.documentElement.classList.toggle("dark", isDarkmode);
     savePreference(themeStorageKey, theme);
+  }, [theme]);
+
+  useLayoutEffect(() => {
+    document.documentElement.classList.toggle("dark", isDarkmode);
     savePreference("IsDarkMood", String(isDarkmode));
-  }, [theme, isDarkmode]);
+  }, [isDarkmode]);
 
   useEffect(() => {
     setMobileOpen(false);

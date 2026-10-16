@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import commentsReducer from '@/redux/store/comments';
-import darkmodeReducer from '@/redux/store/darkmood';
+import darkmodeReducer from '@/redux/slices/themeSlice';
 import discountsReducer from '@/redux/store/discounts';
 import ordersReducer from '@/redux/store/orders';
 import productsReducer from '@/redux/store/products';

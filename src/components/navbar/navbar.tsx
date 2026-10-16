@@ -32,7 +32,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { toggleDarkmode } from "@/redux/store/darkmood";
+import { toggleDarkmode } from "@/redux/slices/themeSlice";
 import { navigationItems } from "@/routes/navigation";
 import { themes } from "@/lib/themes";
 import { setTheme } from "@/redux/store/theme";
