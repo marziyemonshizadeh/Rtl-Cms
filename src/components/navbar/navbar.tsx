@@ -1,53 +1,160 @@
-import { useAppDispatch } from "@/redux/hooks";
+import {
+  ChevronDown,
+  ChevronLeft,
+  Menu,
+  Moon,
+  Plus,
+  Sun,
+  UserRound,
+} from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { SheetTrigger } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { toggleDarkmode } from "@/redux/store/darkmood";
+import { navigationItems } from "@/routes/navigation";
 
-const Navbar: React.FC = () => {
+export default function Navbar() {
+  // #region State
   const dispatch = useAppDispatch();
+  const isDarkmode = useAppSelector((state) => state.darkmode.isDarkmode);
+  const { pathname } = useLocation();
+  const page =
+    navigationItems.find((item) => item.path === pathname) ??
+    navigationItems[0];
+  const today = new Intl.DateTimeFormat("fa-IR", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  }).format(new Date());
+  // #endregion
+
   return (
-    <div className="flex items-center justify-between bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 px-6 py-4 rounded-lg shadow-sm mb-4">
-      <img
-        src="https://img.freepik.com/free-photo/woman-with-beauty-face-clean-skin_186202-5677.jpg"
-        alt="profile"
-        className="w-10 h-10 rounded-full"
-      />
-      <div className="flex items-center gap-3">
-        <button className="w-10 h-10 bg-zinc-100 dark:bg-zinc-700 p-2 rounded-lg flex justify-center items-center text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-600 transition-colors">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="w-5 h-5"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"
-            />
-          </svg>
-        </button>
-        <button
-          className="w-10 h-10 bg-zinc-100 dark:bg-zinc-700 p-2 rounded-lg flex justify-center items-center text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-600 transition-colors"
-          onClick={() => dispatch(toggleDarkmode())}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="w-5 h-5"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
-            />
-          </svg>
-        </button>
+    <header className="sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/85">
+      <div className="mx-auto flex h-20 max-w-[1600px] items-center justify-between gap-3 px-4 sm:px-6 xl:px-8">
+        <div className="flex min-w-0 items-center gap-3">
+          <SheetTrigger asChild>
+            <Button
+              variant="outline"
+              size="icon"
+              className="size-9 shrink-0 lg:hidden"
+              aria-label="باز کردن منوی اصلی"
+            >
+              <Menu className="size-[18px]" />
+            </Button>
+          </SheetTrigger>
+          <div className="min-w-0">
+            <nav
+              aria-label="مسیر صفحه"
+              className="hidden items-center gap-2 text-[11px] text-muted-foreground sm:flex"
+            >
+              <Link to="/" className="transition-colors hover:text-foreground">
+                فروشگاه
+              </Link>
+              <ChevronLeft className="size-3" aria-hidden="true" />
+              <span aria-current="page">{page.title}</span>
+            </nav>
+            <p className="mt-1.5 truncate text-sm font-semibold">
+              {page.title}
+            </p>
+          </div>
+        </div>
+
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+          <span className="me-2 hidden text-xs text-muted-foreground xl:block">
+            {today}
+          </span>
+          <Button asChild size="sm" className="h-9 gap-2 rounded-lg">
+            <Link
+              to="/products"
+              aria-label="افزودن محصول"
+              onClick={() => window.scrollTo(0, 0)}
+            >
+              <Plus className="size-4" />
+              <span className="hidden sm:inline">محصول جدید</span>
+            </Link>
+          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="size-9 text-muted-foreground"
+                onClick={() => dispatch(toggleDarkmode())}
+                aria-label={
+                  isDarkmode ? "فعال کردن حالت روشن" : "فعال کردن حالت تاریک"
+                }
+              >
+                {isDarkmode ? (
+                  <Sun className="size-[18px]" />
+                ) : (
+                  <Moon className="size-[18px]" />
+                )}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              {isDarkmode ? "حالت روشن" : "حالت تاریک"}
+            </TooltipContent>
+          </Tooltip>
+          <div className="h-7 w-px bg-border" />
+          <DropdownMenu dir="rtl">
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                className="h-auto gap-2 rounded-xl p-1.5 sm:gap-3"
+                aria-label="منوی مدیر فروشگاه"
+              >
+                <span className="flex size-9 items-center justify-center rounded-full border border-border bg-muted text-muted-foreground">
+                  <UserRound className="size-[18px]" aria-hidden="true" />
+                </span>
+                <span className="hidden text-start md:block">
+                  <span className="block text-xs font-semibold">
+                    مدیر فروشگاه
+                  </span>
+                  <span className="mt-1 block text-[10px] font-normal text-muted-foreground">
+                    پنل مدیریت
+                  </span>
+                </span>
+                <ChevronDown
+                  className="hidden size-3.5 text-muted-foreground md:block"
+                  aria-hidden="true"
+                />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-52">
+              <DropdownMenuLabel>فضای کاری فروشگاه</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link to="/">پیشخوان</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/users">مدیریت کاربران</Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuCheckboxItem
+                checked={isDarkmode}
+                onCheckedChange={() => dispatch(toggleDarkmode())}
+              >
+                حالت تاریک
+              </DropdownMenuCheckboxItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
-    </div>
+    </header>
   );
-};
-export default Navbar;
+}

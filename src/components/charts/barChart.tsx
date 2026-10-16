@@ -23,8 +23,8 @@ export default function barChart({
 }: BarChartProps) {
   return (
     <>
-      <h3>{title}</h3>
-      <ResponsiveContainer width="100%" height="100%" aspect={2}>
+      <h2 className="mb-5 text-sm font-semibold">{title}</h2>
+      <ResponsiveContainer width="100%" height={280}>
         <BarChart
           width={150}
           height={40}
@@ -36,9 +36,28 @@ export default function barChart({
             bottom: 5,
           }}
         >
-          <Bar dataKey={dataKey} fill={fill} />
-          <XAxis dataKey={XAxisDataKey} />
-          <YAxis dx={-40} />
+          <Bar
+            dataKey={dataKey}
+            fill={fill}
+            radius={[4, 4, 0, 0]}
+            name="فروش"
+          />
+          <XAxis
+            dataKey={XAxisDataKey}
+            axisLine={false}
+            tickLine={false}
+            minTickGap={24}
+          />
+          <YAxis
+            axisLine={false}
+            tickLine={false}
+            width={45}
+            tickFormatter={(value: number) =>
+              new Intl.NumberFormat("fa-IR", { notation: "compact" }).format(
+                value,
+              )
+            }
+          />
           <Legend />
         </BarChart>
       </ResponsiveContainer>

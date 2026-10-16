@@ -7,7 +7,7 @@ interface DarkmodeState {
 
 // Define the initial state using that type
 const initialState: DarkmodeState = {
-  isDarkmode : false
+  isDarkmode : localStorage.getItem("IsDarkMood") === "true"
 }
 
 export const darkmodeSlice = createSlice({

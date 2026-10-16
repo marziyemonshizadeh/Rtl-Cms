@@ -1,171 +1,149 @@
+import {
+  ArrowLeftToLine,
+  ArrowRightToLine,
+  PanelsTopLeft,
+  Store,
+} from "lucide-react";
 import { NavLink } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
+import { navigationItems } from "@/routes/navigation";
 
-const Sidebar: React.FC = () => {
+interface SidebarProps {
+  collapsed?: boolean;
+  onToggle?: () => void;
+  onNavigate?: () => void;
+}
+
+export default function Sidebar({
+  collapsed = false,
+  onToggle,
+  onNavigate,
+}: SidebarProps) {
   return (
-    <>
-      <h2 className="text-white font-extrabold text-lg p-4 border-solid border-b border-zinc-700 dark:border-zinc-600 text-center md:text-right">
-        به داشبورد خود خوش آمدید
-      </h2>
-      <ul className="text-zinc-400 md:space-y-1 md:block grid grid-cols-3">
-        <NavLink
-          to="/"
-          className={({ isActive }) =>
-            `sidebar-item ${
-              isActive
-                ? "sidebar-item-active"
-                : "sidebar-item-inactive"
-            }`
-          }
-          end
+    <div
+      className="flex h-full min-h-0 w-full flex-col bg-zinc-950 text-zinc-300"
+      dir="rtl"
+    >
+      <NavLink
+        to="/"
+        onClick={onNavigate}
+        aria-label="مدیریت فروشگاه، پیشخوان"
+        className={cn(
+          "flex h-24 shrink-0 items-center gap-3 px-6",
+          collapsed && "justify-center px-0",
+        )}
+      >
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-lime-400 text-zinc-950">
+          <PanelsTopLeft className="size-5" aria-hidden="true" />
+        </span>
+        {!collapsed && (
+          <span className="min-w-0">
+            <span className="block text-lg font-bold tracking-tight text-white">
+              مدیریت فروشگاه
+            </span>
+            <span className="mt-1 block text-[10px] tracking-[0.2em] text-zinc-500">
+              RTL CMS
+            </span>
+          </span>
+        )}
+      </NavLink>
+
+      <nav aria-label="منوی اصلی" className="flex-1 overflow-y-auto px-3 py-5">
+        <p
+          className={cn(
+            "mb-4 px-3 text-[11px] font-medium text-zinc-500",
+            collapsed && "sr-only",
+          )}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="w-6 h-6 mr-2 invisible md:visible"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
+          فضای کاری
+        </p>
+        <ul className="space-y-1.5">
+          {navigationItems.map(({ path, title, icon: Icon }) => (
+            <li key={path}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <NavLink
+                    to={path}
+                    end={path === "/"}
+                    onClick={onNavigate}
+                    aria-label={collapsed ? title : undefined}
+                    className={({ isActive }) =>
+                      cn(
+                        "group relative flex h-11 items-center gap-3 rounded-xl px-3 text-[13px] font-medium outline-none transition-colors hover:bg-white/5 hover:text-white focus-visible:ring-2 focus-visible:ring-lime-400",
+                        isActive &&
+                          "bg-lime-400/10 text-lime-300 hover:bg-lime-400/15 hover:text-lime-300",
+                        collapsed && "justify-center px-0",
+                      )
+                    }
+                  >
+                    {({ isActive }) => (
+                      <>
+                        <Icon
+                          className="size-[19px] shrink-0"
+                          strokeWidth={1.7}
+                          aria-hidden="true"
+                        />
+                        {!collapsed && <span className="flex-1">{title}</span>}
+                        {isActive && !collapsed && (
+                          <span className="size-1.5 rounded-full bg-lime-400" />
+                        )}
+                      </>
+                    )}
+                  </NavLink>
+                </TooltipTrigger>
+                {collapsed && (
+                  <TooltipContent side="left">{title}</TooltipContent>
+                )}
+              </Tooltip>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div className="shrink-0 border-t border-white/[0.07] p-3">
+        {!collapsed && (
+          <div className="mb-3 flex items-center gap-3 rounded-xl border border-white/[0.07] bg-white/[0.03] p-3">
+            <Store
+              className="size-5 shrink-0 text-zinc-400"
+              aria-hidden="true"
             />
-          </svg>
-          <span className="font-semibold text-base mx-2">صفحه ی اصلی</span>
-        </NavLink>
-        <NavLink
-          to="/products"
-          className={({ isActive }) =>
-            `sidebar-item ${
-              isActive
-                ? "sidebar-item-active"
-                : "sidebar-item-inactive"
-            }`
-          }
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="w-6 h-6 mr-2 invisible md:visible"
+            <div>
+              <p className="text-xs font-medium text-zinc-200">فروشگاه شما</p>
+              <p className="mt-1 text-[11px] text-zinc-500">
+                همه‌چیز، در یک نگاه
+              </p>
+            </div>
+          </div>
+        )}
+        {onToggle && (
+          <Button
+            variant="ghost"
+            className={cn(
+              "h-10 w-full justify-start gap-3 rounded-xl px-3 text-xs text-zinc-400 hover:bg-white/5 hover:text-white",
+              collapsed && "justify-center px-0",
+            )}
+            onClick={onToggle}
+            aria-label={
+              collapsed ? "باز کردن نوار کناری" : "جمع کردن نوار کناری"
+            }
+            aria-expanded={!collapsed}
+            aria-controls="desktop-sidebar"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z"
-            />
-          </svg>
-          <span className="font-semibold text-base mx-2">محصولات </span>
-        </NavLink>
-        <NavLink
-          to="/comments"
-          className={({ isActive }) =>
-            `sidebar-item ${
-              isActive
-                ? "sidebar-item-active"
-                : "sidebar-item-inactive"
-            }`
-          }
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="w-6 h-6 mr-2 invisible md:visible"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"
-            />
-          </svg>
-          <span className="font-semibold text-base mx-2">کامنت ها</span>
-        </NavLink>
-        <NavLink
-          to="/users"
-          className={({ isActive }) =>
-            `sidebar-item ${
-              isActive
-                ? "sidebar-item-active"
-                : "sidebar-item-inactive"
-            }`
-          }
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="w-6 h-6 mr-2 invisible md:visible"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"
-            />
-          </svg>
-          <span className="font-semibold text-base mx-2">کاربران</span>
-        </NavLink>
-        <NavLink
-          to="/orders"
-          className={({ isActive }) =>
-            `sidebar-item ${
-              isActive
-                ? "sidebar-item-active"
-                : "sidebar-item-inactive"
-            }`
-          }
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="w-6 h-6 mr-2 invisible md:visible"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
-            />
-          </svg>
-          <span className="font-semibold text-base mx-2">سفارشات</span>
-        </NavLink>
-        <NavLink
-          to="/discount"
-          className={({ isActive }) =>
-            `sidebar-item ${
-              isActive
-                ? "sidebar-item-active"
-                : "sidebar-item-inactive"
-            }`
-          }
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="w-6 h-6 mr-2 invisible md:visible"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z"
-            />
-          </svg>
-          <span className="font-semibold text-base mx-2">تخفیفات</span>
-        </NavLink>
-      </ul>
-    </>
+            {collapsed ? (
+              <ArrowLeftToLine className="size-4" />
+            ) : (
+              <ArrowRightToLine className="size-4" />
+            )}
+            {!collapsed && "جمع کردن منو"}
+          </Button>
+        )}
+      </div>
+    </div>
   );
-};
-export default Sidebar;
+}

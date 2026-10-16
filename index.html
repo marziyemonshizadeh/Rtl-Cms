@@ -1,14 +1,26 @@
 <!doctype html>
-<html lang="en">
+<html lang="fa" dir="rtl">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RTL CMS</title>
+    <meta name="theme-color" content="#09090b" />
+    <meta
+      name="description"
+      content="پنل مدیریت فروشگاه؛ محصولات، سفارش‌ها، کاربران و دیدگاه‌ها در یک فضای کاری."
+    />
+    <title>مدیریت فروشگاه | RTL CMS</title>
+    <script>
+      try {
+        document.documentElement.classList.toggle(
+          "dark",
+          localStorage.getItem("IsDarkMood") === "true",
+        );
+      } catch {}
+    </script>
   </head>
   <body>
     <div id="root"></div>
-    <div id="modal" className="w-full h-screen"></div>
+    <div id="modal"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -1,31 +1,101 @@
-import { useAppSelector } from "@/redux/hooks";
-import { Outlet } from "react-router";
+
+import { useEffect, useState } from "react";
+import type { CSSProperties } from "react";
+import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "@/components/navbar/navbar";
 import Sidebar from "@/components/sidebar/sidebar";
-function App() {
-  const IsDarkMood = useAppSelector(
-    (state) => state.darkmode.isDarkmode
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { useAppSelector } from "@/redux/hooks";
+
+export default function App() {
+  // #region State
+  const isDarkmode = useAppSelector((state) => state.darkmode.isDarkmode);
+  const [collapsed, setCollapsed] = useState(
+    () => localStorage.getItem("sidebar-collapsed") === "true",
   );
-  console.log("IsDarkMood = ", IsDarkMood);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", isDarkmode);
+  }, [isDarkmode]);
+
+  useEffect(() => {
+    setMobileOpen(false);
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  useEffect(() => {
+    const desktop = window.matchMedia("(min-width: 1024px)");
+    const closeOnDesktop = () => {
+      if (desktop.matches) setMobileOpen(false);
+    };
+    desktop.addEventListener("change", closeOnDesktop);
+    return () => desktop.removeEventListener("change", closeOnDesktop);
+  }, []);
+
+  const toggleSidebar = () => {
+    setCollapsed((current) => {
+      localStorage.setItem("sidebar-collapsed", String(!current));
+      return !current;
+    });
+  };
+  // #endregion
 
   return (
-    <div
-      dir="rtl"
-      className={`${
-        localStorage.getItem("IsDarkMood") === "true" ? "dark" : ""
-      }`}
-    >
-      <div className="grid xl:grid-cols-6 md:grid-cols-4 grid-cols-1 grid-flow-cols bg-zinc-100 dark:bg-zinc-950">
-        <div className="xl:col-span-1 md:col-span-1 sm:col-auto bg-zinc-800 dark:bg-zinc-900 dark:border-zinc-800 md:h-screen min-h-32 sticky top-0 z-20">
-          <Sidebar />
+    <TooltipProvider delayDuration={200}>
+      <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+        <div
+          dir="rtl"
+          className="min-h-screen bg-background text-foreground"
+          style={
+            {
+              "--sidebar-width": collapsed ? "5.25rem" : "16.5rem",
+            } as CSSProperties
+          }
+        >
+          <a
+            href="#main-content"
+            className="sr-only z-[60] rounded-lg bg-primary p-3 text-primary-foreground focus:not-sr-only focus:fixed focus:start-4 focus:top-4"
+          >
+            رفتن به محتوای اصلی
+          </a>
+          <aside
+            id="desktop-sidebar"
+            className="fixed inset-y-0 start-0 z-40 hidden w-[var(--sidebar-width)] border-e border-white/5 transition-[width] duration-200 motion-reduce:transition-none lg:flex"
+          >
+            <Sidebar collapsed={collapsed} onToggle={toggleSidebar} />
+          </aside>
+
+          <SheetContent
+            className="w-[280px] border-zinc-800 bg-zinc-950 p-0 text-zinc-100"
+            dir="rtl"
+          >
+            <SheetTitle className="sr-only">منوی اصلی فروشگاه</SheetTitle>
+            <SheetDescription className="sr-only">
+              دسترسی به پیشخوان و بخش‌های مدیریت فروشگاه
+            </SheetDescription>
+            <Sidebar onNavigate={() => setMobileOpen(false)} />
+          </SheetContent>
+
+          <div className="min-w-0 transition-[padding] duration-200 motion-reduce:transition-none lg:ps-[var(--sidebar-width)]">
+            <Navbar />
+            <main
+              id="main-content"
+              tabIndex={-1}
+              className="mx-auto max-w-[1600px] p-4 outline-none sm:p-6 xl:p-8"
+            >
+              <Outlet />
+            </main>
+          </div>
         </div>
-        <div className="xl:col-span-5 md:col-span-3 block sm:col-span-1 bg-zinc-100 dark:bg-zinc-950 md:px-4 md:py-4 mb-14">
-          <Navbar />
-          <Outlet />
-        </div>
-      </div>
-    </div>
+      </Sheet>
+    </TooltipProvider>
   );
 }
-
-export default App;

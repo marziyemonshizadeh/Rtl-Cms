@@ -1,99 +1,166 @@
+@import "@fontsource-variable/vazirmatn";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities{
-    .card{
-        @apply bg-white dark:bg-zinc-800 text-base dark:text-zinc-100 border border-zinc-200 dark:border-zinc-700 shadow-sm p-4 rounded-lg my-3
-    }
-    .table-container{
-        @apply bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg shadow-sm overflow-hidden
-    }
-    .table-header{
-        @apply bg-zinc-50 dark:bg-zinc-800/50 border-b border-zinc-200 dark:border-zinc-700
-    }
-    .table-header-cell{
-        @apply py-3 px-4 text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide text-center
-    }
-    .table-row{
-        @apply border-b border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors
-    }
-    .table-cell{
-        @apply py-4 px-4 text-sm text-zinc-900 dark:text-zinc-100 text-center
-    }
-    .table-row:last-child{
-        @apply border-b-0
-    }
-    .mobile-card{
-        @apply bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg p-4 mb-3 shadow-sm
-    }
-    .mobile-card-row{
-        @apply flex justify-between items-start mb-3 pb-3 border-b border-zinc-200 dark:border-zinc-700
-    }
-    .mobile-card-row:last-child{
-        @apply mb-0 pb-0 border-b-0
-    }
-    .mobile-card-label{
-        @apply text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide
-    }
-    .mobile-card-value{
-        @apply text-sm font-semibold text-zinc-900 dark:text-zinc-100
-    }
-    .link{
-        @apply no-underline text-white
-    }
-    .header{
-        @apply font-extrabold text-zinc-900 dark:text-zinc-100 font-serif md:text-4xl text-xl my-2 p-3
-    }
-    .input{
-        @apply appearance-none border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 font-normal text-sm h-10 text-zinc-900 dark:text-zinc-100 px-3 py-2 leading-tight rounded-lg placeholder-zinc-400 dark:placeholder-zinc-500 focus:ring-2 focus:ring-lime-500 focus:border-transparent focus:outline-none my-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-zinc-100 dark:disabled:bg-zinc-900
-    }
-    .sidebar-item{
-        @apply flex hover:bg-zinc-700 dark:hover:bg-zinc-700/50 py-3 px-3 md:justify-start justify-center transition-colors cursor-pointer relative
-    }
-    .sidebar-item-inactive{
-        @apply text-zinc-400 dark:text-zinc-400
-    }
-    .sidebar-item-active{
-        @apply text-lime-500 dark:text-lime-400 bg-zinc-700/50 dark:bg-zinc-700/30 border-r-2 border-lime-500 dark:border-lime-400
-    }
-    .sidebar-item-active::before{
-        content: '';
-        @apply absolute right-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-lime-500 dark:bg-lime-400 rounded-full opacity-100;
-    }
-    .sidebar-item-inactive::before{
-        content: '';
-        @apply absolute right-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-lime-500 dark:bg-lime-400 rounded-full opacity-0 transition-opacity;
-    }
-    .sidebar-item-inactive:hover::before{
-        @apply opacity-100
-    }
-    .btn{
-        @apply font-semibold bg-lime-500 text-white px-4 py-2 text-sm select-none rounded-lg hover:bg-lime-600 focus:ring-2 ring-lime-500 ring-offset-2 active:scale-[0.98] active:bg-lime-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-lime-500
-    }
-    .btn-secondary{
-        @apply font-semibold border border-zinc-300 dark:border-zinc-600 text-zinc-700 dark:text-zinc-200 px-4 py-2 text-sm select-none rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 focus:ring-2 ring-zinc-500 ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed
-    }
-    .btn-destructive{
-        @apply font-semibold bg-red-500 text-white px-4 py-2 text-sm select-none rounded-lg hover:bg-red-600 focus:ring-2 ring-red-500 ring-offset-2 active:scale-[0.98] active:bg-red-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-red-500
-    }
-    .btnDisable{
-        @apply font-semibold bg-zinc-300 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-400 px-4 py-2 text-sm select-none rounded-lg cursor-not-allowed opacity-50
-    }
-    .btnLight{
-        @apply btn-secondary
-    }
-    .td{
-        @apply md:text-center py-4 text-zinc-900 dark:text-zinc-100
-    }
-    .badge-pending{
-        @apply inline-block px-3 py-1 rounded-full text-sm font-semibold bg-amber-100 text-amber-700
-    }
-    .badge-rejected{
-        @apply inline-block px-3 py-1 rounded-full text-sm font-semibold bg-red-100 text-red-700
-    }
-    .badge-approved{
-        @apply inline-block px-3 py-1 rounded-full text-sm font-semibold bg-lime-100 text-lime-700
-    }
+@layer base {
+  :root {
+    --background: 240 6% 97%;
+    --foreground: 240 6% 12%;
+    --card: 0 0% 100%;
+    --popover: 0 0% 100%;
+    --primary: 85 85% 30%;
+    --primary-foreground: 0 0% 100%;
+    --muted: 240 5% 94%;
+    --muted-foreground: 240 4% 44%;
+    --destructive: 0 72% 51%;
+    --border: 240 6% 90%;
+    --radius: 0.75rem;
+    color-scheme: light;
+  }
+
+  .dark {
+    --background: 240 6% 7%;
+    --foreground: 240 5% 94%;
+    --card: 240 5% 10%;
+    --popover: 240 5% 12%;
+    --primary: 83 78% 55%;
+    --primary-foreground: 240 6% 10%;
+    --muted: 240 5% 15%;
+    --muted-foreground: 240 5% 64%;
+    --destructive: 0 72% 60%;
+    --border: 240 4% 19%;
+    color-scheme: dark;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply m-0 min-w-[320px] bg-background font-sans text-sm text-foreground antialiased;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  button,
+  a,
+  input {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  ::selection {
+    @apply bg-lime-200 text-zinc-950;
+  }
+
+  .recharts-cartesian-axis-tick-value,
+  .recharts-legend-item-text {
+    fill: hsl(var(--muted-foreground));
+    color: hsl(var(--muted-foreground)) !important;
+    font-size: 11px;
+  }
 }
 
+@layer components {
+  .card {
+    @apply my-4 min-w-0 rounded-2xl border bg-card p-5 text-foreground shadow-sm sm:p-6;
+  }
+
+  .table-container {
+    @apply overflow-hidden rounded-2xl border bg-card shadow-sm;
+  }
+
+  .table-header {
+    @apply border-b bg-muted/40;
+  }
+
+  .table-header-cell {
+    @apply whitespace-nowrap px-4 py-4 text-center text-xs font-medium text-muted-foreground;
+  }
+
+  .table-row {
+    @apply border-b transition-colors hover:bg-muted/40;
+  }
+
+  .table-cell {
+    @apply px-4 py-4 text-center text-[13px] text-foreground;
+  }
+
+  .table-row:last-child {
+    @apply border-b-0;
+  }
+
+  .mobile-card {
+    @apply mb-3 rounded-xl border bg-card p-4;
+  }
+
+  .mobile-card-row {
+    @apply mb-3 flex items-start justify-between gap-3 border-b pb-3;
+  }
+
+  .mobile-card-row:last-child {
+    @apply mb-0 border-b-0 pb-0;
+  }
+
+  .mobile-card-label {
+    @apply text-xs font-medium text-muted-foreground;
+  }
+
+  .mobile-card-value {
+    @apply break-words text-sm font-medium text-foreground;
+  }
+
+  .link {
+    @apply text-primary no-underline;
+  }
+
+  .header {
+    @apply mb-5 mt-1 text-xl font-bold tracking-tight text-foreground sm:text-2xl;
+  }
+
+  .input {
+    @apply my-2 h-11 appearance-none rounded-lg border border-input bg-card px-3 py-2 text-sm text-foreground outline-none transition-shadow placeholder:text-muted-foreground focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn {
+    @apply inline-flex select-none items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-secondary {
+    @apply inline-flex select-none items-center justify-center rounded-lg border bg-card px-4 py-2.5 text-xs font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-destructive {
+    @apply inline-flex select-none items-center justify-center rounded-lg bg-destructive px-4 py-2.5 text-xs font-medium text-white transition-colors hover:bg-destructive/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btnDisable {
+    @apply cursor-not-allowed select-none rounded-lg bg-muted px-4 py-2.5 text-xs font-medium text-muted-foreground opacity-60;
+  }
+
+  .btnLight {
+    @apply btn-secondary;
+  }
+
+  .td {
+    @apply py-4 text-foreground md:text-center;
+  }
+
+  .badge-pending {
+    @apply inline-flex rounded-md bg-amber-50 px-2.5 py-1 text-[11px] font-medium text-amber-700 dark:bg-amber-400/10 dark:text-amber-300;
+  }
+
+  .badge-rejected {
+    @apply inline-flex rounded-md bg-red-50 px-2.5 py-1 text-[11px] font-medium text-red-700 dark:bg-red-400/10 dark:text-red-300;
+  }
+
+  .badge-approved {
+    @apply inline-flex rounded-md bg-lime-50 px-2.5 py-1 text-[11px] font-medium text-lime-700 dark:bg-lime-400/10 dark:text-lime-300;
+  }
+}

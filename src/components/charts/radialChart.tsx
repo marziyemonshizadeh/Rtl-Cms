@@ -10,34 +10,35 @@ interface RadialChartProps {
   dataKey: string;
 }
 
-export default function RadialChart({ title, data, dataKey }: RadialChartProps) {
+export default function RadialChart({
+  title,
+  data,
+  dataKey,
+}: RadialChartProps) {
   return (
     <>
-      <h3 className="mb-3">{title}</h3>
-      <ResponsiveContainer width="100%" height="100%" aspect={2}>
+      <h2 className="mb-5 text-sm font-semibold">{title}</h2>
+      <ResponsiveContainer width="100%" height={280}>
         <RadialBarChart
           cx="50%"
-          cy="50%"
+          cy="42%"
           innerRadius="10%"
-          outerRadius="80%"
+          outerRadius="70%"
           barSize={10}
           data={data}
         >
           <RadialBar
-            // minAngle={15}
-            label={{ position: "insideStart", fill: "#fff" }}
-            background
-            // clockWise
+            label={{ position: "insideStart", fill: "#18181b", fontSize: 11 }}
+            background={{ fill: "hsl(var(--muted))" }}
             dataKey={dataKey}
           />
           <Legend
             iconSize={10}
-            layout="vertical"
-            verticalAlign="middle"
+            layout="horizontal"
+            verticalAlign="bottom"
             wrapperStyle={{
-              top: "50%",
-              right: 0,
-              transform: "translate(0, -50%)",
+              direction: "ltr",
+              fontSize: "11px",
               lineHeight: "24px",
             }}
           />
