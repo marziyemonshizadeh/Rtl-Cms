@@ -19,5 +19,6 @@ thumb
 sketch
 
 /public/fonts
+/dist/
 
 # End of https://www.toptal.com/developers/gitignore/api/react
