@@ -1,6 +1,7 @@
 import {
   ChevronDown,
   ChevronLeft,
+  CircleUser,
   Menu,
   Moon,
   Palette,
@@ -146,11 +147,11 @@ export default function Navbar() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-52">
-              <DropdownMenuLabel>فضای کاری فروشگاه</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link to="/">پیشخوان</Link>
+              <DropdownMenuItem>
+                <CircleUser />
+                <Link to="/profile">پروفایل</Link>
               </DropdownMenuItem>
+              <DropdownMenuSeparator />
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger
                   aria-label={`رنگ‌بندی محیط، تم فعلی: ${currentTheme.label}`}
