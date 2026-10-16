@@ -8,10 +8,9 @@ import { fetchUser } from "@/redux/store/users";
 const Users: React.FC = () => {
   const dispatch = useAppDispatch();
   const data = useAppSelector((state) => state.users);
-  console.log("data===", data);
 
   useEffect(() => {
-    dispatch(fetchUser("users"));
+    dispatch(fetchUser());
   }, [dispatch]);
 
   return (
@@ -19,6 +18,18 @@ const Users: React.FC = () => {
       <h1 className="header">لیست کاربران</h1>
       {data.loading ? (
         <div>لطفا کمی صبر کنید...</div>
+      ) : data.error ? (
+        <div className="space-y-3">
+          <ErrorBox message={data.error} />
+          <button
+            type="button"
+            className="btn"
+            disabled={Object.values(data.mutations).some((mutation) => mutation.pending)}
+            onClick={() => void dispatch(fetchUser())}
+          >
+            تلاش دوباره
+          </button>
+        </div>
       ) : data.users?.length ? (
         <div className="table-container mt-5">
           <table className="w-full hidden md:table">

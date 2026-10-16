@@ -1,47 +1,41 @@
-import { useAppDispatch } from "@/redux/hooks";
-import type { Action, ThunkAction } from "@reduxjs/toolkit";
-import type { RootState } from "@/redux/store";
 import ReactDom from "react-dom";
 import ModalsTemplate from "@/components/modalsTemplate/modalsTemplate";
 import { Button } from "@/components/ui/button";
 
 interface ModalProps {
-  submitAction: () => void;
+  submitAction: () => Promise<void>;
   cancelAction: () => void;
-  remove: (id: number | undefined) => ThunkAction<unknown, RootState, unknown, Action>;
-  Id: number | undefined;
-  onclick?: () => void;
+  pending: boolean;
+  error?: string | null;
 }
 export default function Modal({
-  Id,
-  remove,
+  pending,
+  error,
   cancelAction,
   submitAction,
 }: ModalProps): JSX.Element {
-  const dispatch = useAppDispatch();
-
   return ReactDom.createPortal(
     <ModalsTemplate>
       <p className="text-center font-extrabold text-2xl">
         مطمئن هستید می خواهید حذف کنید ؟
       </p>
+      {error && <p role="alert" className="text-center text-destructive">{error}</p>}
 
-      <div className="bg-card px-4 py-3 sm:flex sm:flex-row-reverse sm:justify-center sm:px-6">
+      <div aria-busy={pending} className="bg-card px-4 py-3 sm:flex sm:flex-row-reverse sm:justify-center sm:px-6">
         <Button
           type="button"
           variant="destructive"
           className="m-1"
-          onClick={() => {
-            submitAction();
-            dispatch(remove(Id));
-          }}
+          disabled={pending}
+          onClick={() => void submitAction()}
         >
-          بله
+          {pending ? "در حال حذف..." : "بله"}
         </Button>
         <Button
           type="button"
           variant="outline"
           className="m-1"
+          disabled={pending}
           onClick={() => cancelAction()}
         >
           خیر

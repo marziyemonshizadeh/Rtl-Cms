@@ -6,6 +6,7 @@ import ordersReducer from '@/redux/store/orders';
 import productsReducer from '@/redux/store/products';
 import usersReducer from '@/redux/store/users';
 import themeReducer from '@/redux/store/theme';
+import notifications from '@/redux/notifications';
 
  const store = configureStore({
   reducer: {
@@ -16,7 +17,8 @@ import themeReducer from '@/redux/store/theme';
     orders:ordersReducer,
     discount:discountsReducer,
     users:usersReducer
-  }
+  },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend(notifications),
 })
 
 export type RootState = ReturnType<typeof store.getState>

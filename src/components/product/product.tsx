@@ -1,17 +1,14 @@
 import { Input } from "@/components/ui/input";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { removeProduct } from "@/redux/store/products";
-import apiRequests from "@/services/configs/axios";
+import { removeProduct, updateProduct } from "@/redux/store/products";
 import DeleteModal from "@/components/Modals/deleteModal";
 import DetailsModal from "@/components/Modals/detailsModal";
 import EditModal from "@/components/Modals/editModal";
 
 interface productProps {
-  id?: number;
+  id: number;
   name: string;
   img: string;
   price: number | string;
@@ -23,22 +20,16 @@ const Product = ({ id, name, img, price, count }: productProps) => {
   const [isShowDetailsModal, setIsShowDetailsModal] = useState<boolean>(false);
   const [isShowEditModal, setIsShowEditModal] = useState<boolean>(false);
   const dispatch = useAppDispatch();
+  const mutation = useAppSelector((state) => state.products.mutations[id]);
+  const pending = !!mutation?.pending;
 
-  const modalSubmit = () => {
-    setIsShowModal(false);
-    dispatch(removeProduct(id));
-    console.log("work", id);
-
-    toast.success("! محصول مورد نظر با موفقیت حذف شد", {
-      position: "bottom-left",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
+  const modalSubmit = async () => {
+    try {
+      await dispatch(removeProduct(id)).unwrap();
+      setIsShowModal(false);
+    } catch {
+      return;
+    }
   };
 
   const {
@@ -48,20 +39,25 @@ const Product = ({ id, name, img, price, count }: productProps) => {
     formState: { errors },
   } = useForm<productProps>();
   const onSubmit: SubmitHandler<productProps> = async (data) => {
-    console.log(data);
-    await apiRequests.put(`/products/${id}`, {
-      img: data.img,
-      name: data.name,
-      price: data.price,
-      count: data.count,
-    });
-    reset();
-    setIsShowEditModal(false);
+    try {
+      await dispatch(updateProduct({
+        id,
+        changes: {
+          img: data.img,
+          name: data.name,
+          price: data.price,
+          count: data.count,
+        },
+      })).unwrap();
+      reset();
+      setIsShowEditModal(false);
+    } catch {
+      return;
+    }
   };
 
   return (
     <>
-      <ToastContainer />
       <tr className="table-row">
         <td className="table-cell md:flex justify-center">
           <img src={img} alt="hb" className="max-h-40" />
@@ -72,18 +68,17 @@ const Product = ({ id, name, img, price, count }: productProps) => {
         <td className="table-cell">
           <button
             type="button"
+            disabled={pending}
             className="btn m-1"
             onClick={() => {
-              console.log("clicked");
-              console.log(isShowDetailsModal);
               setIsShowDetailsModal(true);
-              console.log(setIsShowDetailsModal);
             }}
           >
             جزئیات
           </button>
           <button
             type="button"
+            disabled={pending}
             className="btn m-1"
             onClick={() => {
               setIsShowModal(true);
@@ -93,6 +88,7 @@ const Product = ({ id, name, img, price, count }: productProps) => {
           </button>
           <button
             type="button"
+            disabled={pending}
             className="btn m-1"
             onClick={() => setIsShowEditModal(true)}
           >
@@ -104,12 +100,12 @@ const Product = ({ id, name, img, price, count }: productProps) => {
       {/* delete modal */}
       {isShowModal && (
         <DeleteModal
-          Id={id}
+          pending={pending}
+          error={mutation?.error}
           submitAction={modalSubmit}
           cancelAction={() => {
             setIsShowModal(false);
           }}
-          remove={removeProduct}
         />
       )}
       {/* details modal */}
@@ -132,66 +128,71 @@ const Product = ({ id, name, img, price, count }: productProps) => {
       {isShowEditModal && (
         <EditModal
           onClose={() => {
-            console.log("close");
-            setIsShowEditModal(false);
+            if (!pending) setIsShowEditModal(false);
           }}
         >
-          <form className="min-h-64 pt-5" onSubmit={handleSubmit(onSubmit)}>
-            <Input
-              defaultValue={name}
-              className="text-right"
-              type="text"
-              placeholder="نام محصول جدید را وارد کنید "
-              aria-label="name"
-              {...register("name", { required: true })}
-            />
-            {errors.name && <span>This field is required</span>}
-            <Input
-              defaultValue={img}
-              className="text-right"
-              type="text"
-              placeholder="آدرس عکس جدید محصول را وارد کنید "
-              aria-label="img"
-              {...register("img", { required: true })}
-            />
-            {errors.img && (
-              <span className="text-destructive">This field is required</span>
-            )}
-            <Input
-              defaultValue={price}
-              className="text-right"
-              type="text"
-              placeholder=" قیمت جدید محصول را وارد کنید "
-              aria-label="price"
-              {...register("price", { required: true })}
-            />
-            {errors.price && (
-              <span className="text-destructive">This field is required</span>
-            )}
-            <Input
-              defaultValue={count}
-              className="text-right"
-              type="text"
-              placeholder=" تعداد جدید محصول را وارد کنید "
-              aria-label="count"
-              {...register("count", { required: true })}
-            />
-            {errors.count && (
-              <span className="text-destructive">This field is required</span>
-            )}
+          <form className="min-h-64 pt-5" aria-busy={pending} onSubmit={handleSubmit(onSubmit)}>
+            <fieldset disabled={pending} className="min-w-0">
+              <Input
+                defaultValue={name}
+                className="text-right"
+                type="text"
+                placeholder="نام محصول جدید را وارد کنید "
+                aria-label="name"
+                {...register("name", { required: true })}
+              />
+              {errors.name && <span>This field is required</span>}
+              <Input
+                defaultValue={img}
+                className="text-right"
+                type="text"
+                placeholder="آدرس عکس جدید محصول را وارد کنید "
+                aria-label="img"
+                {...register("img", { required: true })}
+              />
+              {errors.img && (
+                <span className="text-destructive">This field is required</span>
+              )}
+              <Input
+                defaultValue={price}
+                className="text-right"
+                type="text"
+                placeholder=" قیمت جدید محصول را وارد کنید "
+                aria-label="price"
+                {...register("price", { required: true })}
+              />
+              {errors.price && (
+                <span className="text-destructive">This field is required</span>
+              )}
+              <Input
+                defaultValue={count}
+                className="text-right"
+                type="text"
+                placeholder=" تعداد جدید محصول را وارد کنید "
+                aria-label="count"
+                {...register("count", { required: true })}
+              />
+              {errors.count && (
+                <span className="text-destructive">This field is required</span>
+              )}
 
-            <div className="flex justify-center gap-3">
-              <button
-                type="submit"
-                className="btnLight my-5"
-                onClick={() => setIsShowEditModal(false)}
-              >
-                cancel
-              </button>
-              <button type="submit" className="btn my-5">
-                ثبت اطلاعات جدید
-              </button>
-            </div>
+              <div className="flex justify-center gap-3">
+                <button
+                  type="button"
+                  disabled={pending}
+                  className="btnLight my-5"
+                  onClick={() => setIsShowEditModal(false)}
+                >
+                  cancel
+                </button>
+                <button type="submit" className="btn my-5">
+                  ثبت اطلاعات جدید
+                </button>
+              </div>
+            </fieldset>
+            {mutation?.error && (
+              <p role="alert" className="text-destructive">{mutation.error}</p>
+            )}
           </form>
         </EditModal>
       )}

@@ -1,11 +1,8 @@
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import DeleteModal from "@/components/Modals/deleteModal";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { removeDiscounts } from "@/redux/store/discounts";
-import apiRequests from "@/services/configs/axios";
+import { removeDiscounts, setDiscountConfirmation } from "@/redux/store/discounts";
 
 interface discountProps {
   id: number;
@@ -26,45 +23,25 @@ export default function Discount({
   product,
   confirmation,
 }: discountProps) {
+  const [isShowModal, setIsShowModal] = useState(false);
   const dispatch = useAppDispatch();
-  const data = useAppSelector((state) => state.discount);
-  const newData = data.discounts?.find((i) => i.id === id);
+  const mutation = useAppSelector((state) => state.discount.mutations[id]);
+  const pending = !!mutation?.pending;
 
-  const [isShowModal, setIsShowModal] = useState<boolean>(false);
-
-  const confirmationHandler = (id: number) => {
-    console.log("newData=", newData);
-    console.log("id=", id);
-
-    apiRequests.put(`/discounts/${id}`, {
-      discountCode: newData?.discountCode,
-      discountPercent: newData?.discountPercent,
-      history: newData?.history,
-      adminName: newData?.adminName,
-      product: newData?.product,
-      confirmation: !newData?.confirmation,
-    });
-  };
-  const modalSubmit = () => {
-    setIsShowModal(false);
-    console.log("remove id", id);
-
-    dispatch(removeDiscounts(id));
-    toast.success("! تخفیف مورد نظر با موفقیت حذف شد", {
-      position: "bottom-left",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
+  const confirmationHandler = () => {
+    void dispatch(setDiscountConfirmation({ id, confirmation: !confirmation }));
   };
 
+  const modalSubmit = async () => {
+    try {
+      await dispatch(removeDiscounts(id)).unwrap();
+      setIsShowModal(false);
+    } catch {
+      return;
+    }
+  };
   return (
     <>
-      <ToastContainer />
       <tr className="table-row">
         <td className="table-cell"> {discountCode} </td>
         <td className="table-cell">{discountPercent}</td>
@@ -77,22 +54,24 @@ export default function Discount({
           </Badge>
         </td>
         <td className="table-cell">
+          {mutation?.error && (
+            <p role="alert" className="text-destructive">{mutation.error}</p>
+          )}
           <button
             type="button"
+            disabled={pending}
             className="btn m-1"
-            onClick={() => {
-              confirmationHandler(id);
-            }}
+            onClick={confirmationHandler}
           >
             {confirmation ? <>کنسل</> : <>تایید</>}
           </button>
           <button
             type="button"
+            disabled={pending || confirmation}
             className={`m-1 ${confirmation ? "btnDisable " : "btn"}`}
             onClick={() => {
               setIsShowModal(true);
             }}
-            disabled={confirmation}
           >
             حذف
           </button>
@@ -101,10 +80,10 @@ export default function Discount({
       {/* modals */}
       {isShowModal && (
         <DeleteModal
-          Id={id}
+          pending={pending}
+          error={mutation?.error}
           submitAction={modalSubmit}
           cancelAction={() => setIsShowModal(false)}
-          remove={removeDiscounts}
         />
       )}
     </>

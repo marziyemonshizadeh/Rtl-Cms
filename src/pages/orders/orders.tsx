@@ -1,7 +1,5 @@
 import { useEffect } from "react";
 
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import ErrorBox from "@/components/errorBox/errorBox";
 import Order from "@/components/order/order";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -10,18 +8,29 @@ import { fetchOrders } from "@/redux/store/orders";
 const Orders: React.FC = () => {
   const dispatch = useAppDispatch();
   const datas = useAppSelector((state) => state.orders);
-  console.log("datas = ", datas.orders);
 
   useEffect(() => {
-    dispatch(fetchOrders("orders"));
+    dispatch(fetchOrders());
   }, [dispatch]);
 
   return (
     <>
       <h1 className="header"> لیست سفارشات ثبت شده </h1>
-      <ToastContainer />
+
       {datas.loading ? (
         <div>در حال بارگزاری ...</div>
+      ) : datas.error ? (
+        <div className="space-y-3">
+          <ErrorBox message={datas.error} />
+          <button
+            type="button"
+            className="btn"
+            disabled={Object.values(datas.mutations).some((mutation) => mutation.pending)}
+            onClick={() => void dispatch(fetchOrders())}
+          >
+            تلاش دوباره
+          </button>
+        </div>
       ) : datas.orders?.length ? (
         <div className="table-container mt-5">
           <table className="w-full hidden md:table">

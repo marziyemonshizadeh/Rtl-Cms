@@ -3,6 +3,8 @@ import { Outlet } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import { useAppSelector } from "@/redux/hooks";
 import { savePreference, themeStorageKey } from "@/lib/themes";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function App() {
   const isDarkmode = useAppSelector((state) => state.darkmode.isDarkmode);
@@ -21,6 +23,7 @@ export default function App() {
   return (
     <Layout>
       <Outlet />
+      <ToastContainer position="bottom-left" rtl />
     </Layout>
   );
 }

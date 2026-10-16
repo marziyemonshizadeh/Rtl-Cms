@@ -1,17 +1,14 @@
 import { Input } from "@/components/ui/input";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { removeUser } from "@/redux/store/users";
-import apiRequests from "@/services/configs/axios";
+import { removeUser, updateUser } from "@/redux/store/users";
 import DeleteModal from "@/components/Modals/deleteModal";
 import DetailsModal from "@/components/Modals/detailsModal";
 import EditModal from "@/components/Modals/editModal";
 
 interface userProps {
-  id?: number;
+  id: number;
   customer: string;
   userName: string;
   password: string;
@@ -30,24 +27,17 @@ export default function User({
   const [isShowModal, setIsShowModal] = useState<boolean>(false);
   const [isShowDetailsModal, setIsShowDetailsModal] = useState<boolean>(false);
   const [isShowEditModal, setIsShowEditModal] = useState<boolean>(false);
-  const [productId, setProductId] = useState<number>();
   const dispatch = useAppDispatch();
+  const mutation = useAppSelector((state) => state.users.mutations[id]);
+  const pending = !!mutation?.pending;
 
-  const modalSubmit = () => {
-    setIsShowModal(false);
-    dispatch(removeUser(id));
-    console.log("work", id);
-
-    toast.success("! کاربر مورد نظر با موفقیت حذف شد", {
-      position: "bottom-left",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
+  const modalSubmit = async () => {
+    try {
+      await dispatch(removeUser(id)).unwrap();
+      setIsShowModal(false);
+    } catch {
+      return;
+    }
   };
 
   const {
@@ -57,21 +47,26 @@ export default function User({
     formState: { errors },
   } = useForm<userProps>();
   const onSubmit: SubmitHandler<userProps> = async (data) => {
-    console.log(data);
-    await apiRequests.put(`/users/${productId}`, {
-      customer: data.customer,
-      userName: data.userName,
-      phoneNumber: data.phoneNumber,
-      password: data.password,
-      email: data.email,
-    });
-    reset();
-    setIsShowEditModal(false);
+    try {
+      await dispatch(updateUser({
+        id,
+        changes: {
+          customer: data.customer,
+          userName: data.userName,
+          phoneNumber: data.phoneNumber,
+          password: data.password,
+          email: data.email,
+        },
+      })).unwrap();
+      reset();
+      setIsShowEditModal(false);
+    } catch {
+      return;
+    }
   };
+
   return (
     <>
-      <ToastContainer />
-
       <tr className="table-row">
         <td className="table-cell"> {customer} </td>
         <td className="table-cell">{userName}</td>
@@ -82,10 +77,10 @@ export default function User({
           {/* delete button */}
           <button
             type="button"
+            disabled={pending}
             className="btn m-1"
             onClick={() => {
               setIsShowModal(true);
-              setProductId(id);
             }}
           >
             حذف
@@ -93,10 +88,10 @@ export default function User({
           {/* Details button */}
           <button
             type="button"
+            disabled={pending}
             className="btn m-1"
             onClick={() => {
               setIsShowDetailsModal(true);
-              setProductId(id);
             }}
           >
             جزئیات
@@ -104,10 +99,10 @@ export default function User({
           {/* edit button */}
           <button
             type="button"
+            disabled={pending}
             className="btn m-1"
             onClick={() => {
               setIsShowEditModal(true);
-              setProductId(id);
             }}
           >
             ویرایش
@@ -117,12 +112,12 @@ export default function User({
       {/* delete modal */}
       {isShowModal && (
         <DeleteModal
-          Id={productId}
+          pending={pending}
+          error={mutation?.error}
           submitAction={modalSubmit}
           cancelAction={() => {
             setIsShowModal(false);
           }}
-          remove={removeUser}
         />
       )}
       {/* details modal */}
@@ -145,78 +140,83 @@ export default function User({
       {isShowEditModal && (
         <EditModal
           onClose={() => {
-            console.log("close");
-            setIsShowEditModal(false);
+            if (!pending) setIsShowEditModal(false);
           }}
         >
-          <form className="min-h-64 pt-5" onSubmit={handleSubmit(onSubmit)}>
-            <Input
-              defaultValue={customer}
-              className="text-right"
-              type="text"
-              placeholder="نام را وارد کنید "
-              aria-label="customer"
-              {...register("customer", { required: true })}
-            />
-            {errors.customer && <span>This field is required</span>}
-            <Input
-              defaultValue={userName}
-              className="text-right"
-              type="text"
-              placeholder=" نام کاربری جدید را وارد کنید "
-              aria-label="userName"
-              {...register("userName", { required: true })}
-            />
-            {errors.userName && (
-              <span className="text-destructive">This field is required</span>
-            )}
-            <Input
-              defaultValue={password}
-              className="text-right"
-              type="text"
-              placeholder="رمز عبور جدید را وارد کنید "
-              aria-label="password"
-              {...register("password", { required: true })}
-            />
-            {errors.password && (
-              <span className="text-destructive">This field is required</span>
-            )}
-            <Input
-              defaultValue={phoneNumber}
-              className="text-right"
-              type="text"
-              placeholder="شماره موبایل جدید را وارد کنید "
-              aria-label="phoneNumber"
-              {...register("phoneNumber", { required: true })}
-            />
-            {errors.phoneNumber && (
-              <span className="text-destructive">This field is required</span>
-            )}
+          <form className="min-h-64 pt-5" aria-busy={pending} onSubmit={handleSubmit(onSubmit)}>
+            <fieldset disabled={pending} className="min-w-0">
+              <Input
+                defaultValue={customer}
+                className="text-right"
+                type="text"
+                placeholder="نام را وارد کنید "
+                aria-label="customer"
+                {...register("customer", { required: true })}
+              />
+              {errors.customer && <span>This field is required</span>}
+              <Input
+                defaultValue={userName}
+                className="text-right"
+                type="text"
+                placeholder=" نام کاربری جدید را وارد کنید "
+                aria-label="userName"
+                {...register("userName", { required: true })}
+              />
+              {errors.userName && (
+                <span className="text-destructive">This field is required</span>
+              )}
+              <Input
+                defaultValue={password}
+                className="text-right"
+                type="text"
+                placeholder="رمز عبور جدید را وارد کنید "
+                aria-label="password"
+                {...register("password", { required: true })}
+              />
+              {errors.password && (
+                <span className="text-destructive">This field is required</span>
+              )}
+              <Input
+                defaultValue={phoneNumber}
+                className="text-right"
+                type="text"
+                placeholder="شماره موبایل جدید را وارد کنید "
+                aria-label="phoneNumber"
+                {...register("phoneNumber", { required: true })}
+              />
+              {errors.phoneNumber && (
+                <span className="text-destructive">This field is required</span>
+              )}
 
-            <Input
-              defaultValue={email}
-              className="text-right"
-              type="text"
-              placeholder="ایمیل جدید را وارد کنید "
-              aria-label="email"
-              {...register("email", { required: true })}
-            />
-            {errors.email && (
-              <span className="text-destructive">This field is required</span>
-            )}
+              <Input
+                defaultValue={email}
+                className="text-right"
+                type="text"
+                placeholder="ایمیل جدید را وارد کنید "
+                aria-label="email"
+                {...register("email", { required: true })}
+              />
+              {errors.email && (
+                <span className="text-destructive">This field is required</span>
+              )}
 
-            <div className="flex justify-center gap-3">
-              <button
-                type="submit"
-                className="btnLight my-5"
-                onClick={() => setIsShowEditModal(false)}
-              >
-                cancel
-              </button>
-              <button type="submit" className="btn my-5">
-                ثبت اطلاعات جدید
-              </button>
-            </div>
+              <div className="flex justify-center gap-3">
+                <button
+                  type="button"
+                  disabled={pending}
+                  className="btnLight my-5"
+                  onClick={() => setIsShowEditModal(false)}
+                >
+                  cancel
+                </button>
+                <button type="submit" className="btn my-5">
+                  ثبت اطلاعات جدید
+                </button>
+              </div>
+            </fieldset>
+            {mutation?.error && (
+              <p role="alert" className="text-destructive">{mutation.error}</p>
+            )}
           </form>
         </EditModal>
       )}

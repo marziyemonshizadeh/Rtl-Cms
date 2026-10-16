@@ -1,6 +1,4 @@
 import React, { useEffect } from "react";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import AddNewProduct from "@/components/addNewProduct/addNewProduct";
 import ErrorBox from "@/components/errorBox/errorBox";
 import Product from "@/components/product/product";
@@ -12,15 +10,27 @@ const Products: React.FC = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchProduct("products"));
+    dispatch(fetchProduct());
   }, [dispatch]);
 
   return (
     <>
       <AddNewProduct />
-      <ToastContainer />
+
       {data.loading ? (
         <div>در حال بارگزاری ...</div>
+      ) : data.error ? (
+        <div className="space-y-3">
+          <ErrorBox message={data.error} />
+          <button
+            type="button"
+            className="btn"
+            disabled={Object.values(data.mutations).some((mutation) => mutation.pending)}
+            onClick={() => void dispatch(fetchProduct())}
+          >
+            تلاش دوباره
+          </button>
+        </div>
       ) : data.products?.length ? (
         <div className="table-container">
           <table className="w-full hidden md:table">

@@ -8,16 +8,27 @@ import { fetchComment } from "@/redux/store/comments";
 const Comments: React.FC = () => {
   const dispatch = useAppDispatch();
   const data = useAppSelector((state) => state.comments);
-  console.log("data===", data);
 
   useEffect(() => {
-    dispatch(fetchComment("comments"));
+    dispatch(fetchComment());
   }, [dispatch]);
   return (
     <>
       <h1 className="header"> کامنت های محصولات</h1>
       {data.loading ? (
         <div>در حال بارگزاری ...</div>
+      ) : data.error ? (
+        <div className="space-y-3">
+          <ErrorBox message={data.error} />
+          <button
+            type="button"
+            className="btn"
+            disabled={Object.values(data.mutations).some((mutation) => mutation.pending)}
+            onClick={() => void dispatch(fetchComment())}
+          >
+            تلاش دوباره
+          </button>
+        </div>
       ) : data.comments?.length ? (
         <div className="table-container mt-5">
           <table className="w-full hidden md:table">

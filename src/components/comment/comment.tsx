@@ -1,10 +1,7 @@
 import { Badge } from "@/components/ui/badge";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { removeComment } from "@/redux/store/comments";
-import apiRequests from "@/services/configs/axios";
+import { removeComment, setCommentConfirmation } from "@/redux/store/comments";
 import DeleteModal from "@/components/Modals/deleteModal";
 import ShowComment from "@/components/Modals/showCommentModal";
 
@@ -27,44 +24,35 @@ export default function Comment({
   time,
   comment,
 }: commentProps) {
-  const [isShowModal, setIsShowModal] = useState<boolean>(false);
-  const [isShowComment, setIsShowComment] = useState<boolean>(false);
-  const [productId, setProductId] = useState<number>();
-
+  const [isShowModal, setIsShowModal] = useState(false);
+  const [isShowComment, setIsShowComment] = useState(false);
   const dispatch = useAppDispatch();
+  const mutation = useAppSelector((state) => state.comments.mutations[id]);
+  const pending = !!mutation?.pending;
 
-  const modalSubmit = () => {
-    setIsShowModal(false);
-    console.log(id);
-    dispatch(removeComment(id));
-    toast.success("! کامنت مورد نظر با موفقیت حذف شد", {
-      position: "bottom-left",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
+  const confirmationHandler = () => {
+    void dispatch(setCommentConfirmation({ id, confirmation: !confirmation }));
   };
-  const modalCancel = () => {
-    setIsShowModal(false);
+
+  const modalSubmit = async () => {
+    try {
+      await dispatch(removeComment(id)).unwrap();
+      setIsShowModal(false);
+    } catch {
+      return;
+    }
   };
   return (
     <>
-      <ToastContainer />
-
       <tr className="table-row">
         <td className={`table-cell`}>{name} </td>
         <td className="table-cell"> {product} </td>
         <td className="table-cell">
           <button
             type="button"
+            disabled={pending || confirmation}
             className={`${confirmation ? "btnDisable " : "btn"}`}
-            disabled={confirmation}
             onClick={() => {
-              setProductId(id);
               setIsShowComment(true);
             }}
           >
@@ -81,28 +69,22 @@ export default function Comment({
         <td className="table-cell">
           <button
             type="button"
+            disabled={pending || confirmation}
             className={`m-1 ${confirmation ? "btnDisable " : "btn"}`}
             onClick={() => {
               setIsShowModal(true);
             }}
-            disabled={confirmation}
           >
             حذف
           </button>
+          {mutation?.error && (
+            <p role="alert" className="text-destructive">{mutation.error}</p>
+          )}
           <button
             type="button"
+            disabled={pending}
             className="btn m-1"
-            onClick={() => {
-              console.log("this", id, "comments");
-              apiRequests.put(`/comments/${id}`, {
-                name: name,
-                product: product,
-                history: history,
-                time: time,
-                comment: comment,
-                confirmation: !confirmation,
-              });
-            }}
+            onClick={confirmationHandler}
           >
             {confirmation ? <>کنسل</> : <>تایید</>}
           </button>
@@ -111,13 +93,13 @@ export default function Comment({
       {/* modals */}
       {isShowModal && (
         <DeleteModal
-          Id={id}
+          pending={pending}
+          error={mutation?.error}
           submitAction={modalSubmit}
-          cancelAction={modalCancel}
-          remove={removeComment}
+          cancelAction={() => setIsShowModal(false)}
         />
       )}
-      {console.log("id=", productId)}
+
       {isShowComment && (
         <ShowComment
           comment={comment}

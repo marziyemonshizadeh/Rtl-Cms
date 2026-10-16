@@ -1,10 +1,7 @@
 import { Badge } from "@/components/ui/badge";
-import { useAppDispatch } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useState } from "react";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { removeOrders } from "@/redux/store/orders";
-import apiRequests from "@/services/configs/axios";
+import { removeOrders, setOrderConfirmation } from "@/redux/store/orders";
 import DeleteModal from "@/components/Modals/deleteModal";
 import DetailsModal from "@/components/Modals/detailsModal";
 
@@ -29,44 +26,23 @@ export default function Order({
   discount,
   confirmation,
 }: orderProps) {
-  const confirmationHandler = (id: number) => {
-    apiRequests.put(`/orders/${id}`, {
-      product: product,
-      customer: customer,
-      orderDate: orderDate,
-      orderTime: orderTime,
-      price: price,
-      discount: discount,
-      confirmation: !confirmation,
-    });
-    toast.success("! وضعیت سفارش مورد نظر با موفقیت تغییر کرد", {
-      position: "bottom-left",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-  };
-  const [isShowModal, setIsShowModal] = useState<boolean>(false);
-  const [isShowDetailsModal, setIsShowDetailsModal] = useState<boolean>(false);
+  const [isShowModal, setIsShowModal] = useState(false);
+  const [isShowDetailsModal, setIsShowDetailsModal] = useState(false);
   const dispatch = useAppDispatch();
+  const mutation = useAppSelector((state) => state.orders.mutations[id]);
+  const pending = !!mutation?.pending;
 
-  const modalSubmit = () => {
-    setIsShowModal(false);
-    dispatch(removeOrders(id));
-    toast.success("! سفارش مورد نظر با موفقیت حذف شد", {
-      position: "bottom-left",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
+  const confirmationHandler = () => {
+    void dispatch(setOrderConfirmation({ id, confirmation: !confirmation }));
+  };
+
+  const modalSubmit = async () => {
+    try {
+      await dispatch(removeOrders(id)).unwrap();
+      setIsShowModal(false);
+    } catch {
+      return;
+    }
   };
   return (
     <>
@@ -85,6 +61,7 @@ export default function Order({
         <td className="table-cell">
           <button
             type="button"
+            disabled={pending}
             className={`m-1 ${confirmation ? "btnDisable " : "btn"}`}
             onClick={() => setIsShowDetailsModal(true)}
           >
@@ -92,20 +69,22 @@ export default function Order({
           </button>
           <button
             type="button"
+            disabled={pending || confirmation}
             className={`m-1 ${confirmation ? "btnDisable " : "btn"}`}
             onClick={() => {
               setIsShowModal(true);
             }}
-            disabled={confirmation}
           >
             حذف
           </button>
+          {mutation?.error && (
+            <p role="alert" className="text-destructive">{mutation.error}</p>
+          )}
           <button
             type="button"
+            disabled={pending}
             className="btn m-1"
-            onClick={() => {
-              confirmationHandler(id);
-            }}
+            onClick={confirmationHandler}
           >
             {confirmation ? <>کنسل</> : <>تایید</>}
           </button>
@@ -115,10 +94,10 @@ export default function Order({
       {/* modals */}
       {isShowModal && (
         <DeleteModal
-          Id={id}
+          pending={pending}
+          error={mutation?.error}
           submitAction={modalSubmit}
           cancelAction={() => setIsShowModal(false)}
-          remove={removeOrders}
         />
       )}
 

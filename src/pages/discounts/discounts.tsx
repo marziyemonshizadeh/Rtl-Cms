@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import "react-toastify/dist/ReactToastify.css";
 import Discount from "@/components/discount/discount";
 import ErrorBox from "@/components/errorBox/errorBox";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -8,10 +7,9 @@ import { fetchDiscounts } from "@/redux/store/discounts";
 const Discounts: React.FC = () => {
   const dispatch = useAppDispatch();
   const data = useAppSelector((state) => state.discount);
-  console.log("data===", data);
 
   useEffect(() => {
-    dispatch(fetchDiscounts("discounts"));
+    dispatch(fetchDiscounts());
   }, [dispatch]);
 
   return (
@@ -19,6 +17,18 @@ const Discounts: React.FC = () => {
       <h1 className="header"> لیست کدهای تخفیف ثبت شده </h1>
       {data.loading ? (
         <div>در حال بارگزاری ...</div>
+      ) : data.error ? (
+        <div className="space-y-3">
+          <ErrorBox message={data.error} />
+          <button
+            type="button"
+            className="btn"
+            disabled={Object.values(data.mutations).some((mutation) => mutation.pending)}
+            onClick={() => void dispatch(fetchDiscounts())}
+          >
+            تلاش دوباره
+          </button>
+        </div>
       ) : data.discounts?.length ? (
         <div className="table-container my-5">
           <table className="w-full hidden md:table">
