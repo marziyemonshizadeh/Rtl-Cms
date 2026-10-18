@@ -4,7 +4,7 @@ import Comments from "@/pages/comments/comments";
 import Discounts from "@/pages/discounts/discounts";
 import Home from "@/pages/home/home";
 import Orders from "@/pages/orders/orders";
-import Products from "@/pages/products/products";
+import ProductsPage from "@/pages/Products/ProductsPage";
 import Users from "@/pages/users/users";
 
 export const router = createBrowserRouter([
@@ -17,7 +17,7 @@ export const router = createBrowserRouter([
       { path: "discount", element: <Discounts /> },
       { path: "orders", element: <Orders /> },
       { path: "users", element: <Users /> },
-      { path: "products", element: <Products /> },
+      { path: "products", element: <ProductsPage /> },
     ],
   },
 ]);

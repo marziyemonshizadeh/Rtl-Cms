@@ -3,7 +3,7 @@ import commentsReducer from '@/redux/store/comments';
 import darkmodeReducer from '@/redux/slices/themeSlice';
 import discountsReducer from '@/redux/store/discounts';
 import ordersReducer from '@/redux/store/orders';
-import productsReducer from '@/redux/store/products';
+import productsReducer from '@/pages/Products/store/productsSlice';
 import usersReducer from '@/redux/store/users';
 import themeReducer from '@/redux/store/theme';
 import notifications from '@/redux/notifications';

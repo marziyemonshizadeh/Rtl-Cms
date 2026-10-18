@@ -1,6 +1,6 @@
 import { createListenerMiddleware, isAnyOf } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
-import { removeProduct, addProduct, updateProduct } from "@/redux/store/products";
+import { removeProduct, addProduct, updateProduct } from "@/pages/Products/store/productsSlice";
 import { removeUser, updateUser } from "@/redux/store/users";
 import { removeComment, setCommentConfirmation } from "@/redux/store/comments";
 import { removeOrders, setOrderConfirmation } from "@/redux/store/orders";

@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, isAnyOf } from "@reduxjs/toolkit";
-import type Product from "@/models/productType";
-import { productsApi } from "@/pages/products/api/productsApi";
+import type { PayloadAction } from "@reduxjs/toolkit";
+import type { Product, ProductValues } from "../models/product";
+import { productsApi } from "../api/productsApi";
 import { getApiError } from "@/services/shared/apiError";
 import type { RootState } from "@/redux/store";
 
@@ -55,7 +56,7 @@ export const removeProduct = createAsyncThunk<number, number, ThunkConfig>(
   },
 );
 
-export const addProduct = createAsyncThunk<Product, Omit<Product, "id">, ThunkConfig>(
+export const addProduct = createAsyncThunk<Product, ProductValues, ThunkConfig>(
   "product/create",
   async (values, { rejectWithValue }) => {
     try {
@@ -72,7 +73,7 @@ export const addProduct = createAsyncThunk<Product, Omit<Product, "id">, ThunkCo
   },
 );
 
-export const updateProduct = createAsyncThunk<Product, { id: number; changes: Omit<Product, "id"> }, ThunkConfig>(
+export const updateProduct = createAsyncThunk<Product, { id: number; changes: ProductValues }, ThunkConfig>(
   "product/update",
   async ({ id, changes }, { rejectWithValue }) => {
     try {
@@ -93,7 +94,12 @@ export const updateProduct = createAsyncThunk<Product, { id: number; changes: Om
 const productsSlice = createSlice({
   name: "products",
   initialState,
-  reducers: {},
+  reducers: {
+    clearProductMutationError(state, action: PayloadAction<number>) {
+      const mutation = state.mutations[action.payload];
+      if (mutation && !mutation.pending) mutation.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchProduct.pending, (state) => {
@@ -133,4 +139,5 @@ const productsSlice = createSlice({
   },
 });
 
+export const { clearProductMutationError } = productsSlice.actions;
 export default productsSlice.reducer;
