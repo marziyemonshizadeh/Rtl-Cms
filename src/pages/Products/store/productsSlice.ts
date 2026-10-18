@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, isAnyOf } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { Product, ProductValues } from "../models/product";
+import type { Product, ProductValues } from "../AddProduct/Models/ProductModel";
 import { productsApi } from "../api/productsApi";
 import { getApiError } from "@/services/shared/apiError";
 import type { RootState } from "@/redux/store";

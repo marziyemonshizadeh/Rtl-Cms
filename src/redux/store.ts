@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import commentsReducer from '@/redux/store/comments';
+import commentsReducer from '@/pages/Comments/store/commentsSlice';
 import darkmodeReducer from '@/redux/slices/themeSlice';
-import discountsReducer from '@/redux/store/discounts';
-import ordersReducer from '@/redux/store/orders';
+import discountsReducer from '@/pages/Discounts/store/discountsSlice';
+import ordersReducer from '@/pages/Orders/store/ordersSlice';
 import productsReducer from '@/pages/Products/store/productsSlice';
-import usersReducer from '@/redux/store/users';
+import usersReducer from '@/pages/Users/store/usersSlice';
 import themeReducer from '@/redux/store/theme';
 import notifications from '@/redux/notifications';
 

@@ -1,10 +1,10 @@
 import { createListenerMiddleware, isAnyOf } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import { removeProduct, addProduct, updateProduct } from "@/pages/Products/store/productsSlice";
-import { removeUser, updateUser } from "@/redux/store/users";
-import { removeComment, setCommentConfirmation } from "@/redux/store/comments";
-import { removeOrders, setOrderConfirmation } from "@/redux/store/orders";
-import { removeDiscounts, setDiscountConfirmation } from "@/redux/store/discounts";
+import { removeUser, updateUser } from "@/pages/Users/store/usersSlice";
+import { removeComment, setCommentConfirmation } from "@/pages/Comments/store/commentsSlice";
+import { removeOrders, setOrderConfirmation } from "@/pages/Orders/store/ordersSlice";
+import { removeDiscounts, setDiscountConfirmation } from "@/pages/Discounts/store/discountsSlice";
 
 const mutations = [
   { thunk: removeProduct, message: "محصول با موفقیت حذف شد." },

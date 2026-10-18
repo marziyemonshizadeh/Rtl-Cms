@@ -1,4 +1,4 @@
-import type { Product, ProductValues } from "../models/product";
+import type { Product, ProductValues } from "../AddProduct/Models/ProductModel";
 import apiRequests from "@/services/configs/axios";
 import { endpoints } from "@/services/shared/endpoints";
 

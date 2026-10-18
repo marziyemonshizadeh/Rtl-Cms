@@ -1,6 +1,6 @@
 # Rtl-Cms refactor plan
 
-Status: Steps 2 and 3 are complete. Steps 4–9 implementation and source-level verification are complete; Step 7 backend integration checks also pass. Browser acceptance checks remain pending. The separately requested UI refresh is recorded below. Step 1 browser checks remain pending; Steps 10–16 have not been started.
+Status: Numbered execution is paused at the user's request. The reference-table and page-folder alignment below supersedes the earlier table/folder targets. Prior numbered-step results remain as history; no later numbered step is marked complete by this separate request.
 
 Reference: `/Users/mac/Desktop/untitled folder/Profs.Front`
 
@@ -21,12 +21,27 @@ Refactor this CMS toward Profs.Front's organization and Persian RTL dashboard UI
 - Keep json-server, `db.json`, and `VITE_API_URL`. Preserve `/`, `/products`, `/users`, `/comments`, `/orders`, and `/discount`.
 - Preserve Persian text, RTL, existing feature actions, and the `IsDarkMood` persistence key.
 - Make file moves separately from visual changes where possible. Keep behavior corrections explicit in the relevant step.
-- Run `npm run lint`, then `npm run build`, before committing each implementation step. Both must pass; warnings count as failures for lint.
+- Use focused lint/TypeScript checks for changes. Do not run a full build or browser verification automatically for every step; run them when requested or needed for a specific issue. Keep verification reports brief and avoid repeated checks after they pass.
 - There is no test suite. Use the manual acceptance checks below; adding a test framework is outside this plan.
 - Do not commit automatically. Each step should leave a reviewable diff and a short verification report.
 - End each step's final report with a recommended Conventional Commit message based on the actual changes. Update the suggested message at the end of that step to match its final scope; messages for unstarted steps are provisional. Return the message without creating a commit.
 
 ## What to adopt from Profs.Front
+
+### Current reference alignment — 2026-10-18
+
+- Follow `components/@base/Table/MetronicTable/` and the `TadvinHozeFarhangi` Page/List example under `FaaliyatOzvHeyatElmi/FarhangiEjtemaei/`.
+- Replaced DataTable across Products, Users, Comments, Orders, and Discounts with a TypeScript/Tailwind v3 adaptation of that TanStack pattern: accessor/cell columns, TableRowActions markers, separate icon-action columns, search, pagination, sticky headers, row numbering, skeletons, and mobile cards. The table engine is the same `@tanstack/react-table` version range as the reference.
+- Page modules own data/dialog coordination; List modules define columns/actions. Forms follow `AddFeature/AddFeature.tsx`, `AddFeature/Models/FeatureModel.ts`, and `AddFeature/Validation/FeatureSchema.ts`; details sit beside Page/List, and API modules remain in `api/`. Features without forms have no empty Add/Validation folders. Redux slices remain feature-local to preserve this CMS's state architecture.
+- Search/pagination use URL parameters and filter/page the complete Redux lists locally; the reference's backend response envelopes and server-search contract are not imposed on json-server. Existing routes, actions, confirmation restrictions, and fixtures are retained.
+- Removed obsolete entity-row components, shared DataTable, and the unused comment-modal wrapper. Numbered implementation remains paused.
+- Verification: TypeScript and ESLint pass. No build, browser session, or integration probe was run for this request.
+
+**Suggested commit message:**
+
+```text
+refactor(ui): adopt reference table and feature page structure
+```
 
 ### Current UI request — 2026-10-16
 
@@ -106,10 +121,11 @@ src/
       Breadcrumbs.tsx
       Form/
         FormField.tsx
+      TableRowActions.tsx
       Table/
-        DataTable.tsx
-        TableSkeleton.tsx
-        TableRowActions.tsx
+        MetronicTable/
+          MetronicTable.tsx
+          TableSkeleton.tsx
       Modal/
         ConfirmDialog.tsx
         DetailsDialog.tsx
@@ -126,10 +142,11 @@ src/
       ProductsList.tsx
       api/productsApi.ts
       store/productsSlice.ts
-      models/product.ts
-      components/
-        ProductForm.tsx
-        ProductDetails.tsx
+      ProductDetails.tsx
+      AddProduct/
+        AddProduct.tsx
+        Models/ProductModel.ts
+        Validation/ProductSchema.ts
     Users/
     Comments/
     Orders/
@@ -145,6 +162,8 @@ src/
     hooks.ts
     slices/
       themeSlice.ts
+  hooks/
+    usePaginationParams.ts
   styles/
     tokens.css
     layout.css
@@ -412,19 +431,33 @@ refactor(products): use shared responsive data table
 
 Depends on Step 9.
 
-- [ ] Move the product page, list, model, slice, API, form, and details UI into `pages/Products/` following the target structure.
-- [ ] Make ProductsPage own data/loading/error/dialog coordination and ProductsList own display. Reuse one ProductForm for create/edit with typed defaults and validation rules.
-- [ ] Keep price/count numeric at the form/API boundary; inspect existing fixture values and normalize reads if necessary without silently rewriting `db.json`.
-- [ ] Correct field-specific error messages; use Persian messages. Reset forms and close dialogs only after success; use `type="button"` for Cancel.
-- [ ] Match the reference's page title, add action, card/table treatment, compact row actions, and responsive presentation. Keep inline add versus dialog placement consistent with the Step 1 visual decision.
-- [ ] Remove old product components/model/slice only when all callers use the new files.
+- [x] Move the product page, list, model, slice, API, form, and details UI into `pages/Products/` following the target structure.
+- [x] Make ProductsPage own data/loading/error/dialog coordination and ProductsList own display. Reuse one ProductForm for create/edit with typed defaults and validation rules.
+- [x] Keep price/count numeric at the form/API boundary; inspect existing fixture values and normalize reads if necessary without silently rewriting `db.json`.
+- [x] Correct field-specific error messages; use Persian messages. Reset forms and close dialogs only after success; use `type="button"` for Cancel.
+- [x] Match the reference's page title, add action, card/table treatment, compact row actions, and responsive presentation. Keep inline add versus dialog placement consistent with the Step 1 visual decision.
+- [x] Remove old product components/model/slice only when all callers use the new files.
 
 **Done when:** list, create, edit, details, delete, cancel, invalid input, failed requests, and repeated submissions work on desktop/mobile in both themes. New/edited/deleted products appear correctly immediately. Lint/build pass.
+
+**Step 10 implementation — 2026-10-18:** consolidated Products under `pages/Products/` with ProductsPage, ProductsList, `api/productsApi.ts`, `store/productsSlice.ts`, `models/product.ts`, and feature-local ProductForm/ProductDetails. Router, store assembly, and notification listeners use the migrated modules. The case-only folder rename is recorded in Git so imports resolve on case-sensitive systems. Old product component, form, model, slice, and page paths have no remaining callers or compatibility exports.
+
+**Ownership and forms:** ProductsPage owns fetching, request state, selected record ID, and one active details/edit/delete dialog outside the table. It resolves the selected record from current Redux data. ProductsList renders the shared DataTable and native action buttons from page callbacks, preserving one row/action group per record across layouts. A shared ProductForm serves inline creation and modal editing with four explicit typed defaults, excluding record IDs and extra server fields. Required messages remain field-specific Persian; price must be finite/nonnegative and count a nonnegative integer. React Hook Form converts numeric inputs and disables the fieldset while submitting. Creation resets only after success; edit closes only after the awaited update succeeds; rejection retains input and the open dialog. Cancel is a non-submit control. A new, used slice action clears a completed mutation's error before opening another product dialog, preventing a failed deletion message from appearing in a fresh edit dialog; pending requests are preserved.
+
+**Numeric data and presentation:** inspected all seven fixtures and confirmed valid numeric strings/numbers. API list/create/update responses normalize price/count to numbers while preserving other response fields; nonfinite values reject instead of entering Redux. Numeric form payloads continue to use POST/PATCH and centralized resource endpoints. The page now has a Persian management title and an add action linking to the existing inline form, retaining its placement. Existing semantic cards, shared responsive table, compact actions, confirmation dialogs, and pending/error controls remain in use; list/details format numbers with `fa-IR` and show the existing تومان currency. No fixture values, routes, backend field names, dependencies, or other feature modules were changed.
+
+**Verification:** lint passes with zero errors/warnings, followed by a passing build with the existing Browserslist and bundle-size warnings. Temporary React/RHF render and callback probes verified both form modes, four labelled fields/default keys, ID/extra-field exclusion, numeric conversion including zero, invalid/blank/negative/nonfinite prices and fractional counts, Persian validation messages, success-only reset/closure, failure retention, Cancel behavior, pending dismissal guards, row-action focus/open callbacks, clearing stale errors before selection, list states/retry, and page-owned dialogs outside the table. A targeted reducer probe verified error clearing without changing records or pending requests. Actual Axios, API modules, thunks, application store, listener middleware, and json-server were exercised against `/private/tmp/rtl-cms-step10-api-iUZX9t/db.json`: numeric reads and writes, immediate create/edit/delete state updates, preserved PATCH fields, duplicate suppression with one HTTP request/notification, post-reducer success notifications, HTTP 500/404/offline errors, retry, empty results, and serializability checks passed. Read normalization did not rewrite the copied fixture. Vite returned HTTP 200 for all six routes and the migrated runtime modules; that establishes serving/import reachability, not browser rendering. Verification servers were stopped afterward.
+
+**Acceptance limitation and scope review:** browser inventory still returned no connected browsers; the earlier native Chrome approval limitation remains. Actual desktop/mobile checks at 375px/768px/1440px, light/dark appearance, anchor navigation, keyboard focus/trapping/restoration, resize behavior, and console checks remain pending. All seven feature modules, their exports, API methods, and component props have application consumers. No placeholder module, dependency, provider, test framework, or shared-component feature dependency was added. `db.json` retains SHA-256 `a15c37ca236d4dd6d01582ddf0205a8ff2867bb27cd9163d7c7bdec9b30cffb2`. Step 11 was not started and the agent created no commit.
 
 **Suggested commit message:**
 
 ```text
 refactor(products): colocate feature modules and share product form
+
+- Move Products page, API, slice, model, and UI into the feature folder
+- Share the create/edit form and centralize dialog coordination
+- Normalize numeric responses and clear stale dialog errors
 ```
 
 ### Step 11 — Migrate Users
