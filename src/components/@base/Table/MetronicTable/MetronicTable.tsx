@@ -1,28 +1,27 @@
-import { isValidElement, useId, useMemo, useState, type ReactElement, type ReactNode } from "react";
+import { useId, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-  type ColumnDef,
   type SortingState,
 } from "@tanstack/react-table";
 import { useSearchParams } from "react-router-dom";
-import { ArrowDown, ArrowUp, ChevronLeft, ChevronRight, ChevronsUpDown, Search, X } from "lucide-react";
+import { ArrowDown, ArrowUp, ChevronDown, ChevronLeft, ChevronRight, ChevronsUpDown, Inbox, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ErrorBox from "@/components/errorBox/errorBox";
-import TableRowActions, { type TableRowActionsProps } from "@/components/@base/TableRowActions";
 import type { PaginationParams } from "@/hooks/usePaginationParams";
 import { cn } from "@/lib/utils";
 import TableSkeleton from "./TableSkeleton";
+import { getAutoSizedColumns, isActionColumnId, withColumnSizing, type MetronicColumn } from "./columnSizing";
 
-export type MetronicColumn<T> = ColumnDef<T, unknown> & { sorted?: boolean; hidden?: boolean };
+export type { MetronicColumn } from "./columnSizing";
 
 interface MetronicTableProps<T> {
   data: T[];
-  columns: (MetronicColumn<T> | ReactElement<TableRowActionsProps<T>>)[];
+  columns: MetronicColumn<T>[];
   pagination: PaginationParams;
   setPagination: (pagination: PaginationParams) => void;
   isLoading: boolean;
@@ -34,6 +33,7 @@ interface MetronicTableProps<T> {
     havePagination: boolean;
     haveStickyHeader: boolean;
     haveIndex: boolean;
+    isAutoColumnSize?: boolean;
   };
   error: string | null;
   onRetry: () => void;
@@ -56,6 +56,8 @@ export default function MetronicTable<T extends { id: number | string }>({
 }: MetronicTableProps<T>) {
   const id = useId();
   const [sorting, setSorting] = useState<SortingState>([]);
+  const tableAreaRef = useRef<HTMLDivElement>(null);
+  const [availableWidth, setAvailableWidth] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
   const search = searchParams.get("searchKey") ?? "";
   const filteredData = useMemo(() => {
@@ -69,33 +71,37 @@ export default function MetronicTable<T extends { id: number | string }>({
   const startIndex = (pageIndex - 1) * pagination.pageSize;
 
   const processedColumns = useMemo(() => {
-    const expanded = columns.flatMap((column): MetronicColumn<T>[] => {
-      if (!isValidElement<TableRowActionsProps<T>>(column)) return column.hidden ? [] : [column];
-      const { actions, haveSeparateColumns, defaultColumnSize = 40 } = column.props;
-      if (haveSeparateColumns) {
-        return actions.map((action) => ({
-          id: action.id,
-          header: "",
-          size: defaultColumnSize,
-          cell: ({ row }) => <TableRowActions actions={[action]} row={row.original} />,
-        }));
-      }
-      return [{
-        id: "details_actions",
-        header: "عملیات",
-        size: 120,
-        cell: ({ row }) => <TableRowActions actions={actions} row={row.original} />,
-      }];
-    });
-    return options.haveIndex ? [
+    const visibleColumns = columns.filter((column) => !column.hidden);
+    const allColumns: MetronicColumn<T>[] = options.haveIndex ? [
       { id: "_rowIndex", header: "ردیف", size: 60, enableSorting: false },
-      ...expanded,
-    ] : expanded;
+      ...visibleColumns,
+    ] : visibleColumns;
+    return allColumns.map(withColumnSizing);
   }, [columns, options.haveIndex]);
+
+  const autoSizeEnabled = !!options.isAutoColumnSize;
+  useLayoutEffect(() => {
+    const element = tableAreaRef.current;
+    if (!autoSizeEnabled || !element) {
+      setAvailableWidth(0);
+      return;
+    }
+    const measure = () => setAvailableWidth(element.clientWidth);
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [autoSizeEnabled, isLoading, error, filteredData.length]);
+
+  const sizedColumns = useMemo(() =>
+    autoSizeEnabled && availableWidth
+      ? getAutoSizedColumns(processedColumns, availableWidth) ?? processedColumns
+      : processedColumns,
+  [autoSizeEnabled, availableWidth, processedColumns]);
 
   const table = useReactTable({
     data: filteredData,
-    columns: processedColumns,
+    columns: sizedColumns,
     getRowId: (row) => String(row.id),
     state: { sorting, pagination: { pageIndex: pageIndex - 1, pageSize: pagination.pageSize } },
     onSortingChange: setSorting,
@@ -121,22 +127,23 @@ export default function MetronicTable<T extends { id: number | string }>({
     .filter((page) => page <= 2 || page > pageCount - 2 || Math.abs(page - pageIndex) <= 1);
 
   return (
-    <section aria-labelledby={`${id}-title`} aria-busy={isLoading} className="my-4 min-w-0 overflow-hidden rounded-lg border bg-card shadow-sm">
-      <header className="flex min-h-16 flex-wrap items-center justify-between gap-3 border-b px-4 py-3">
-        <div className="flex flex-wrap items-center gap-3">
-          <h2 id={`${id}-title`} className="font-semibold">{options.title}</h2>
+    <section aria-labelledby={`${id}-title`} aria-busy={isLoading} className="metronic-table">
+      <header className="metronic-toolbar">
+        <h2 id={`${id}-title`} className="text-sm font-semibold text-foreground">{options.title}</h2>
+        <div className="flex w-full flex-wrap items-center gap-3 sm:w-auto">
           {options.haveFilter && (
-            <div className="relative w-full sm:w-60">
-              <Input aria-label={`جستجو در ${options.title}`} value={search} onChange={(event) => updateSearch(event.target.value)} placeholder="جستجو کنید ..." className="my-0 h-9 w-full pe-9" />
+            <div className="metronic-search">
+              <Search aria-hidden="true" className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <Input aria-label={`جستجو در ${options.title}`} value={search} onChange={(event) => updateSearch(event.target.value)} placeholder="جستجو در جدول..." className="metronic-search-input" />
               {search ? (
-                <button type="button" aria-label="پاک کردن جستجو" onClick={() => updateSearch("")} className="absolute end-3 top-1/2 -translate-y-1/2 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                <button type="button" aria-label="پاک کردن جستجو" onClick={() => updateSearch("")} className="metronic-clear-search">
                   <X className="size-4 text-muted-foreground" />
                 </button>
-              ) : <Search aria-hidden="true" className="absolute end-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />}
+              ) : null}
             </div>
           )}
+          {addNewItemBtn}
         </div>
-        {addNewItemBtn}
       </header>
       {isLoading ? <TableSkeleton /> : error ? (
         <div role="alert" className="space-y-3 p-4">
@@ -144,22 +151,32 @@ export default function MetronicTable<T extends { id: number | string }>({
           <Button type="button" variant="outline" disabled={retryDisabled} onClick={onRetry}>تلاش دوباره</Button>
         </div>
       ) : !rows.length ? (
-        <p role="status" className="my-10 px-4 text-center text-muted-foreground">{search ? "نتیجه‌ای برای جستجوی شما یافت نشد" : emptyMessage}</p>
+        <div role="status" className="metronic-empty">
+          <span className="metronic-empty-icon"><Inbox aria-hidden="true" className="size-6" /></span>
+          <p className="text-sm font-medium text-foreground">{search ? "نتیجه‌ای برای جستجوی شما یافت نشد" : emptyMessage}</p>
+          {search && <Button type="button" variant="ghost" size="sm" onClick={() => updateSearch("")}>پاک کردن جستجو</Button>}
+        </div>
       ) : (
         <>
-          <div className="hidden max-h-[38rem] overflow-auto sm:block" dir="rtl">
-            <table aria-labelledby={`${id}-title`} className="w-full border-collapse text-sm" style={{ minWidth: table.getTotalSize() }}>
-              <thead className={cn("bg-muted text-muted-foreground", options.haveStickyHeader && "sticky top-0 z-10")}>
+          <div ref={tableAreaRef} className="metronic-scroll hidden sm:block" dir="rtl">
+            <table aria-labelledby={`${id}-title`} className="metronic-grid" style={{ width: table.getTotalSize(), minWidth: table.getTotalSize() }}>
+              <colgroup>
+                {table.getVisibleLeafColumns().map((column) => <col key={column.id} style={{ width: column.getSize() }} />)}
+              </colgroup>
+              <thead className={cn("metronic-head", options.haveStickyHeader && "sticky top-0 z-10")}>
                 {table.getHeaderGroups().map((group) => (
                   <tr key={group.id}>
                     {group.headers.map((header) => {
                       const definition = header.column.columnDef as MetronicColumn<T>;
                       const sorted = header.column.getIsSorted();
+                      const isAction = isActionColumnId(header.column.id);
+                      const width = header.getSize();
+                      const numeric = !isAction && typeof table.getPreSortedRowModel().flatRows[0]?.getValue(header.column.id) === "number";
                       return (
-                        <th key={header.id} scope="col" aria-sort={definition.sorted ? sorted === "asc" ? "ascending" : sorted === "desc" ? "descending" : "none" : undefined} style={{ width: header.getSize() }} className="border-b border-e px-3 py-3 text-start text-xs font-medium last:border-e-0">
-                          {definition.sorted ? (
-                            <button type="button" className="flex items-center gap-2 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" onClick={() => sorted === "asc" ? header.column.toggleSorting(true) : sorted === "desc" ? header.column.clearSorting() : header.column.toggleSorting(false)}>
-                              {flexRender(definition.header, header.getContext())}
+                        <th key={header.id} scope="col" colSpan={header.colSpan} aria-sort={definition.sorted ? sorted === "asc" ? "ascending" : sorted === "desc" ? "descending" : "none" : undefined} style={{ width, minWidth: width, maxWidth: width }} className={cn("metronic-th", isAction && "metronic-action-cell", header.column.id === "_rowIndex" && "metronic-row-number")} data-numeric={numeric}>
+                          {isAction ? "عملیات" : definition.sorted ? (
+                            <button type="button" className="metronic-sort" data-active={!!sorted} onClick={() => sorted === "asc" ? header.column.toggleSorting(true) : sorted === "desc" ? header.column.clearSorting() : header.column.toggleSorting(false)}>
+                              <span className="min-w-0 whitespace-normal break-words">{flexRender(definition.header, header.getContext())}</span>
                               {sorted === "asc" ? <ArrowUp className="size-3" /> : sorted === "desc" ? <ArrowDown className="size-3" /> : <ChevronsUpDown className="size-3" />}
                             </button>
                           ) : flexRender(definition.header, header.getContext())}
@@ -171,10 +188,12 @@ export default function MetronicTable<T extends { id: number | string }>({
               </thead>
               <tbody>
                 {rows.map((row, index) => (
-                  <tr key={row.id} className="transition-colors hover:bg-muted/40">
+                  <tr key={row.id} className="metronic-row">
                     {row.getVisibleCells().map((cell) => (
-                      <td key={cell.id} className={cn("border-b border-e px-3 py-3 align-middle text-[13px] last:border-e-0", cell.column.id.startsWith("details_") && "px-1 text-center")}>
-                        {cell.column.id === "_rowIndex" ? (startIndex + index + 1).toLocaleString("fa-IR") : flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      <td key={cell.id} style={{ width: cell.column.getSize(), minWidth: cell.column.getSize(), maxWidth: cell.column.getSize() }} className={cn("metronic-cell", cell.column.id === "_rowIndex" && "metronic-row-number", isActionColumnId(cell.column.id) && "metronic-action-cell")} data-numeric={!isActionColumnId(cell.column.id) && typeof cell.getValue() === "number"}>
+                        <div className="metronic-cell-content" title={typeof cell.getValue() === "string" ? String(cell.getValue()) : undefined}>
+                          {cell.column.id === "_rowIndex" ? (startIndex + index + 1).toLocaleString("fa-IR") : flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </div>
                       </td>
                     ))}
                   </tr>
@@ -182,24 +201,25 @@ export default function MetronicTable<T extends { id: number | string }>({
               </tbody>
             </table>
           </div>
-          <div className="space-y-3 p-3 sm:hidden" dir="rtl">
-            {rows.map((row) => {
+          <div className="metronic-cards sm:hidden" dir="rtl">
+            {rows.map((row, index) => {
               const cells = row.getVisibleCells();
-              const actions = cells.filter((cell) => cell.column.id.startsWith("details_"));
+              const actions = cells.filter((cell) => isActionColumnId(cell.column.id));
               return (
-                <article key={row.id} className="rounded-lg border px-3 pb-2 transition-colors hover:bg-muted/40">
+                <article key={row.id} className="metronic-card">
+                  {options.haveIndex && <div className="metronic-card-index">ردیف {(startIndex + index + 1).toLocaleString("fa-IR")}</div>}
                   <dl>
-                    {cells.filter((cell) => cell.column.id !== "_rowIndex" && !cell.column.id.startsWith("details_")).map((cell) => (
-                      <div key={cell.id} className="flex items-start justify-between gap-4 border-b px-2 py-3">
-                        <dt className="max-w-[45%] shrink-0 text-xs font-bold text-muted-foreground">{typeof cell.column.columnDef.header === "string" ? cell.column.columnDef.header : cell.column.id}</dt>
+                    {cells.filter((cell) => cell.column.id !== "_rowIndex" && !isActionColumnId(cell.column.id)).map((cell) => (
+                      <div key={cell.id} className="metronic-card-field">
+                        <dt className="max-w-[45%] shrink-0 text-xs font-medium text-muted-foreground">{typeof cell.column.columnDef.header === "string" ? cell.column.columnDef.header : cell.column.id}</dt>
                         <dd className="min-w-0 break-words text-left text-sm font-medium [overflow-wrap:anywhere]">{flexRender(cell.column.columnDef.cell, cell.getContext())}</dd>
                       </div>
                     ))}
                   </dl>
                   {actions.length > 0 && (
-                    <div className="flex min-h-12 items-center justify-between gap-3 px-2">
-                      <span className="text-xs font-bold text-muted-foreground">عملیات</span>
-                      <div className="flex flex-wrap items-center gap-3">{actions.map((cell) => <div key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</div>)}</div>
+                    <div className="metronic-card-actions">
+                      <span className="text-xs font-medium text-muted-foreground">عملیات</span>
+                      <div className="flex flex-wrap items-center gap-2">{actions.map((cell) => <div key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</div>)}</div>
                     </div>
                   )}
                 </article>
@@ -209,24 +229,27 @@ export default function MetronicTable<T extends { id: number | string }>({
         </>
       )}
       {options.havePagination && !error && !isLoading && (
-        <footer className="flex flex-wrap items-center justify-between gap-4 border-t px-4 py-4 text-sm text-muted-foreground" dir="rtl">
-          <label className="flex items-center gap-2">نمایش
-            <select aria-label="تعداد در هر صفحه" value={pagination.pageSize} onChange={(event) => table.setPageSize(Number(event.target.value))} className="rounded border border-input bg-background px-2 py-1 text-foreground">
-              {[5, 10, 20, 50].map((size) => <option key={size} value={size}>{size.toLocaleString("fa-IR")}</option>)}
-            </select>
+        <footer className="metronic-footer" dir="rtl">
+          <label className="flex items-center gap-2.5">نمایش
+            <span className="relative">
+              <select aria-label="تعداد در هر صفحه" value={pagination.pageSize} onChange={(event) => table.setPageSize(Number(event.target.value))} className="metronic-page-size">
+                {[5, 10, 20, 50].map((size) => <option key={size} value={size}>{size.toLocaleString("fa-IR")}</option>)}
+              </select>
+              <ChevronDown aria-hidden="true" className="pointer-events-none absolute end-2 top-1/2 size-3 -translate-y-1/2" />
+            </span>
             در هر صفحه
           </label>
           <div className="flex flex-wrap items-center gap-3">
             <span aria-live="polite">{filteredData.length ? `${(startIndex + 1).toLocaleString("fa-IR")}–${Math.min(startIndex + pagination.pageSize, filteredData.length).toLocaleString("fa-IR")}` : "۰"} از {(search ? filteredData.length : options.totalCount).toLocaleString("fa-IR")}</span>
-            <nav aria-label="صفحه‌بندی جدول" className="flex items-center gap-1">
-              <Button type="button" variant="ghost" size="icon" className="size-8" aria-label="صفحه قبل" disabled={!table.getCanPreviousPage()} onClick={() => table.previousPage()}><ChevronRight /></Button>
+            <nav aria-label="صفحه‌بندی جدول" className="metronic-pagination">
+              <Button type="button" variant="ghost" size="icon" className="metronic-page-button" aria-label="صفحه قبل" disabled={!table.getCanPreviousPage()} onClick={() => table.previousPage()}><ChevronRight /></Button>
               {pageNumbers.map((page, index) => (
                 <span key={page} className="inline-flex items-center">
                   {index > 0 && page - pageNumbers[index - 1] > 1 && <span className="px-2">…</span>}
-                  <Button type="button" variant={page === pageIndex ? "outline" : "ghost"} size="icon" className="size-8" aria-current={page === pageIndex ? "page" : undefined} onClick={() => table.setPageIndex(page - 1)}>{page.toLocaleString("fa-IR")}</Button>
+                  <Button type="button" variant="ghost" size="icon" className="metronic-page-button" aria-current={page === pageIndex ? "page" : undefined} aria-label={`صفحه ${page.toLocaleString("fa-IR")}`} onClick={() => table.setPageIndex(page - 1)}>{page.toLocaleString("fa-IR")}</Button>
                 </span>
               ))}
-              <Button type="button" variant="ghost" size="icon" className="size-8" aria-label="صفحه بعد" disabled={!table.getCanNextPage()} onClick={() => table.nextPage()}><ChevronLeft /></Button>
+              <Button type="button" variant="ghost" size="icon" className="metronic-page-button" aria-label="صفحه بعد" disabled={!table.getCanNextPage()} onClick={() => table.nextPage()}><ChevronLeft /></Button>
             </nav>
           </div>
         </footer>

@@ -12,18 +12,14 @@ export interface TableRowAction<T> {
 
 export interface TableRowActionsProps<T> {
   actions: TableRowAction<T>[];
-  row?: T;
-  haveSeparateColumns?: boolean;
-  defaultColumnSize?: number;
+  row: T;
 }
 
 const icons = { delete: Trash2, view: Eye, edit: SquarePen, confirm: Check };
 
 export default function TableRowActions<T>({ actions, row }: TableRowActionsProps<T>) {
-  if (!row) return null;
-
   return (
-    <div className="flex items-center justify-center gap-1">
+    <div className="flex flex-wrap items-center justify-center gap-2">
       {actions.map((action) => {
         const props = action.props(row);
         const label = typeof action.label === "function" ? action.label(row) : action.label;
@@ -34,8 +30,9 @@ export default function TableRowActions<T>({ actions, row }: TableRowActionsProp
               <Button
                 type="button"
                 size="icon"
-                variant={action.action === "delete" ? "destructive" : "outline"}
-                className="size-7"
+                variant="ghost"
+                className="metronic-action"
+                data-action={action.action}
                 aria-label={label}
                 disabled={props.disabled}
                 onClick={(event) => {

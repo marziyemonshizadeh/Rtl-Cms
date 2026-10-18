@@ -21,4 +21,11 @@ sketch
 /public/fonts
 /dist/
 
+
+.agents/*
+.continue/*
+.kiro/*
+.hermes/*
+.vscode/*
+.claude/*
 # End of https://www.toptal.com/developers/gitignore/api/react

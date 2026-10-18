@@ -1,24 +1,22 @@
 import { useEffect, useState } from "react";
 import DeleteModal from "@/components/Modals/deleteModal";
-import EditModal from "@/components/Modals/editModal";
-import { Card } from "@/components/ui/card";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import ProductDetails from "./ProductDetails";
 import AddProduct from "./AddProduct/AddProduct";
 import usePaginationParams from "@/hooks/usePaginationParams";
 import ProductsList from "./ProductsList";
-import { addProduct, clearProductMutationError, fetchProduct, removeProduct, updateProduct } from "./store/productsSlice";
+import { clearProductMutationError, fetchProduct, removeProduct } from "./store/productsSlice";
 
-type ProductDialog = { type: "details" | "edit" | "delete"; id: number } | null;
+type ProductDialog = { type: "create" } | { type: "details" | "edit" | "delete"; id: number } | null;
 
 export default function ProductsPage() {
   const data = useAppSelector((state) => state.products);
   const dispatch = useAppDispatch();
   const { pagination, setPagination } = usePaginationParams();
   const [dialog, setDialog] = useState<ProductDialog>(null);
-  const selectedProduct = data.products.find((product) => product.id === dialog?.id);
-  const selectedMutation = dialog ? data.mutations[dialog.id] : undefined;
-  const createMutation = data.mutations.create;
+  const selectedId = dialog && "id" in dialog ? dialog.id : undefined;
+  const selectedProduct = data.products.find((product) => product.id === selectedId);
+  const selectedMutation = selectedId !== undefined ? data.mutations[selectedId] : undefined;
 
   useEffect(() => {
     void dispatch(fetchProduct());
@@ -28,9 +26,9 @@ export default function ProductsPage() {
     if (!selectedMutation?.pending) setDialog(null);
   };
 
-  const openDialog = (type: NonNullable<ProductDialog>["type"], id: number) => {
-    dispatch(clearProductMutationError(id));
-    setDialog({ type, id });
+  const openDialog = (nextDialog: NonNullable<ProductDialog>) => {
+    dispatch(clearProductMutationError(nextDialog.type === "create" ? "create" : nextDialog.id));
+    setDialog(nextDialog);
   };
 
   return (
@@ -38,18 +36,6 @@ export default function ProductsPage() {
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
         <h1 className="header mb-0">مدیریت محصولات</h1>
       </div>
-      <Card id="new-product" tabIndex={-1} aria-labelledby="new-product-title" className="scroll-mt-[calc(var(--header-height)+1rem)]">
-        <h2 id="new-product-title" className="mb-5 text-base font-semibold">افزودن محصول جدید</h2>
-        <AddProduct
-          mode="create"
-          pending={!!createMutation?.pending}
-          disabled={data.loading}
-          error={createMutation?.error}
-          onSubmit={async (values) => {
-            await dispatch(addProduct(values)).unwrap();
-          }}
-        />
-      </Card>
       <ProductsList
         products={data.products}
         pagination={pagination}
@@ -57,30 +43,23 @@ export default function ProductsPage() {
         loading={data.loading}
         error={data.error}
         isPending={(product) => !!data.mutations[product.id]?.pending}
-        onDetails={(product) => openDialog("details", product.id)}
-        onEdit={(product) => openDialog("edit", product.id)}
-        onDelete={(product) => openDialog("delete", product.id)}
+        onCreate={() => openDialog({ type: "create" })}
+        createDisabled={data.loading || !!data.mutations.create?.pending}
+        onDetails={(product) => openDialog({ type: "details", id: product.id })}
+        onEdit={(product) => openDialog({ type: "edit", id: product.id })}
+        onDelete={(product) => openDialog({ type: "delete", id: product.id })}
         onRetry={() => void dispatch(fetchProduct())}
         retryDisabled={Object.values(data.mutations).some((mutation) => mutation.pending)}
       />
       {dialog?.type === "details" && selectedProduct && (
         <ProductDetails product={selectedProduct} onClose={closeDialog} />
       )}
-      {dialog?.type === "edit" && selectedProduct && (
-        <EditModal pending={!!selectedMutation?.pending} onClose={closeDialog}>
-          <AddProduct
-            key={selectedProduct.id}
-            mode="edit"
-            defaultValues={selectedProduct}
-            pending={!!selectedMutation?.pending}
-            error={selectedMutation?.error}
-            onCancel={closeDialog}
-            onSubmit={async (values) => {
-              await dispatch(updateProduct({ id: selectedProduct.id, changes: values })).unwrap();
-              setDialog(null);
-            }}
-          />
-        </EditModal>
+      {(dialog?.type === "create" || (dialog?.type === "edit" && selectedProduct)) && (
+        <AddProduct
+          key={dialog.type === "edit" ? selectedProduct?.id : "create"}
+          product={dialog.type === "edit" ? selectedProduct : undefined}
+          onClose={() => setDialog(null)}
+        />
       )}
       {dialog?.type === "delete" && selectedProduct && (
         <DeleteModal

@@ -11,6 +11,7 @@ const DialogDescription = DialogPrimitive.Description;
 interface DialogContentProps
   extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> {
   placement?: "center" | "sheet";
+  layout?: "default" | "sections";
   pending?: boolean;
 }
 
@@ -22,6 +23,7 @@ const DialogContent = React.forwardRef<
   children,
   dir = "rtl",
   placement = "center",
+  layout = "default",
   pending = false,
   onEscapeKeyDown,
   onInteractOutside,
@@ -36,7 +38,12 @@ const DialogContent = React.forwardRef<
       className={cn(
         "fixed z-50 overflow-y-auto bg-popover text-popover-foreground shadow-lg outline-none",
         placement === "center"
-          ? "inset-x-4 top-1/2 mx-auto max-h-[calc(100dvh-2rem)] max-w-lg -translate-y-1/2 rounded-lg border p-4 pt-12 sm:p-6 sm:pt-12"
+          ? cn(
+            "inset-x-4 top-1/2 mx-auto max-h-[calc(100dvh-2rem)] max-w-lg -translate-y-1/2 rounded-lg border",
+            layout === "sections"
+              ? "flex flex-col overflow-hidden"
+              : "p-4 pt-12 sm:p-6 sm:pt-12",
+          )
           : "inset-y-0 start-0 h-dvh w-3/4 border-e p-6 transition ease-in-out data-[state=closed]:duration-200 data-[state=open]:duration-300 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right motion-reduce:animate-none",
         className,
       )}
@@ -63,4 +70,25 @@ const DialogContent = React.forwardRef<
 ));
 DialogContent.displayName = "DialogContent";
 
-export { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription };
+function DialogHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return <div className={cn("flex shrink-0 flex-col gap-2 border-b px-5 py-5 pe-12 text-start", className)} {...props} />;
+}
+
+function DialogBody({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return <div className={cn("min-h-0 flex-1 overflow-y-auto px-5 py-5", className)} {...props} />;
+}
+
+function DialogFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return <div className={cn("flex shrink-0 flex-wrap items-center justify-end gap-3 border-t px-5 py-4", className)} {...props} />;
+}
+
+export {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+};

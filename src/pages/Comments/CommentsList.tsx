@@ -1,4 +1,3 @@
-import type { ReactElement } from "react";
 import MetronicTable, {
   type MetronicColumn,
 } from "@/components/@base/Table/MetronicTable/MetronicTable";
@@ -32,37 +31,13 @@ export default function CommentsList({
   onDelete,
   onToggleConfirmation,
 }: CommentsListProps) {
-  const isPending = (comment: Comment) => loading || !!mutations[comment.id]?.pending;
+  const isPending = (row: Comment) => loading || !!mutations[row.id]?.pending;
   const actions: TableRowAction<Comment>[] = [
-    {
-      id: "details_view",
-      action: "view",
-      label: "دیدن کامنت",
-      props: (comment) => ({
-        onClick: () => onView(comment),
-        disabled: isPending(comment) || comment.confirmation,
-      }),
-    },
-    {
-      id: "details_delete",
-      action: "delete",
-      label: "حذف",
-      props: (comment) => ({
-        onClick: () => onDelete(comment),
-        disabled: isPending(comment) || comment.confirmation,
-      }),
-    },
-    {
-      id: "details_confirm",
-      action: "confirm",
-      label: (comment) => comment.confirmation ? "کنسل" : "تایید",
-      props: (comment) => ({
-        onClick: () => onToggleConfirmation(comment),
-        disabled: isPending(comment),
-      }),
-    },
+    { id: "details_delete", action: "delete", label: "حذف", props: (row) => ({ onClick: () => onDelete(row), disabled: isPending(row) || row.confirmation }) },
+    { id: "details_view", action: "view", label: "دیدن کامنت", props: (row) => ({ onClick: () => onView(row), disabled: isPending(row) || row.confirmation }) },
+    { id: "details_confirm", action: "confirm", label: (row) => row.confirmation ? "کنسل" : "تایید", props: (row) => ({ onClick: () => onToggleConfirmation(row), disabled: isPending(row) }) },
   ];
-  const columns: (MetronicColumn<Comment> | ReactElement)[] = [
+  const columns: MetronicColumn<Comment>[] = [
     { id: "name", accessorFn: (comment) => comment.name, header: "اسم کاربر", sorted: true },
     { id: "product", accessorFn: (comment) => comment.product, header: "محصول", sorted: true },
     { id: "history", accessorFn: (comment) => comment.history, header: "تاریخ", sorted: true },
@@ -85,7 +60,12 @@ export default function CommentsList({
         );
       },
     },
-    <TableRowActions key="details_actions" actions={actions} haveSeparateColumns defaultColumnSize={40} />,
+    {
+      id: "details_actions",
+      header: "عملیات",
+      cell: ({ row }) => <TableRowActions actions={actions} row={row.original} />,
+      size: 250,
+    },
   ];
 
   return (
@@ -101,7 +81,7 @@ export default function CommentsList({
         haveFilter: true,
         havePagination: true,
         haveStickyHeader: true,
-        haveIndex: true,
+        haveIndex: true, isAutoColumnSize: true,
       }}
       error={error}
       onRetry={onRetry}

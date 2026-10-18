@@ -1,4 +1,3 @@
-import type { ReactElement } from "react";
 import MetronicTable, { type MetronicColumn } from "@/components/@base/Table/MetronicTable/MetronicTable";
 import TableRowActions, { type TableRowAction } from "@/components/@base/TableRowActions";
 import { Badge } from "@/components/ui/badge";
@@ -28,21 +27,12 @@ export default function DiscountsList({
   onRetry,
   retryDisabled,
 }: DiscountsListProps) {
+  const isPending = (row: Discount) => !!mutations[row.id]?.pending;
   const actions: TableRowAction<Discount>[] = [
-    {
-      id: "details_confirm",
-      action: "confirm",
-      label: (discount) => discount.confirmation ? "کنسل" : "تایید",
-      props: (discount) => ({ onClick: () => onConfirmation(discount), disabled: !!mutations[discount.id]?.pending }),
-    },
-    {
-      id: "details_delete",
-      action: "delete",
-      label: "حذف",
-      props: (discount) => ({ onClick: () => onDelete(discount), disabled: !!mutations[discount.id]?.pending || discount.confirmation }),
-    },
+    { id: "details_delete", action: "delete", label: "حذف", props: (row) => ({ onClick: () => onDelete(row), disabled: isPending(row) || row.confirmation }) },
+    { id: "details_confirm", action: "confirm", label: (row) => row.confirmation ? "کنسل" : "تایید", props: (row) => ({ onClick: () => onConfirmation(row), disabled: isPending(row) }) },
   ];
-  const columns: (MetronicColumn<Discount> | ReactElement)[] = [
+  const columns: MetronicColumn<Discount>[] = [
     { id: "discountCode", accessorFn: (discount) => discount.discountCode, header: "کد تخفیف", cell: (info) => String(info.getValue()), sorted: true, size: 150 },
     { id: "discountPercent", accessorFn: (discount) => discount.discountPercent, header: "درصد تخفیف", cell: (info) => String(info.getValue()), sorted: true, size: 110 },
     { id: "history", accessorFn: (discount) => discount.history, header: "تاریخ ثبت", cell: (info) => String(info.getValue()), sorted: true, size: 130 },
@@ -65,7 +55,12 @@ export default function DiscountsList({
       sorted: true,
       size: 120,
     },
-    <TableRowActions key="details_actions" actions={actions} haveSeparateColumns defaultColumnSize={40} />,
+    {
+      id: "details_actions",
+      header: "عملیات",
+      cell: ({ row }) => <TableRowActions actions={actions} row={row.original} />,
+      size: 250,
+    },
   ];
 
   return (
@@ -75,7 +70,7 @@ export default function DiscountsList({
       isLoading={loading}
       pagination={pagination}
       setPagination={setPagination}
-      options={{ title: "لیست کدهای تخفیف", totalCount: discounts.length, haveFilter: true, havePagination: true, haveStickyHeader: true, haveIndex: true }}
+      options={{ title: "لیست کدهای تخفیف", totalCount: discounts.length, haveFilter: true, havePagination: true, haveStickyHeader: true, haveIndex: true, isAutoColumnSize: true }}
       error={error}
       onRetry={onRetry}
       retryDisabled={retryDisabled}

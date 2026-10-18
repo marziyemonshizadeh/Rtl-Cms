@@ -1,0 +1,188 @@
+@layer components {
+  .metronic-table {
+    @apply my-5 min-w-0 max-w-full overflow-hidden rounded-lg border bg-card text-foreground;
+  }
+
+  .metronic-toolbar {
+    @apply flex min-h-16 flex-wrap items-center justify-between gap-4 border-b px-4 py-3 sm:px-5;
+  }
+
+  .metronic-search {
+    @apply relative min-w-0 flex-1 sm:w-64 sm:flex-none;
+  }
+
+  .metronic-search .metronic-search-input {
+    @apply my-0 h-10 w-full rounded-lg border-border bg-muted/20 pe-10 ps-10 text-sm shadow-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:ring-offset-0;
+  }
+
+  .metronic-clear-search {
+    @apply absolute end-1 top-1/2 inline-flex size-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring;
+  }
+
+  .metronic-scroll {
+    @apply max-h-[38rem] w-full min-w-0 max-w-full overflow-auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .metronic-grid {
+    @apply table-fixed border-separate border-spacing-0 text-sm;
+  }
+
+  .metronic-head {
+    color: var(--muted-foreground);
+    background: color-mix(in srgb, var(--primary) 4%, var(--card));
+  }
+
+  .metronic-th {
+    @apply border-b px-4 py-3 text-start text-xs font-medium;
+    overflow-wrap: anywhere;
+  }
+
+  .metronic-sort {
+    @apply flex min-h-8 min-w-0 max-w-full cursor-pointer items-center gap-2 rounded text-start transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring;
+  }
+
+  .metronic-sort[data-active="true"] {
+    @apply font-semibold text-primary;
+  }
+
+  .metronic-sort svg {
+    @apply shrink-0 opacity-60;
+  }
+
+  .metronic-th[data-numeric="true"],
+  .metronic-cell[data-numeric="true"] {
+    @apply text-end tabular-nums;
+  }
+
+  .metronic-th[data-numeric="true"] .metronic-sort {
+    @apply ms-auto;
+  }
+
+  .metronic-cell {
+    @apply border-b border-border/60 px-4 py-3 align-middle text-sm leading-6;
+    transition: background-color 150ms;
+  }
+
+  .metronic-cell-content {
+    @apply min-w-0 max-w-full truncate;
+  }
+
+  .metronic-row:hover .metronic-cell,
+  .metronic-row:focus-within .metronic-cell {
+    background: color-mix(in srgb, var(--primary) 4%, var(--card));
+  }
+
+  .metronic-row:last-child .metronic-cell {
+    @apply border-b-0;
+  }
+
+  .metronic-row-number {
+    @apply text-center text-xs tabular-nums text-muted-foreground;
+  }
+
+  .metronic-action-cell {
+    @apply px-0 text-center;
+  }
+
+  .metronic-th.metronic-action-cell {
+    @apply whitespace-nowrap align-middle text-center;
+  }
+
+  .metronic-action-cell .metronic-cell-content {
+    @apply overflow-visible whitespace-normal;
+  }
+
+  .metronic-cell img,
+  .metronic-card img {
+    @apply mx-auto size-10 rounded-lg bg-muted/30 p-1 object-contain;
+  }
+
+  .metronic-table .metronic-action {
+    @apply size-6 max-w-full cursor-pointer rounded-md text-muted-foreground shadow-none hover:bg-primary/10 hover:text-primary disabled:opacity-40;
+  }
+
+  .metronic-action[data-action="delete"] {
+    @apply hover:bg-destructive/10 hover:text-destructive focus-visible:ring-destructive;
+  }
+
+  .metronic-action[data-action="confirm"] {
+    @apply text-primary;
+  }
+
+  .metronic-footer {
+    @apply flex flex-wrap items-center justify-between gap-4 border-t px-4 py-3 text-xs text-muted-foreground sm:px-5;
+  }
+
+  .metronic-page-size {
+    @apply h-9 min-w-14 cursor-pointer appearance-none rounded-md border border-border bg-card pe-6 ps-2.5 text-sm tabular-nums text-foreground outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20;
+  }
+
+  .metronic-pagination {
+    @apply flex items-center gap-1;
+  }
+
+  .metronic-page-button {
+    @apply size-8 cursor-pointer rounded-md text-xs tabular-nums text-muted-foreground hover:bg-primary/10 hover:text-primary;
+  }
+
+  .metronic-table .metronic-page-button[aria-current="page"] {
+    @apply bg-primary/10 font-semibold text-primary;
+  }
+
+  .metronic-cards {
+    @apply divide-y divide-border/60;
+  }
+
+  .metronic-card {
+    @apply min-w-0 px-4 py-4;
+  }
+
+  .metronic-card-index {
+    @apply mb-2 text-xs tabular-nums text-muted-foreground;
+  }
+
+  .metronic-card-field {
+    @apply flex min-w-0 items-center justify-between gap-4 py-2;
+  }
+
+  .metronic-card-actions {
+    @apply mt-3 flex items-center justify-between gap-3 border-t border-border/50 pt-3;
+  }
+
+  .metronic-card .metronic-action {
+    @apply size-11;
+  }
+
+  .metronic-empty {
+    @apply flex min-h-64 flex-col items-center justify-center gap-4 px-6 py-12 text-center;
+  }
+
+  .metronic-empty-icon {
+    @apply inline-flex size-12 items-center justify-center rounded-full bg-muted/60 text-muted-foreground;
+  }
+
+  @media (pointer: coarse) {
+    .metronic-table .metronic-page-button,
+    .metronic-table .metronic-clear-search {
+      @apply size-11;
+    }
+
+    .metronic-table .metronic-page-size,
+    .metronic-table .metronic-search-input,
+    .metronic-table .metronic-sort {
+      @apply min-h-11;
+    }
+
+    .metronic-table .metronic-search-input {
+      @apply text-base;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .metronic-table :is(button, input, select, .metronic-cell) {
+      transition: none;
+    }
+  }
+}

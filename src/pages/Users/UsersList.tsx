@@ -1,4 +1,3 @@
-import type { ReactElement } from "react";
 import MetronicTable, { type MetronicColumn } from "@/components/@base/Table/MetronicTable/MetronicTable";
 import TableRowActions, { type TableRowAction } from "@/components/@base/TableRowActions";
 import type usePaginationParams from "@/hooks/usePaginationParams";
@@ -22,17 +21,22 @@ export default function UsersList({
   users, loading, error, pagination, setPagination, isPending, onDetails, onEdit, onDelete, onRetry, retryDisabled,
 }: UsersListProps) {
   const actions: TableRowAction<User>[] = [
-    { id: "details_edit", action: "edit", label: "ویرایش", props: (user) => ({ onClick: () => onEdit(user), disabled: isPending(user) }) },
-    { id: "details_view", action: "view", label: "جزئیات", props: (user) => ({ onClick: () => onDetails(user), disabled: isPending(user) }) },
-    { id: "details_delete", action: "delete", label: "حذف", props: (user) => ({ onClick: () => onDelete(user), disabled: isPending(user) }) },
+    { id: "details_delete", action: "delete", label: "حذف", props: (row) => ({ onClick: () => onDelete(row), disabled: isPending(row) }) },
+    { id: "details_view", action: "view", label: "جزئیات", props: (row) => ({ onClick: () => onDetails(row), disabled: isPending(row) }) },
+    { id: "details_edit", action: "edit", label: "ویرایش", props: (row) => ({ onClick: () => onEdit(row), disabled: isPending(row) }) },
   ];
-  const columns: (MetronicColumn<User> | ReactElement)[] = [
+  const columns: MetronicColumn<User>[] = [
     { id: "customer", accessorFn: (user) => user.customer, header: "نام و نام خانوادگی", cell: (info) => String(info.getValue()), sorted: true, size: 190 },
     { id: "userName", accessorFn: (user) => user.userName, header: "نام کاربری", cell: (info) => String(info.getValue()), sorted: true, size: 140 },
     { id: "password", accessorFn: (user) => user.password, header: "رمز عبور", cell: (info) => String(info.getValue()), sorted: true, size: 130 },
     { id: "phoneNumber", accessorFn: (user) => user.phoneNumber, header: "شماره تماس", cell: (info) => <span dir="ltr">{String(info.getValue())}</span>, sorted: true, size: 150 },
     { id: "email", accessorFn: (user) => user.email, header: "ایمیل", cell: (info) => <span dir="ltr">{String(info.getValue())}</span>, sorted: true, size: 220 },
-    <TableRowActions key="details_actions" actions={actions} haveSeparateColumns defaultColumnSize={40} />,
+    {
+      id: "details_actions",
+      header: "عملیات",
+      cell: ({ row }) => <TableRowActions actions={actions} row={row.original} />,
+      size: 250,
+    },
   ];
 
   return (
@@ -42,7 +46,7 @@ export default function UsersList({
       isLoading={loading}
       pagination={pagination}
       setPagination={setPagination}
-      options={{ title: "لیست کاربران", totalCount: users.length, haveFilter: true, havePagination: true, haveStickyHeader: true, haveIndex: true }}
+      options={{ title: "لیست کاربران", totalCount: users.length, haveFilter: true, havePagination: true, haveStickyHeader: true, haveIndex: true, isAutoColumnSize: true }}
       error={error}
       onRetry={onRetry}
       retryDisabled={retryDisabled}

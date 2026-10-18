@@ -95,7 +95,7 @@ const productsSlice = createSlice({
   name: "products",
   initialState,
   reducers: {
-    clearProductMutationError(state, action: PayloadAction<number>) {
+    clearProductMutationError(state, action: PayloadAction<number | "create">) {
       const mutation = state.mutations[action.payload];
       if (mutation && !mutation.pending) mutation.error = null;
     },

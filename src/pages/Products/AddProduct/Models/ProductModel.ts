@@ -7,3 +7,10 @@ export interface Product {
 }
 
 export type ProductValues = Omit<Product, "id">;
+
+export const ProductModel = {
+  name: "",
+  img: "",
+  price: undefined,
+  count: undefined,
+};

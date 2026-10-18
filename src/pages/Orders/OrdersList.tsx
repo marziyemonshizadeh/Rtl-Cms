@@ -1,4 +1,3 @@
-import type { ReactElement } from "react";
 import MetronicTable, { type MetronicColumn } from "@/components/@base/Table/MetronicTable/MetronicTable";
 import TableRowActions, { type TableRowAction } from "@/components/@base/TableRowActions";
 import { Badge } from "@/components/ui/badge";
@@ -30,27 +29,13 @@ export default function OrdersList({
   onRetry,
   retryDisabled,
 }: OrdersListProps) {
+  const isPending = (row: Order) => !!mutations[row.id]?.pending;
   const actions: TableRowAction<Order>[] = [
-    {
-      id: "details_view",
-      action: "view",
-      label: "جزئیات",
-      props: (order) => ({ onClick: () => onDetails(order), disabled: !!mutations[order.id]?.pending }),
-    },
-    {
-      id: "details_delete",
-      action: "delete",
-      label: "حذف",
-      props: (order) => ({ onClick: () => onDelete(order), disabled: !!mutations[order.id]?.pending || order.confirmation }),
-    },
-    {
-      id: "details_confirm",
-      action: "confirm",
-      label: (order) => order.confirmation ? "کنسل" : "تایید",
-      props: (order) => ({ onClick: () => onConfirmation(order), disabled: !!mutations[order.id]?.pending }),
-    },
+    { id: "details_delete", action: "delete", label: "حذف", props: (row) => ({ onClick: () => onDelete(row), disabled: isPending(row) || row.confirmation }) },
+    { id: "details_view", action: "view", label: "جزئیات", props: (row) => ({ onClick: () => onDetails(row), disabled: isPending(row) }) },
+    { id: "details_confirm", action: "confirm", label: (row) => row.confirmation ? "کنسل" : "تایید", props: (row) => ({ onClick: () => onConfirmation(row), disabled: isPending(row) }) },
   ];
-  const columns: (MetronicColumn<Order> | ReactElement)[] = [
+  const columns: MetronicColumn<Order>[] = [
     { id: "product", accessorFn: (order) => order.product, header: "نام محصول خریداری شده", cell: (info) => String(info.getValue()), sorted: true, size: 200 },
     { id: "customer", accessorFn: (order) => order.customer, header: "نام خریدار", cell: (info) => String(info.getValue()), sorted: true, size: 140 },
     { id: "orderDate", accessorFn: (order) => order.orderDate, header: "تاریخ سفارش", cell: (info) => String(info.getValue()), sorted: true, size: 120 },
@@ -74,7 +59,12 @@ export default function OrdersList({
       sorted: true,
       size: 120,
     },
-    <TableRowActions key="details_actions" actions={actions} haveSeparateColumns defaultColumnSize={40} />,
+    {
+      id: "details_actions",
+      header: "عملیات",
+      cell: ({ row }) => <TableRowActions actions={actions} row={row.original} />,
+      size: 250,
+    },
   ];
 
   return (
@@ -84,7 +74,7 @@ export default function OrdersList({
       isLoading={loading}
       pagination={pagination}
       setPagination={setPagination}
-      options={{ title: "لیست سفارشات", totalCount: orders.length, haveFilter: true, havePagination: true, haveStickyHeader: true, haveIndex: true }}
+      options={{ title: "لیست سفارشات", totalCount: orders.length, haveFilter: true, havePagination: true, haveStickyHeader: true, haveIndex: true, isAutoColumnSize: true }}
       error={error}
       onRetry={onRetry}
       retryDisabled={retryDisabled}
