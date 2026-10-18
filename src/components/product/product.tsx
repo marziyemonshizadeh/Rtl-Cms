@@ -8,18 +8,11 @@ import { removeProduct, updateProduct } from "@/redux/store/products";
 import DeleteModal from "@/components/Modals/deleteModal";
 import DetailsModal from "@/components/Modals/detailsModal";
 import EditModal from "@/components/Modals/editModal";
+import type Product from "@/models/productType";
 
-interface productProps {
-  id: number;
-  name: string;
-  img: string;
-  price: number | string;
-  count: number | string;
-  isMobile?: boolean;
-}
-type ProductInputs = Pick<productProps, "name" | "img"> & { price: number; count: number };
+type ProductInputs = Pick<Product, "name" | "img"> & { price: number; count: number };
 
-const Product = ({ id, name, img, price, count }: productProps) => {
+const ProductActions = ({ id, name, img, price, count }: Product) => {
   const [isShowModal, setIsShowModal] = useState<boolean>(false);
   const [isShowDetailsModal, setIsShowDetailsModal] = useState<boolean>(false);
   const [isShowEditModal, setIsShowEditModal] = useState<boolean>(false);
@@ -62,51 +55,45 @@ const Product = ({ id, name, img, price, count }: productProps) => {
 
   return (
     <>
-      <tr className="table-row">
-        <td className="table-cell md:flex justify-center">
-          <img src={img} alt="hb" className="max-h-40" />
-        </td>
-        <td className="table-cell">{name}</td>
-        <td className="table-cell">{price.toLocaleString()} تومان</td>
-        <td className="table-cell">{count}</td>
-        <td className="table-cell">
-          <button
-            type="button"
-            disabled={pending}
-            className="btn m-1"
-            onClick={(event) => {
-              event.currentTarget.focus();
-              setIsShowDetailsModal(true);
-            }}
-          >
-            جزئیات
-          </button>
-          <button
-            type="button"
-            disabled={pending}
-            className="btn m-1"
-            onClick={(event) => {
-              event.currentTarget.focus();
-              setIsShowModal(true);
-            }}
-          >
-            حذف
-          </button>
-          <button
-            type="button"
-            disabled={pending}
-            className="btn m-1"
-            onClick={(event) => {
-              event.currentTarget.focus();
-              setIsShowEditModal(true);
-            }}
-          >
-            ویرایش
-          </button>
-        </td>
-      </tr>
+      <div role="group" aria-label={`عملیات ${name}`} aria-busy={pending} className="flex flex-wrap justify-end gap-2 md:justify-center">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          disabled={pending}
+          onClick={(event) => {
+            event.currentTarget.focus();
+            setIsShowDetailsModal(true);
+          }}
+        >
+          جزئیات
+        </Button>
+        <Button
+          type="button"
+          variant="destructive"
+          size="sm"
+          disabled={pending}
+          onClick={(event) => {
+            event.currentTarget.focus();
+            setIsShowModal(true);
+          }}
+        >
+          حذف
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          disabled={pending}
+          onClick={(event) => {
+            event.currentTarget.focus();
+            setIsShowEditModal(true);
+          }}
+        >
+          ویرایش
+        </Button>
+      </div>
 
-      {/* delete modal */}
       {isShowModal && (
         <DeleteModal
           pending={pending}
@@ -117,7 +104,6 @@ const Product = ({ id, name, img, price, count }: productProps) => {
           }}
         />
       )}
-      {/* details modal */}
       {isShowDetailsModal && (
         <DetailsModal
           title="جزئیات محصول"
@@ -129,7 +115,6 @@ const Product = ({ id, name, img, price, count }: productProps) => {
           ]}
         />
       )}
-      {/* edit modal */}
       {isShowEditModal && (
         <EditModal
           pending={pending}
@@ -207,4 +192,4 @@ const Product = ({ id, name, img, price, count }: productProps) => {
     </>
   );
 };
-export default Product;
+export default ProductActions;

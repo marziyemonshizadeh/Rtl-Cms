@@ -1,9 +1,23 @@
 import React, { useEffect } from "react";
 import AddNewProduct from "@/components/addNewProduct/addNewProduct";
-import ErrorBox from "@/components/errorBox/errorBox";
-import Product from "@/components/product/product";
+import DataTable, { type DataTableColumn } from "@/components/@base/Table/DataTable";
+import ProductActions from "@/components/product/product";
+import type Product from "@/models/productType";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchProduct } from "@/redux/store/products";
+
+const columns: DataTableColumn<Product>[] = [
+  {
+    id: "image",
+    header: "عکس",
+    render: (product) => (
+      <img src={product.img} alt={product.name} className="mx-auto max-h-24 max-w-full rounded object-contain" />
+    ),
+  },
+  { id: "name", header: "اسم", render: (product) => product.name },
+  { id: "price", header: "قیمت", render: (product) => `${product.price.toLocaleString()} تومان` },
+  { id: "count", header: "موجودی", render: (product) => product.count },
+];
 
 const Products: React.FC = () => {
   const data = useAppSelector((state) => state.products);
@@ -17,67 +31,21 @@ const Products: React.FC = () => {
     <>
       <AddNewProduct />
 
-      {data.loading ? (
-        <div>در حال بارگزاری ...</div>
-      ) : data.error ? (
-        <div className="space-y-3">
-          <ErrorBox message={data.error} />
-          <button
-            type="button"
-            className="btn"
-            disabled={Object.values(data.mutations).some((mutation) => mutation.pending)}
-            onClick={() => void dispatch(fetchProduct())}
-          >
-            تلاش دوباره
-          </button>
-        </div>
-      ) : data.products?.length ? (
-        <div className="table-container">
-          <table className="w-full hidden md:table">
-            <thead className="table-header">
-              <tr>
-                <th className="table-header-cell">عکس</th>
-                <th className="table-header-cell">اسم</th>
-                <th className="table-header-cell">قیمت</th>
-                <th className="table-header-cell">موجودی</th>
-                <th className="table-header-cell">وضعیت</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.products.map(
-                (item): JSX.Element => (
-                  <Product key={item.id} {...item} />
-                )
-              )}
-            </tbody>
-          </table>
-          <div className="md:hidden block p-4">
-            {data.products.map((item) => (
-              <div key={item.id} className="mobile-card">
-                <div className="mobile-card-row">
-                  <span className="mobile-card-label">عکس</span>
-                  <img src={item.img} alt={item.name} className="max-h-24 rounded" />
-                </div>
-                <div className="mobile-card-row">
-                  <span className="mobile-card-label">اسم</span>
-                  <span className="mobile-card-value">{item.name}</span>
-                </div>
-                <div className="mobile-card-row">
-                  <span className="mobile-card-label">قیمت</span>
-                  <span className="mobile-card-value">{item.price.toLocaleString()} تومان</span>
-                </div>
-                <div className="mobile-card-row">
-                  <span className="mobile-card-label">موجودی</span>
-                  <span className="mobile-card-value">{item.count}</span>
-                </div>
-                <Product {...item} isMobile />
-              </div>
-            ))}
-          </div>
-        </div>
-      ) : (
-        !data.loading && <ErrorBox message="هیچ محصولی یافت نشد" />
-      )}
+      <DataTable
+        title="لیست محصولات"
+        toolbar={!data.loading && !data.error && (
+          <span className="text-xs text-muted-foreground">{data.products.length.toLocaleString("fa-IR")} محصول</span>
+        )}
+        records={data.products}
+        columns={columns}
+        getRowId={(product) => product.id}
+        renderActions={(product) => <ProductActions {...product} />}
+        loading={data.loading}
+        error={data.error}
+        emptyMessage="هیچ محصولی یافت نشد"
+        onRetry={() => void dispatch(fetchProduct())}
+        retryDisabled={Object.values(data.mutations).some((mutation) => mutation.pending)}
+      />
     </>
   );
 };
